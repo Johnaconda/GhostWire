@@ -1,0 +1,13 @@
+name: Feature request
+description: Propose a scoped capability and its acceptance criteria
+body:
+  - type: textarea
+    id: outcome
+    attributes:
+      label: User outcome and proposed checkpoint
+    validations:
+      required: true
+  - type: textarea
+    id: acceptance
+    attributes:
+      label: Acceptance criteria and privacy implications

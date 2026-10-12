@@ -1,0 +1,33 @@
+name: macos
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: macos-14
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        config: [debug, release]
+    env:
+      VCPKG_DISABLE_METRICS: '1'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, reviewed pin
+        with:
+          persist-credentials: false
+      - name: Prepare pinned vcpkg
+        shell: bash
+        run: |
+          git clone https://github.com/microsoft/vcpkg.git "$RUNNER_TEMP/ghostwire-vcpkg"
+          git -C "$RUNNER_TEMP/ghostwire-vcpkg" checkout --detach 9e593bb18ea69cc5095e012465dcd675a822ed0d
+          "$RUNNER_TEMP/ghostwire-vcpkg/bootstrap-vcpkg.sh" -disableMetrics
+          echo "VCPKG_ROOT=$RUNNER_TEMP/ghostwire-vcpkg" >> "$GITHUB_ENV"
+      - name: Check module boundaries
+        run: python3 tools/check_boundaries.py
+      - name: Configure build and test
+        run: bash tools/dev.sh all macos-${{ matrix.config }}

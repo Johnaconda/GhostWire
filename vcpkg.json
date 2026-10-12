@@ -1,0 +1,15 @@
+{
+  "name": "ghostwire",
+  "version-semver": "0.1.1",
+  "description": "GhostWire A01 core lifecycle and services; no network or cryptographic runtime yet",
+  "license": "MIT",
+  "builtin-baseline": "9e593bb18ea69cc5095e012465dcd675a822ed0d",
+  "dependencies": [],
+  "features": {
+    "tests": {
+      "description": "Use the pinned doctest framework for development tests",
+      "dependencies": [{"name": "doctest", "version>=": "2.4.12"}]
+    }
+  },
+  "overrides": [{"name": "doctest", "version": "2.4.12"}]
+}

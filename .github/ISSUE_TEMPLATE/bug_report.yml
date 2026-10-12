@@ -1,0 +1,21 @@
+name: Bug report
+description: Reproducible failure without private data
+title: "[Bug] "
+body:
+  - type: input
+    id: checkpoint
+    attributes:
+      label: Checkpoint and platform
+    validations:
+      required: true
+  - type: textarea
+    id: reproduction
+    attributes:
+      label: Steps, expected result, actual result
+    validations:
+      required: true
+  - type: textarea
+    id: diagnostics
+    attributes:
+      label: Redacted commands and diagnostics
+      description: No passwords, keys, IPs, private messages or raw crash dumps.

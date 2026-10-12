@@ -1,0 +1,38 @@
+name: windows
+on:
+  push:
+    branches: [main, develop]
+  pull_request:
+  workflow_dispatch:
+permissions:
+  contents: read
+jobs:
+  build:
+    runs-on: windows-2022
+    timeout-minutes: 30
+    strategy:
+      fail-fast: false
+      matrix:
+        config: [Debug, Release]
+    env:
+      VCPKG_DISABLE_METRICS: '1'
+    steps:
+      - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
+        with:
+          persist-credentials: false
+      - name: Prepare pinned vcpkg
+        shell: pwsh
+        run: |
+          $vcpkgDir = Join-Path $env:RUNNER_TEMP 'ghostwire-vcpkg'
+          git clone https://github.com/microsoft/vcpkg.git $vcpkgDir
+          if ($LASTEXITCODE -ne 0) { throw 'vcpkg clone failed' }
+          git -C $vcpkgDir checkout --detach 9e593bb18ea69cc5095e012465dcd675a822ed0d
+          if ($LASTEXITCODE -ne 0) { throw 'vcpkg checkout failed' }
+          & "$vcpkgDir/bootstrap-vcpkg.bat" -disableMetrics
+          if ($LASTEXITCODE -ne 0) { throw 'vcpkg bootstrap failed' }
+          "VCPKG_ROOT=$vcpkgDir" | Out-File -FilePath $env:GITHUB_ENV -Encoding utf8 -Append
+      - name: Check module boundaries
+        run: python tools/check_boundaries.py
+      - name: Configure build and test
+        shell: pwsh
+        run: ./tools/windows/dev-windows.ps1 -Action all -Configuration ${{ matrix.config }}
