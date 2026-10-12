@@ -12,7 +12,7 @@ if(BUILD_TESTING AND GW_TEST_DEPENDENCY STREQUAL "vcpkg")
 endif()
 set(VCPKG_MANIFEST_NO_DEFAULT_FEATURES ON)
 
-project(GhostWire VERSION 0.1.1 LANGUAGES CXX)
+project(GhostWire VERSION 0.1.2 LANGUAGES CXX)
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
     message(FATAL_ERROR "Use an out-of-source build: cmake --preset portable-debug")
 endif()

@@ -8,11 +8,12 @@ permissions:
   contents: read
 jobs:
   build:
-    runs-on: macos-14
+    runs-on: ${{ matrix.os }}
     timeout-minutes: 30
     strategy:
       fail-fast: false
       matrix:
+        os: [macos-26, macos-26-intel]
         config: [debug, release]
     env:
       VCPKG_DISABLE_METRICS: '1'
@@ -20,6 +21,25 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4, reviewed pin
         with:
           persist-credentials: false
+      - name: Verify Apple C++20 cancellation support
+        shell: bash
+        run: |
+          set -euo pipefail
+          xcodebuild -version
+          xcode-select -p
+          xcrun --find clang++
+          cat > "$RUNNER_TEMP/ghostwire-stop-token.cpp" <<'CPP'
+          #include <stop_token>
+          int main() {
+              std::stop_source source;
+              std::stop_token token = source.get_token();
+              source.request_stop();
+              return token.stop_requested() ? 0 : 1;
+          }
+          CPP
+          xcrun clang++ -std=c++20 -Wall -Wextra -Werror \
+            "$RUNNER_TEMP/ghostwire-stop-token.cpp" -o "$RUNNER_TEMP/ghostwire-stop-token"
+          "$RUNNER_TEMP/ghostwire-stop-token"
       - name: Prepare pinned vcpkg
         shell: bash
         run: |
@@ -30,4 +50,6 @@ jobs:
       - name: Check module boundaries
         run: python3 tools/check_boundaries.py
       - name: Configure build and test
-        run: bash tools/dev.sh all macos-${{ matrix.config }}
+        run: |
+          CC="$(xcrun --find clang)" CXX="$(xcrun --find clang++)" \
+            bash tools/dev.sh all macos-${{ matrix.config }}

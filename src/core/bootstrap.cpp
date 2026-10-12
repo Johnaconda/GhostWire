@@ -32,9 +32,11 @@ Result<Options> parse_options(std::span<const std::string_view> args) {
             if (++i >= args.size() || args[i].empty() || args[i].starts_with("--") ||
                 args[i].size() > max_argument_bytes)
                 return Error{ErrorCode::usage, "Path option requires a nonempty path argument."};
-            for (const unsigned char c : args[i])
-                if (c < 32 || c == 127)
+            for (const char code_unit : args[i]) {
+                const auto byte = static_cast<unsigned char>(code_unit);
+                if (byte < 32 || byte == 127)
                     return Error{ErrorCode::usage, "Path argument contains a control character."};
+            }
             auto path = platform::path_from_utf8(args[i]);
             if (!path)
                 return Error{ErrorCode::usage, "Invalid path encoding."};

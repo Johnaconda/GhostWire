@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.1.2 — GW-A01-HF02-MACOS-CI-RECOVERY — 2026-10-12 (candidate)
+
+- Scoped GitHub publication/CI repair atop accepted HF01; not A02 work.
+- Moved macOS CI from unsupported AppleClang 15/libc++ on macos-14 to
+  macos-26 ARM64 and Intel with a C++20 std::stop_source preflight.
+- Made char-to-unsigned-char control checks explicit in three core loops without
+  relaxing -Werror or changing validation behavior.
+- Recorded owner HF01 Windows Debug and Release (34/34 CTest each, original
+  TEMP/TMP), newly published GitHub CI evidence and remaining macOS gates.
+- Updated README/agent/roadmap/TODO and source packaging checkpoint metadata.
+- macOS CI acceptance remains pending until fresh hosted jobs succeed.
+
+
 ## 0.1.1 — GW-A01-HF01-WINDOWS-UNICODE-RECOVERY — 2026-10-12
 
 - Continued the exact supplied A01 cumulative archive; recorded owner-reported

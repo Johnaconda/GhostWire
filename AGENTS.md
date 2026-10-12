@@ -6,12 +6,13 @@
    TODO.md, docs/checkpoints/GW-A00.md and the latest later checkpoint if present.
 2. Inspect actual headers/sources, build settings, tests and decisions for the
    affected modules. Confirm the supplied archive/checkpoint/hash.
-3. Identify the user's authorized checkpoint and bounded change scope. The owner
-   reports A01 Windows Debug/Release validated with an ASCII TEMP workaround and
-   authorizes only GW-A01-HF01-WINDOWS-UNICODE-RECOVERY from the supplied A01 ZIP.
-   HF01 native acceptance with original TEMP/TMP is pending. Stop after HF01;
-   do not begin A02 merely because its proposal exists. Windows vcpkg acceptance
-   remains unresolved, separate from the working portable/vendored route.
+3. Identify the authorized checkpoint and scope. Owner accepted HF01 native
+   Windows portable Debug/Release (34/34 CTest each, original TEMP/TMP); the
+   source was published to https://github.com/Johnaconda/GhostWire. A02 was
+   subsequently authorized but is **not** implemented here. The HF02 repository
+   repair is a separate candidate pending hosted macOS acceptance. The old
+   Windows vcpkg/doctest local gate remains open; do not claim it solved.
+   Maintain accepted source continuity and stop at each requested checkpoint.
 4. Record the implemented, experimental, planned and blocked boundaries before
    making changes. Existing source is authoritative over memory or old packages.
 

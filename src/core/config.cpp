@@ -60,9 +60,11 @@ Result<Config> parse_config(std::string_view text) {
     // Permit UTF-8 BOM, CRLF and printable UTF-8 path bytes; reject control bytes.
     if (text.starts_with("\xEF\xBB\xBF"))
         text.remove_prefix(3);
-    for (const unsigned char c : text)
-        if ((c < 32 && c != '\n' && c != '\r' && c != '\t') || c == 127)
+    for (const char code_unit : text) {
+        const auto byte = static_cast<unsigned char>(code_unit);
+        if ((byte < 32 && byte != '\n' && byte != '\r' && byte != '\t') || byte == 127)
             return Error{ErrorCode::configuration, "Configuration contains a control character."};
+    }
     Config config;
     std::set<std::string_view> seen;
     std::size_t line_number = 0;

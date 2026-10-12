@@ -1,18 +1,31 @@
 # GhostWire
 
-**Checkpoint: GW-A01-HF01-WINDOWS-UNICODE-RECOVERY · Version: 0.1.1 · C++20**
+**Checkpoint candidate: GW-A01-HF02-MACOS-CI-RECOVERY · Version: 0.1.2 · C++20**
 
-A clean-room foundation for an independently hostable communication platform.
-A01 extends A00 with an owned application context, dependency-aware service
-startup and rollback, cooperative cancellation, shutdown deadlines and bounded
-resource admission. All four executables use the same headless core. It is
-not a messaging application yet. There is no network listener, account creation,
+**Your identity. Your server. Your network.**
+
+[![Linux CI](https://github.com/Johnaconda/GhostWire/actions/workflows/linux.yml/badge.svg)](https://github.com/Johnaconda/GhostWire/actions/workflows/linux.yml)
+[![Windows CI](https://github.com/Johnaconda/GhostWire/actions/workflows/windows.yml/badge.svg)](https://github.com/Johnaconda/GhostWire/actions/workflows/windows.yml)
+[![macOS CI](https://github.com/Johnaconda/GhostWire/actions/workflows/macos.yml/badge.svg)](https://github.com/Johnaconda/GhostWire/actions/workflows/macos.yml)
+
+GhostWire is an open-source, privacy-first communication platform in early
+foundation development. Independent hosting, decentralized discovery, encrypted
+conversations and portable identities are **planned features**, not current
+capabilities. See [the roadmap](ROADMAP.md) for sequencing and security gates.
+
+The current source is a clean-room foundation for an independently hostable
+communication platform. A01 extends A00 with an owned application context,
+dependency-aware service startup and rollback, cooperative cancellation,
+shutdown deadlines and bounded resource admission. All four executables use
+the same headless core. It is not a messaging application yet. There is no network listener, account creation,
 cryptography, vault, GUI, relay forwarding, or remote AI call in this checkpoint.
 
 ## Start here
 
 - [BUILD.md](BUILD.md): Windows/MSVC, Linux and macOS commands and exit codes.
-- [HF01 report](docs/checkpoints/GW-A01-HF01.md): current changes, validation and limits.
+- [HF02 candidate report](docs/checkpoints/GW-A01-HF02.md): macOS CI repair scope and pending acceptance.
+- [Published Windows acceptance](docs/checkpoints/GW-A01-HF01-HOST-ACCEPTANCE.md): owner's Debug/Release evidence.
+- [HF01 report](docs/checkpoints/GW-A01-HF01.md): preserved historical changes and limits.
 - [Windows acceptance](docs/checkpoints/GW-A01-HF01-WINDOWS-ACCEPTANCE.md): original TEMP/TMP checklist.
 - [A01 report](docs/checkpoints/GW-A01.md): preserved implementation evidence.
 - [A00 report](docs/checkpoints/GW-A00.md): preserved baseline evidence.
@@ -20,7 +33,7 @@ cryptography, vault, GUI, relay forwarding, or remote AI call in this checkpoint
 - [ROADMAP.md](ROADMAP.md) and [TODO.md](TODO.md): implementation sequence and work records.
 - [AGENTS.md](AGENTS.md): mandatory continuation rules.
 - [Lifecycle contracts](docs/architecture/CORE_LIFECYCLE.md): ownership, deadlines and budgets.
-- [A02 proposal](docs/checkpoints/GW-A02-PROMPT.md): requires acceptance and new authorization.
+- [A02 proposal](docs/checkpoints/GW-A02-PROMPT.md): separately authorized; not implemented in HF02.
 - [Future features](docs/architecture/FUTURE_FEATURES.md): proposals, not implemented capabilities.
 
 ## Build quickly on Windows
@@ -80,6 +93,12 @@ header with its MIT notice and checksum. The production executables have no
 third-party application dependency.
 
 Project code is licensed under MIT. Dependency licenses remain separate.
-No remote repository has been created or pushed. The owner validated A01 on
-Windows with the ASCII temp workaround. HF01 without that workaround and macOS
-remain unverified; configured CI is not evidence that CI ran.
+Source repository: [Johnaconda/GhostWire](https://github.com/Johnaconda/GhostWire).
+The owner accepted HF01 Windows 10 x64 portable Debug/Release with 34/34 CTest
+passes each using original TEMP/TMP (no ASCII override); see the host record.
+The published HF01 Linux and Windows GitHub Actions runs passed. The published
+macOS 14 jobs failed under AppleClang 15; this candidate updates the macOS
+workflow and three explicit byte conversions but **has not passed macOS CI yet**.
+Windows owner's standard vcpkg/doctest configure failure remains a separate
+local-environment issue; passing hosted CI does not prove that route on that host.
+No runtime networking, cryptography or user directory exists at this checkpoint.

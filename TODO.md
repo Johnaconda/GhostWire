@@ -68,6 +68,15 @@ Legend: `[ ]` planned, `[~]` partial/experimental, `[x]` implemented and validat
 | GW-A25-IMPL | Performance & Release Baseline | benchmarks; tools/packaging; docs/release | A23; A24; all release blockers closed | [ ] Planned | Not run | Defined workloads on ordinary hardware; idle/UI/IO memory/backpressure evidence; installer/update provenance and three-OS release/restore acceptance. | Proposed; not accepted |
 | GW-A25-EVIDENCE | Performance & Release Baseline: tests and handover | tests; docs/checkpoints/GW-A25.md; relevant ADRs | GW-A25-IMPL | [ ] Planned | Not run | Add relevant failure/security tests; run available host/build checks; update invariant map, TODO, changes, limits and cumulative ZIP/SHA. | Proposed; not accepted |
 
+## HF02 repository/macOS CI repair — candidate (2026-10-12)
+
+| ID | Work | Current evidence | Acceptance needed |
+|---|---|---|---|
+| GW-A01-HF01-WIN-ACCEPTED | Owner portable Windows Debug/Release and Unicode tooling | [x] 34/34 CTest each; original TEMP/TMP, no manual workaround; see HOST-ACCEPTANCE | Accepted only for portable Windows 10 x64; owner vcpkg remains separate |
+| GW-A01-HF02-CLANG | Explicit unsigned byte validation in two loops | [~] Source change; run strict Clang/GCC builds/CTest | Preserve all error behavior and test expectations |
+| GW-A01-HF02-MACOS-CI | Newer C++20 macOS standard library, ARM64/Intel runner coverage | [~] Workflow changed, hosted rerun not yet evidenced | All four macOS builds/tests pass; no unsupported-compiler fallback |
+| GW-A01-HF02-REPO | Align README, GitHub instructions, checkpoint inventory | [~] Source changes, not yet owner accepted | Verify new source ZIP, hosted CI and version identity |
+
 ## Status discipline
 
 No future feature is complete because its header is proposed. A00 records remain
@@ -82,12 +91,12 @@ into COMPLETED with evidence; leave unresolved constraints visible here.
 
 | ID | Remaining work | Status and acceptance evidence required |
 |---|---|---|
-| GW-A01-WIN | Windows 10 x64 / VS2026 MSVC | Owner reports portable Debug/Release builds, 29/29 CTest and 64/64 unit cases with ASCII TEMP/TMP, plus CLI launch. Original TEMP/TMP recovery and fresh-shell tooling remain pending under HF01. The old 65-case expectation was Linux-only (one POSIX symlink case). |
-| GW-A01-MAC | macOS x64 and ARM64 | Unexecuted: AppleClang Debug/Release and lifecycle/cancellation/paths on each claimed architecture. Includes A00-MAC coverage. |
+| GW-A01-WIN | Windows 10 x64 / VS2026 MSVC | Owner passed HF01 portable Debug/Release 34/34 CTest each in normal PowerShell with original TEMP/TMP, plus CLI launch. Previous ASCII-TEMP 29/29 results are historical. |
+| GW-A01-MAC | macOS x64 and ARM64 | Initial hosted macos-14/AppleClang 15 Debug/Release compile failed. HF02 macos-26 ARM64/Intel matrix candidate requires a green rerun; no macOS CTest pass yet. |
 | GW-A01-LEAK | Full LeakSanitizer | Blocked here by process inspection; run default sanitizer suite on an unrestricted host. ASan/UBSan without leak detection is separately passing. |
 | GW-A01-TIDY | clang-tidy | Tool unavailable here; run configured analysis on a supported compiler/tooling host. Compiler warnings-as-errors and boundary checks passed separately. |
-| GW-A01-CI | Hosted workflows | Not run and no remote created; owner authorization required for publication. |
-| GW-A01-ACCEPT | Checkpoint acceptance | Owner accepts A01 functionality with documented workaround and cooperative deadline/declared-budget limits. HF01 must pass with original TEMP/TMP before A02 authorization. No unconditional native/vcpkg acceptance inferred. |
+| GW-A01-CI | Hosted workflows | GitHub repository public; initial hosted Windows/Linux CI passed; initial macOS jobs failed. HF02 rerun pending. |
+| GW-A01-ACCEPT | Checkpoint acceptance | Owner accepts A01 functionality with documented workaround and cooperative deadline/declared-budget limits. HF01 Windows portable original TEMP/TMP is now accepted, and the owner authorized A02 separately. HF02 hosted macOS repair is pending; no unconditional native/vcpkg acceptance inferred. |
 | GW-FUTURE-PROPOSALS | Web, native AI, model ecosystem, training, AI security, media and GPU policies | Planned only; IDs and scope/gates in docs/architecture/FUTURE_FEATURES.md. No implementation authorization implied. |
 
 ## A01 HF01 recovery
@@ -98,11 +107,11 @@ and the exact supplied A01 ZIP, SHA-256 recorded in GW-A01-HF01.md.
 
 | ID | Work | Implementation / validation | Acceptance |
 |---|---|---|---|
-| GW-A01-HF01-UTF8 | Remove native narrow fixture serialization; retain native fs paths | [x] Implemented; Linux Debug/Release and vcpkg Debug pass 33 CTest checks; 67 unit cases / 640 assertions; ASan/UBSan with leaks disabled | Windows original-TEMP run pending |
-| GW-A01-HF01-REGRESS | Unicode profile shape, ö/spaces/default temp, config/CLI, invalid bytes | [x] Two new portable cases, native Windows UTF-16 case, four real executable Unicode tests; production UTF-8 validator unchanged | Windows expects 67 unit cases plus tooling, 34 CTest registrations; not claimed run |
-| GW-A01-HF01-TOOLS | CMake/CTest pairing, explicit overrides, Unicode environment, x64 diagnostics and fresh configure | [~] Source implemented and PowerShell grammar parsed; 18 native tooling checks registered | Windows PowerShell 5.1/MSVC execution pending |
+| GW-A01-HF01-UTF8 | Remove native narrow fixture serialization; retain native fs paths | [x] Implemented; Linux Debug/Release and vcpkg Debug pass 33 CTest checks; 67 unit cases / 640 assertions; ASan/UBSan with leaks disabled | Windows original-TEMP owner validation passed 34/34 each |
+| GW-A01-HF01-REGRESS | Unicode profile shape, ö/spaces/default temp, config/CLI, invalid bytes | [x] Two new portable cases, native Windows UTF-16 case, four real executable Unicode tests; production UTF-8 validator unchanged | Windows actually passed 34/34 CTest each (unit case counts not independently posted) |
+| GW-A01-HF01-TOOLS | CMake/CTest pairing, explicit overrides, Unicode environment, x64 diagnostics and fresh configure | [~] Source implemented and PowerShell grammar parsed; 18 native tooling checks registered | Owner Windows PowerShell 5.1/MSVC execution passed 34/34 CTest each |
 | GW-A01-HF01-VCPKG | Windows doctest 2.4.12 configure failure | [!] Unresolved owner report; pins/modes preserved; Linux vcpkg passing does not resolve Windows failure | Capture full configure/buildtree logs and pass Debug/Release + CTest before closure |
-| GW-A01-HF01-ACCEPT | Original Windows TEMP/TMP and ordinary-shell acceptance | [ ] Owner checklist in GW-A01-HF01-WINDOWS-ACCEPTANCE.md | Required before A02; no ASCII workaround |
+| GW-A01-HF01-ACCEPT | Original Windows TEMP/TMP and ordinary-shell acceptance | [x] Owner procedure in checklist; results recorded in GW-A01-HF01-HOST-ACCEPTANCE.md | Windows portable Debug/Release accepted; original TEMP/TMP |
 
 macOS x64/ARM64, full LSan, clang-tidy and hosted CI remain unverified/incomplete.
 No new runtime scope, private persistence or authorization exception is granted.

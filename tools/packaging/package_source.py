@@ -18,7 +18,7 @@ parser = argparse.ArgumentParser()
 parser.add_argument('--output', type=Path)
 args = parser.parse_args()
 root = Path(__file__).resolve().parents[2]
-destination = args.output or root / 'dist/GHOSTWIRE-GW-A01-HF01-WINDOWS-UNICODE-RECOVERY-source.zip'
+destination = args.output or root / 'dist/GHOSTWIRE-GW-A01-HF02-MACOS-CI-RECOVERY-source.zip'
 destination = destination.resolve()
 files = []
 for name in sorted(ROOT_FILES):
@@ -40,7 +40,7 @@ files.sort(key=lambda p: p.relative_to(root).as_posix())
 if destination == root or destination.is_relative_to(root / 'docs') or destination in files:
     parser.error('Output must not overwrite source')
 inventory = {path.relative_to(root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest() for path in files}
-manifest = json.dumps({'checkpoint': 'GW-A01-HF01-WINDOWS-UNICODE-RECOVERY', 'algorithm': 'SHA-256',
+manifest = json.dumps({'checkpoint': 'GW-A01-HF02-MACOS-CI-RECOVERY', 'algorithm': 'SHA-256',
                        'files': inventory}, indent=2, sort_keys=True).encode() + b'\n'
 destination.parent.mkdir(parents=True, exist_ok=True)
 with zipfile.ZipFile(destination, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:

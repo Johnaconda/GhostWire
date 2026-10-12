@@ -137,6 +137,14 @@ triplets; do not report success until both build and CTest actually pass.
 
 ## Linux and macOS
 
+For current CI macOS support, use Xcode 26 and its C++20 libc++ with
+`std::stop_source`/`std::stop_token`; the historical macos-14 AppleClang 15
+runner lacks those required library types. HF02 uses hosted macos-26 ARM64/Intel
+for candidate CI runs. Do not turn off `-Werror` or silently substitute a
+nonstandard cancellation API to get older SDKs building. macOS CI validation
+is pending until those hosted jobs complete successfully.
+
+
 Install a C++20 compiler (GCC/Clang or AppleClang), CMake and Ninja through your
 chosen package manager. For the exact offline dependency:
 
@@ -241,7 +249,9 @@ Also validate a path containing Swedish letters using `--data-root`, check
 tool discovery. Windows Known Folder APIs, Unicode argv and PowerShell setup
 remain host acceptance items. The console windows exiting immediately is
 correct A01 behavior; no GUI or long-lived server is expected. The checkpoint
-report separates Linux execution evidence from pending HF01 host acceptance.
+report preserves the original pre-acceptance checklist. Actual HF01 owner
+Windows results are in
+[GW-A01-HF01-HOST-ACCEPTANCE.md](docs/checkpoints/GW-A01-HF01-HOST-ACCEPTANCE.md).
 The complete Unicode/default-TEMP checklist and A01 owner-reported results are
 in [GW-A01-HF01-WINDOWS-ACCEPTANCE.md](docs/checkpoints/GW-A01-HF01-WINDOWS-ACCEPTANCE.md).
 

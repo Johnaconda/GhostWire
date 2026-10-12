@@ -65,7 +65,8 @@ void quoted(std::ostream &out, std::string_view text) {
     constexpr char digits[] = "0123456789abcdef";
     out << '"';
     const auto clipped = text.substr(0, 256);
-    for (const unsigned char c : clipped) {
+    for (const char code_unit : clipped) {
+        const auto c = static_cast<unsigned char>(code_unit);
         if (c == '"' || c == '\\')
             out << '\\' << static_cast<char>(c);
         else if (c < 32 || c >= 127)
