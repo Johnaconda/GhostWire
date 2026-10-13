@@ -10,7 +10,7 @@ Production path validation and the runtime dependency graph are unchanged.
 Windows development-tool environment transfer uses explicit Unicode decoding;
 tooling helpers and their subprocess checks do not add an application process API.
 
-## What exists at A01
+## What exists through A02
 
 The four composition roots retain the A00 strict CLI, configuration, logging,
 paths and one-shot behavior. Application now owns an immutable ApplicationContext,
@@ -21,8 +21,11 @@ reverse-ordered, deadline-aware and retryable while retaining live dependencies.
 
 See [core lifecycle contracts](docs/architecture/CORE_LIFECYCLE.md) and
 [ADR-004](docs/decisions/ADR-004-CORE-LIFECYCLE.md) for ownership, states, deadlines,
-diagnostics and resource semantics. There are no production workers, domain
-services, GUI, networking, cryptography or persistent private data.
+diagnostics and resource semantics. A02 adds real owned process monitoring, an
+explicit native-stop registration and secure-storage API capability discovery.
+See [platform contracts](docs/architecture/PLATFORM_ABSTRACTIONS.md) and
+[ADR-005](docs/decisions/ADR-005-PLATFORM-OWNERSHIP.md). There are no domain services,
+GUI, networking, cryptography or persistent private data.
 
 `ghostwire_core` and `ghostwire_platform` are static libraries. “Shared core”
 means common code used by all executable roles, not a shared binary ABI. This
@@ -41,8 +44,10 @@ separate accepted change; do not silently convert these contracts into a plugin 
 3. Logger borrows its output stream; a mutex serializes complete bounded records.
    Public field values must be reviewed fixed metadata. Arbitrary content goes
    through a sensitive key and is redacted. It is not a secret detection engine.
-4. OS environment reads happen during bootstrap, before future workers start.
-   No module changes process environment during normal operation.
+4. OS environment reads happen during bootstrap or explicit process launch.
+   Process launch defaults to replacement; optional inheritance snapshots must
+   not race POSIX environment mutation. No module changes the parent process
+   environment during normal operation.
 5. UI, networking, vault and crypto ownership are separate future service
    domains. Their public headers must not expose native OS or renderer types.
 6. A result containing Error is a failure, never a success-shaped stub. Errors
@@ -85,8 +90,10 @@ defines proposed headers without providing misleading compilable security stubs.
 
 ## Thread and performance contract
 
-A01 creates no production worker pool and performs no background I/O. Test
-fixtures own real joining threads to verify cancellation and timeout behavior. Future networking
+A01 creates no production worker pool. A02 Process owns one joined monitor per
+explicitly launched child for bounded pipe I/O and reaping. The bootstrap creates
+no child/monitor. Restricted native stop callbacks latch state; only owner-thread
+dispatch calls C++ cancellation callbacks. Test fixtures verify real cleanup. Future networking
 owns bounded event loops; each vault owns a serialized transaction executor;
 crypto/file jobs run on bounded workers and return immutable results. UI and
 platform event mutation stay on their UI thread. Shutdown rejects new work,

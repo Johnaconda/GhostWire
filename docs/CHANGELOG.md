@@ -1,5 +1,25 @@
 # Changelog
 
+## 0.2.0 — GW-A02-PLATFORM-ABSTRACTIONS — 2026-10-12 (acceptance pending)
+
+- Continue verified accepted HF01 and reconcile supplied GitHub commit 7137505;
+  preserve HF02 macOS CI/byte-conversion repairs, owner README and prior records.
+- Add owned native process launch, explicit cwd/environment, argv without shell
+  interpolation, bounded stream capture, cancellable/deadline waits and RAII cleanup.
+- Add Windows job/handle isolation and POSIX group/descriptor/reaping ownership,
+  with a joined monitor and explicit graceful versus forced stop.
+- Add explicit process-stop registration and owner-thread cancellation dispatch;
+  integrate safe points into all four existing one-shot bootstraps.
+- Add truthful DPAPI/Keychain API-presence probes; Linux unsupported, policy-disabled
+  unavailable, failures distinct, and persistence_ready false throughout.
+- Add real child/descendant, Unicode/quoting, failure, environment, lifetime,
+  deadline, native signal/console, concurrent-wait and child-service tests.
+- Preserve C++20, warning policy, portable/vcpkg presets and all prior tests;
+  require safe POSIX spawn facilities instead of unsafe fallback inheritance.
+- Record actual Linux evidence, prior input CI, new native acceptance gates,
+  platform contracts, ADR-005, inventory and proposed A03 handover. No A03 work.
+
+
 ## 0.1.2 — GW-A01-HF02-MACOS-CI-RECOVERY — 2026-10-12 (candidate)
 
 - Scoped GitHub publication/CI repair atop accepted HF01; not A02 work.

@@ -61,3 +61,19 @@ resource_budget() is declared in resource_admission.hpp and implemented in core.
 | WorkLease | Owns reservation in shared accounting state | No payload ownership, executor or borrowed context lifetime extension |
 
 See [CORE_LIFECYCLE.md](CORE_LIFECYCLE.md) for complete contracts.
+
+## A02 runtime ownership
+
+Compile-time arrows and the platform core-value allowlist are unchanged. Native
+process, stop and capability APIs link only platform/contracts/system libraries.
+No new third-party runtime dependency is added.
+
+| Owner | Owned resources | Constraint |
+|---|---|---|
+| Caller / application service | unique_ptr Process | No adopted PID; destruction cannot race callers; service retains dependencies until cleanup |
+| Process | Direct child, group/job, pipes, joined monitor | Synchronized operations, bounded captures/waits, no detached monitor |
+| Bootstrap / future event loop | ProcessStopBridge registration and stop source | One owner thread dispatches; restricted callbacks only latch atomic state |
+| Capability probe call | Temporary native library reference | Local API discovery only; no secret-store session or persistence authority |
+
+See [PLATFORM_ABSTRACTIONS.md](PLATFORM_ABSTRACTIONS.md). A platform adapter does
+not perform service lookup and service dependency IDs are not permissions.

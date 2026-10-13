@@ -1,73 +1,98 @@
-# Validation policy
+# Validation policy and current A02 evidence
 
-The current measured results are in docs/checkpoints/GW-A01-HF01.md; GW-A00.md
-and GW-A01.md are preserved historical evidence. This file defines
-how to reproduce and interpret them, not additional passed tests.
+The measured A02 matrix is in [GW-A02](../checkpoints/GW-A02.md). Earlier reports
+remain historical records. [Input evidence](../checkpoints/GW-A02-INPUT-EVIDENCE.md)
+separates owner HF01 acceptance and supplied HF02 hosted results from new A02 tests.
+Implementation, execution evidence and owner acceptance are different states.
+
+## Regression coverage
 
 CMake warnings-as-errors applies to project code; vendored doctest is a SYSTEM
-include. HF01 CTest registers one doctest executable and eight real subprocess
-contracts for each of four roles, plus a Windows-only PowerShell tooling test.
-That is 33 Linux/macOS registrations and 34 Windows registrations. Unit cases cover version/result, bounded
-configuration, paths, UTF-8, lifecycle/cancellation, log redaction/concurrency,
-CLI precedence and exact exit codes. Subprocess tests include help, version,
-valid defaults, unknown flag, invalid config, missing file, complete bootstrap
-and Unicode paths through actual native argv/config handling.
+include. No warning flags or accepted test cases are weakened. A02 registers two
+unit executables plus eight real subprocess contracts per role, and the existing
+Windows PowerShell test: **34 Linux/macOS, 35 Windows** CTest registrations.
+Windows/macOS A02 counts are expected coverage, not execution evidence.
 
-A01 adds graph ordering/rejection/bounds, partial-start failure/exception rollback,
-dependency retention, repeated/reentrant shutdown, context/ownership lifetimes,
-stop-token forwarding, deadline overflow/shared budgets, actual joined-worker
-timeout/retry and synchronized resource admission. A01 had 65 Linux cases / 589
-assertions and 64 Windows cases / 587 assertions because its symlink traversal
-test was POSIX-only. HF01 retains all these cases and adds two portable Unicode
-cases and a Windows-only native UTF-16 case. Linux now passes 67 cases / 640
-assertions; Windows also expects 67 cases but has not been executed for HF01.
-Controlled service fixtures
-are test code only. No production subsystem is represented by a pretend service.
+The existing core suite retains bounded config/version/results, strict UTF-8,
+Unicode native paths, role isolation, exact CLI exits, no-write validation,
+privacy-aware logging, service graphs/failure rollback/reverse cleanup, repeated
+shutdown, context lifetimes, cancellation, shared monotonic deadlines, joined
+work and admission contention. Linux still has 67 core cases / 640 assertions.
 
-The contention workload uses four threads with 1,000 admission attempts each;
-it checks capacity invariants, not throughput. The real deadline test uses a
-completion gate so 10 ms must expire before cleanup can finish, verifies return
-within a generous 2 s watchdog, then releases the gate and retries with 2,000 ms.
-Deterministic fake-clock tests prove the shared deadline arithmetic without
-relying on scheduler timing. CTest applies a 30 s unit-suite timeout and
-15 s per original CLI subprocess contract; Unicode/tooling cases get 30 s.
+The new platform suite uses an actual compiled child fixture. Linux has 18 cases /
+191 assertions, including Unicode exe/cwd/argv/env, spaces/empty/quotes/backslashes,
+literal shell metacharacters, invalid UTF-8/options/missing native resources,
+nonzero exits, flood/discard/zero output budgets, timeout/cancellation ownership,
+force/repeated/concurrent waits, RAII reaping, ordinary descendants, native stop
+owner dispatch/reinstall/restoration, environment isolation, foreign descriptors,
+SIGCHLD ownership and a real A01 child-owning service. Windows adds foreign HANDLE
+isolation in place of three POSIX-only cases. Its actual A02 case/assertion counts
+must come from native logs. Capability tests cover unsupported/disabled/cancel/
+invalid-policy behavior and native API presence on supported systems; no vault.
 
-HF01 core fixtures preserve fs::temp_directory_path() and create Unicode/spaces
-below it. Native fs::path values are used for filesystem I/O and path_to_utf8
-only for CLI/config text. Test on the real non-ASCII Windows profile with its
-original TEMP/TMP; do not apply the old ASCII workaround. The Windows tooling
-case exercises actual cmd.exe UTF-16 environment transport with Unicode/spaces
-and shell metacharacters, failed setup, CTest discovery and architecture checks.
-Its fixtures never invoke the fake tool files used solely to test discovery.
+Fixtures retain native temp paths, including ö/spaces, and use explicit UTF-8
+conversion only at text boundaries. Never substitute an ASCII TEMP/TMP to obtain
+acceptance. Windows platform tests own a console only when no shared console is
+present. Native process-control failures must fail the test rather than become a
+silent skip. CTest's suite watchdogs and real handshake deadlines bound fixtures;
+these do not prove hard kernel cleanup deadlines.
 
-Run Debug and Release for a foundation change. On a supported compiler run
-ASan/UBSan and record any environment restrictions rather than suppressing errors.
-A test process must finish within its CTest timeout; no-tests is an error.
-Run `python3 tools/check_boundaries.py` and `python3 tools/format.py --check`.
-clang-tidy is opt-in with GW_ENABLE_CLANG_TIDY; absence is reported as unverified.
+## Actual local commands
 
-On this Linux executor, default LeakSanitizer cannot inspect process tasks.
-The explicitly separate `ASAN_OPTIONS=detect_leaks=0 UBSAN_OPTIONS=halt_on_error=1`
-run passes; it is not a passing leak check and is not baked into presets or CI.
-GCC ThreadSanitizer passed in A01; it was not rerun for HF01's fixture/tooling-only
-changes. The limited ASan/UBSan suite was rerun for HF01 and all 33 checks passed.
-No sanitizer finding was suppressed. Run full leak checks on a supported host.
+Run from project root with compiler/CMake/Ninja on PATH. A02 local evidence uses
+serial builds because an observed parallel-link environment issue intermittently
+left binaries at mode 0644; serial clean rebuild restored valid output without
+source or warning-policy workarounds. This is not a native-platform result.
 
-Windows: validate the actual MSVC/SDK, Known Folder, Unicode argv and tool
-selection in both ordinary and Developer PowerShell. macOS: validate
-AppleClang, user directories, symlink behavior and host architecture. Hosted
-CI is useful but does not substitute for the user's Windows 10/VS2026 host.
+```bash
+cmake --preset portable-debug
+cmake --build --preset portable-debug --parallel 1
+ctest --preset portable-debug --verbose
+cmake --preset portable-release
+cmake --build --preset portable-release --parallel 1
+ctest --preset portable-release --verbose
+# Requires pinned VCPKG_ROOT; no silent fallback to vendored:
+cmake --preset linux-debug
+cmake --build --preset linux-debug --parallel 1
+ctest --preset linux-debug --verbose
+cmake --preset portable-sanitize
+cmake --build --preset portable-sanitize --parallel 1
+# Actual default local attempt: unit assertions passed, LSan runtime failed:
+ctest --preset portable-sanitize -R '^core-unit$'
+# Separate limited evidence, never embedded in presets/CI:
+ASAN_OPTIONS=detect_leaks=0 UBSAN_OPTIONS=halt_on_error=1 ctest --preset portable-sanitize --verbose
+cmake -S . -B out/build/portable-tsan -G Ninja -DCMAKE_BUILD_TYPE=Debug \
+  -DGW_TEST_DEPENDENCY=vendored \
+  '-DCMAKE_CXX_FLAGS=-fsanitize=thread -fno-omit-frame-pointer' \
+  -DCMAKE_EXE_LINKER_FLAGS=-fsanitize=thread
+cmake --build out/build/portable-tsan --target ghostwire-tests ghostwire-platform-tests ghostwire-platform-fixture --parallel 1
+ctest --test-dir out/build/portable-tsan -R '^(core|platform)-unit$' --output-on-failure
+python3 tools/check_boundaries.py
+python3 tools/format.py --check
+```
 
-The owner reports A01 Windows portable builds/CTest pass with the TEMP workaround.
-HF01 Windows and its PowerShell checks remain unexecuted here. All three current
-PowerShell files parsed with Tree-sitter PowerShell 0.26.4 / Tree-sitter 0.26.0;
-this is a grammar check, not PowerShell 5.1 or MSVC runtime validation. Parser
-packages are local validation tools, not project/runtime dependencies. Windows
-vcpkg doctest configuration is still unresolved. Follow the HF01 Windows checklist
-and record tool versions, exact archive checksum, test counts and unmodified temp
-environment before owner acceptance. Full LSan, clang-tidy and hosted CI stay open.
+Test-only replacement environments explicitly forward ASAN_OPTIONS, UBSAN_OPTIONS
+and TSAN_OPTIONS when the test runner receives them, so instrumented children
+honor the requested run policy. They set no default suppression/disable policy.
+Production environment replacement/inheritance is unaffected.
 
-Future checkpoints must add interop, fuzzing, storage fault injection and
-privacy leakage tests as real functionality arrives. No synthetic benchmark
-number is a product throughput/latency guarantee. Add workload definitions and
-hardware/environment metadata before publishing performance claims.
+## Interpretation and remaining checks
+
+Local default LeakSanitizer failed to inspect /proc task state after core assertions
+passed. The separately recorded leak-disabled ASan/UBSan success is not a passing
+leak audit. TSan covered both complete unit executables (including real instrumented
+children), not all role CLI subprocess contracts. Prior HF02 default sanitizer CI
+passed, but it predates the new A02 monitor/process implementation.
+
+clang-tidy is opt-in via GW_ENABLE_CLANG_TIDY; it is unavailable in this executor.
+Do not report it as passed based on strict compilation or the boundary script.
+A02 Windows10/MSVC19.51 and macOS native runtime are unexecuted here. The prior
+hosted MSVC19.44 success does not close the owner's local vcpkg/doctest issue.
+Use [native acceptance](../checkpoints/GW-A02-NATIVE-ACCEPTANCE.md) and retain
+original temp settings. New A02 CI was not triggered and no remote changes made.
+
+Source JSON/YAML, local Markdown links, packaging CRC/source hashes and a fresh
+archive extraction/build must be checked before delivery. Do not ship build/cache
+outputs, credentials, temporary fixtures or .git. Future crypto/storage/network
+checkpoints need their own upstream vectors, fault injection, interop/fuzzing and
+privacy leakage tests; no current unit result establishes product readiness.

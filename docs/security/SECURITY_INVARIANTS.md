@@ -1,6 +1,6 @@
 # Security invariants and test mapping
 
-“Implemented” refers to narrow A00/A01 behavior, not a future security capability.
+“Implemented” refers to narrow A00/A01/A02 behavior, not a future security capability.
 Future tests are named acceptance tasks, not passing tests hidden by missing code.
 
 | ID | Invariant | State / evidence |
@@ -23,7 +23,7 @@ Future tests are named acceptance tasks, not passing tests hidden by missing cod
 | SI-016 | AI/plugin authority is explicit and revocable | Future: A20/A22 scope denial, prompt-injection, provider disclosure and sandbox tests |
 | SI-017 | Community policy never grants blanket DM or vault access | Future: A13/A21 permission matrix and host-only compromise tests |
 | SI-018 | Recovery/erasure claims account for replicated keys and copied plaintext | Future: A11/A12/A23 restore/replica inventory and deliberate authorization tests |
-| SI-019 | Capability claims reflect actual platform/runtime state | A00 capability text tests; A17 capture diagnostics and accessibility host tests pending |
+| SI-019 | Capability claims reflect actual platform/runtime state | A02 supported/available/unavailable/unsupported API probe results; persistence_ready always false; loader failure is an error. Native A02 host checks pending. A17 capture/accessibility remain future. |
 | SI-020 | Protocol changes are versioned; unsupported versions fail closed | No wire schema in A00; A05 compatibility matrix and fuzz tests pending |
 | SI-021 | Runtime GUI components cannot become headless dependencies | Implemented module-boundary check, separate composition roots; future CMake dependency checks |
 | SI-022 | Dependency/packaging provenance is explicit | Manifest pin, vendored SHA verification, source inventory and archive checksum; future advisory/release-signing audits pending |
@@ -33,3 +33,16 @@ Future tests are named acceptance tasks, not passing tests hidden by missing cod
 When adding a security subsystem, assign concrete test IDs and evidence to its
 invariants. Mark failed, blocked and unverified separately. Do not label a future
 invariant “passing” merely because the triggering subsystem does not exist yet.
+
+## A02 additions
+
+| ID | Invariant | Implementation and evidence |
+|---|---|---|
+| SI-025 | Only explicitly owned child resources can be controlled | No PID-adoption API; Windows suspended-child job assignment and handle allowlist; POSIX group identity retained until cleanup/reap; Linux real-child/foreign-FD tests |
+| SI-026 | Child output and waits are bounded without abandoning ownership | Per-stream caps plus continued draining; timeout/cancel retains object; repeated/concurrent waits, flood and RAII tests; OS cleanup is not a hard deadline |
+| SI-027 | Restricted native callbacks do not run application code | Lock-free latch only; owner dispatch requests stop; handler restoration/reinstall and actual signal-delivery tests |
+| SI-028 | Secure API presence cannot authorize private persistence | Capability field explicitly API-only; no secret operation; disabled/unsupported/cancel tests; A11-PRE and AUTH-PRE stay open |
+
+These invariants do not imply hostile process containment, forced in-process
+service cancellation, complete process-memory secrecy or production encryption.
+See the full platform contracts and A02 native acceptance checklist.

@@ -3,10 +3,10 @@ Legend: `[ ]` planned, `[~]` partial/experimental, `[x]` implemented and validat
 ## Current acceptance gates
 | ID | Title | Planned source | Dependencies | Implementation | Validation | Acceptance criteria | Design/owner acceptance |
 |---|---|---|---|---|---|---|---|
-| GW-A00-WIN | Windows 10 / VS2026 acceptance | tools/windows; src/platform; .github/workflows/windows.yml | A00 package | [~] Implemented, native run pending | Not run on Windows | Debug/Release + CTest; fresh PowerShell detection; Unicode/spaces paths; exact exit codes | Pending user host acceptance |
-| GW-A00-MAC | macOS native acceptance | src/platform; .github/workflows/macos.yml | A00 package | [~] Implemented, native run pending | Not run on macOS | AppleClang Debug/Release + CTest; directories/symlinks; host architecture | Pending |
-| GW-A00-CI | Execute remote workflows and branch policy |  .github; SECURITY.md | Authorized remote creation | [ ] Configured files only | Not run remotely | Windows/Linux/macOS workflow results; private security reporting and reviewed required checks | No remote authorized/created |
-| GW-A00-LEAK | LeakSanitizer on unrestricted Linux host | tests/unit; docs/checkpoints/GW-A00.md | A00 sanitizer build | [!] Test path exists | Local environment blocks /proc task inspection | Run full sanitizer suite without disabling leaks on supported host; archive evidence | Pending |
+| GW-A00-WIN | Windows 10 / VS2026 acceptance | tools/windows; src/platform | Cumulative HF01 | [x] Existing foundation accepted through HF01 | Owner Debug/Release 34/34 each, original TEMP/TMP | Preserve Unicode/CLI/tooling coverage in A02 | HF01 accepted; new A02 native gates below |
+| GW-A00-MAC | macOS foundation acceptance | src/platform; CI | Supplied HF02 commit | [x] Prior cumulative hosted coverage | macOS26 ARM64/Intel Debug/Release 33/33 each at 7137505 | Preserve coverage; rerun new A02 native branches | Hosted evidence only; physical-host/minimum-OS acceptance separate |
+| GW-A00-CI | Execute remote workflows and branch policy | .github; SECURITY.md | Owner-published repository | [x] Prior hosted workflows executed | Linux/Windows/macOS success at 7137505; see A02-INPUT-EVIDENCE | New A02 CI still required; branch protection/private reporting not audited | No repository policy changes made in A02 |
+| GW-A00-LEAK | LeakSanitizer on supported host | tests/unit | Sanitizer builds | [~] Prior HF02 default sanitizer workflow passed | 33/33 hosted; A02 local default core run blocked by /proc inspection | Full A02 leak validation remains open | No standalone leak audit inferred |
 | GW-A00-TIDY | Run clang-tidy in supported tooling environment | .clang-tidy; CMakeLists.txt | clang-tidy installed | [ ] Integration configured | Not run locally | Record actual static-analysis version/findings; resolve relevant defects | Pending |
 | GW-A11-PRE | Minimum encrypted key and session-state store | src/vault; platform/secure_storage.hpp | A02; A03; provider/license review | [ ] Planned | Not run | No raw keys on disk; OS-protected wrapping + bounded KDF; atomic authenticated state and rollback/crash tests before persistent A04/A08 | Architecture decision recorded; implementation unaccepted |
 | GW-AUTH-PRE | Base scoped authorization | src/permissions; include/ghostwire/permissions | A01; A04 public principal contract | [ ] Planned | Not run | Deny by default; action/resource/expiry; no admin/agent ambient vault rights; negative matrix before listeners | Architecture decision recorded; implementation unaccepted |
@@ -17,10 +17,10 @@ Legend: `[ ]` planned, `[~]` partial/experimental, `[x]` implemented and validat
 
 | ID | Title | Planned source | Dependencies | Implementation | Validation | Acceptance criteria | Design/owner acceptance |
 |---|---|---|---|---|---|---|---|
-| GW-A01-IMPL | Core Lifecycle & Services | include/ghostwire/core; src/core | Verified A00; explicit owner authorization | [x] Implemented | Linux Debug/Release: 65 cases, 589 assertions; all 29 CTest checks | Owned context; deterministic graph validation; rollback/reverse cleanup; cancellation/deadline retry; bounded admission and diagnostics | Implementation authorized; checkpoint acceptance pending |
-| GW-A01-EVIDENCE | Core Lifecycle & Services: tests and handover | tests; docs/checkpoints/GW-A01.md; ADR-004 | GW-A01-IMPL | [x] Recorded for executed environment | ASan/UBSan with leaks disabled; TSan unit suite; format/boundaries and package verification | Full cumulative source, changed files, commands, actual limits and A02 proposal; native/leak gates remain below | Await owner Windows host acceptance |
-| GW-A02-IMPL | Platform Abstractions | include/ghostwire/platform; src/platform | A01 | [ ] Planned | Not run | Prove native paths, secure-storage capabilities, owned-process and stop-event APIs on Windows/Linux/macOS; unsupported states explicit. | Proposed; not accepted |
-| GW-A02-EVIDENCE | Platform Abstractions: tests and handover | tests; docs/checkpoints/GW-A02.md; relevant ADRs | GW-A02-IMPL | [ ] Planned | Not run | Add relevant failure/security tests; run available host/build checks; update invariant map, TODO, changes, limits and cumulative ZIP/SHA. | Proposed; not accepted |
+| GW-A01-IMPL | Core Lifecycle & Services | include/ghostwire/core; src/core | Verified A00; explicit owner authorization | [x] Implemented | Linux Debug/Release: 65 cases, 589 assertions; all 29 CTest checks | Owned context; deterministic graph validation; rollback/reverse cleanup; cancellation/deadline retry; bounded admission and diagnostics | Owner A01/HF01 acceptance recorded below |
+| GW-A01-EVIDENCE | Core Lifecycle & Services: tests and handover | tests; docs/checkpoints/GW-A01.md; ADR-004 | GW-A01-IMPL | [x] Recorded for executed environment | ASan/UBSan with leaks disabled; TSan unit suite; format/boundaries and package verification | Full cumulative source, changed files, commands, actual limits and A02 proposal; native/leak gates remain below | Owner HF01 Windows portable accepted; prior records preserved |
+| GW-A02-IMPL | Platform Abstractions | include/ghostwire/platform; src/platform | Accepted HF01 + supplied HF02 repository | [x] Implemented; Linux validated | Portable Debug/Release 34/34 each; 85 cases / 831 assertions | Owned process/group/job, bounded capture/waits, owner-dispatched stop and truthful API-only storage capability | Authorized implementation; independent/native acceptance pending |
+| GW-A02-EVIDENCE | Platform tests and handover | tests; docs/checkpoints/GW-A02.md; ADR-005 | GW-A02-IMPL | [x] Source and evidence recorded | Actual matrix and limitations in GW-A02.md | Cumulative ZIP/SHA, source inventory, native checklist and A03 proposal | Stop after A02; A03 not authorized |
 | GW-A03-IMPL | Cryptographic Provider | include/ghostwire/crypto; src/crypto | A02 | [ ] Planned | Not run | Adopt reviewed pinned provider with license/advisory review; upstream vectors, entropy failure, key/nonce bounds, handle lifetimes and secret-memory limits. | Proposed; not accepted |
 | GW-A03-EVIDENCE | Cryptographic Provider: tests and handover | tests; docs/checkpoints/GW-A03.md; relevant ADRs | GW-A03-IMPL | [ ] Planned | Not run | Add relevant failure/security tests; run available host/build checks; update invariant map, TODO, changes, limits and cumulative ZIP/SHA. | Proposed; not accepted |
 | GW-A04-IMPL | Identity & Device Trust | include/ghostwire/identity; src/identity | A03; A11-PRE for persistence | [ ] Planned | Not run | Generate/verify root and authorized device identities; rotation/revocation/contact proof; alias collision/change tests; no raw key files. | Proposed; not accepted |
@@ -68,14 +68,14 @@ Legend: `[ ]` planned, `[~]` partial/experimental, `[x]` implemented and validat
 | GW-A25-IMPL | Performance & Release Baseline | benchmarks; tools/packaging; docs/release | A23; A24; all release blockers closed | [ ] Planned | Not run | Defined workloads on ordinary hardware; idle/UI/IO memory/backpressure evidence; installer/update provenance and three-OS release/restore acceptance. | Proposed; not accepted |
 | GW-A25-EVIDENCE | Performance & Release Baseline: tests and handover | tests; docs/checkpoints/GW-A25.md; relevant ADRs | GW-A25-IMPL | [ ] Planned | Not run | Add relevant failure/security tests; run available host/build checks; update invariant map, TODO, changes, limits and cumulative ZIP/SHA. | Proposed; not accepted |
 
-## HF02 repository/macOS CI repair — candidate (2026-10-12)
+## HF02 repository/macOS CI repair — supplied input evidence (2026-10-12)
 
 | ID | Work | Current evidence | Acceptance needed |
 |---|---|---|---|
 | GW-A01-HF01-WIN-ACCEPTED | Owner portable Windows Debug/Release and Unicode tooling | [x] 34/34 CTest each; original TEMP/TMP, no manual workaround; see HOST-ACCEPTANCE | Accepted only for portable Windows 10 x64; owner vcpkg remains separate |
-| GW-A01-HF02-CLANG | Explicit unsigned byte validation in two loops | [~] Source change; run strict Clang/GCC builds/CTest | Preserve all error behavior and test expectations |
-| GW-A01-HF02-MACOS-CI | Newer C++20 macOS standard library, ARM64/Intel runner coverage | [~] Workflow changed, hosted rerun not yet evidenced | All four macOS builds/tests pass; no unsupported-compiler fallback |
-| GW-A01-HF02-REPO | Align README, GitHub instructions, checkpoint inventory | [~] Source changes, not yet owner accepted | Verify new source ZIP, hosted CI and version identity |
+| GW-A01-HF02-CLANG | Explicit unsigned-byte validation in three core loops | [x] Preserved; supplied AppleClang21 CI and current GCC builds pass | Behavior and warnings unchanged |
+| GW-A01-HF02-MACOS-CI | C++20 macOS standard library, ARM64/Intel runner coverage | [x] Actual four hosted Debug/Release jobs pass at 7137505 | New A02 native code still requires a rerun |
+| GW-A01-HF02-REPO | README, GitHub instructions, checkpoint inventory | [x] Actual supplied commit checked and preserved | Prior repository work is input, not A02 hosted validation |
 
 ## Status discipline
 
@@ -92,11 +92,11 @@ into COMPLETED with evidence; leave unresolved constraints visible here.
 | ID | Remaining work | Status and acceptance evidence required |
 |---|---|---|
 | GW-A01-WIN | Windows 10 x64 / VS2026 MSVC | Owner passed HF01 portable Debug/Release 34/34 CTest each in normal PowerShell with original TEMP/TMP, plus CLI launch. Previous ASCII-TEMP 29/29 results are historical. |
-| GW-A01-MAC | macOS x64 and ARM64 | Initial hosted macos-14/AppleClang 15 Debug/Release compile failed. HF02 macos-26 ARM64/Intel matrix candidate requires a green rerun; no macOS CTest pass yet. |
-| GW-A01-LEAK | Full LeakSanitizer | Blocked here by process inspection; run default sanitizer suite on an unrestricted host. ASan/UBSan without leak detection is separately passing. |
+| GW-A01-MAC | macOS x64 and ARM64 | Initial macos-14 failure is historical; supplied HF02 macOS26/AppleClang21 ARM64/Intel Debug/Release now pass 33/33 each. A02 native changes unexecuted here. |
+| GW-A01-LEAK | Full LeakSanitizer | Prior HF02 default hosted ASan/UBSan workflow passed 33/33. A02 default local run remains blocked by /proc task inspection; leak-disabled success is separate. Full A02 leak gate remains open. |
 | GW-A01-TIDY | clang-tidy | Tool unavailable here; run configured analysis on a supported compiler/tooling host. Compiler warnings-as-errors and boundary checks passed separately. |
-| GW-A01-CI | Hosted workflows | GitHub repository public; initial hosted Windows/Linux CI passed; initial macOS jobs failed. HF02 rerun pending. |
-| GW-A01-ACCEPT | Checkpoint acceptance | Owner accepts A01 functionality with documented workaround and cooperative deadline/declared-budget limits. HF01 Windows portable original TEMP/TMP is now accepted, and the owner authorized A02 separately. HF02 hosted macOS repair is pending; no unconditional native/vcpkg acceptance inferred. |
+| GW-A01-CI | Hosted workflows | Actual Linux, Windows and macOS runs all passed at supplied commit 7137505; exact job evidence in GW-A02-INPUT-EVIDENCE.md. No A02 run or push performed. |
+| GW-A01-ACCEPT | Checkpoint acceptance | Owner accepted A01 functionality/cooperative limits and HF01 Windows portable original TEMP/TMP; A02 authorized. Supplied HF02 repository repairs preserved with prior hosted evidence. No owner-local vcpkg success inferred. |
 | GW-FUTURE-PROPOSALS | Web, native AI, model ecosystem, training, AI security, media and GPU policies | Planned only; IDs and scope/gates in docs/architecture/FUTURE_FEATURES.md. No implementation authorization implied. |
 
 ## A01 HF01 recovery
@@ -109,9 +109,26 @@ and the exact supplied A01 ZIP, SHA-256 recorded in GW-A01-HF01.md.
 |---|---|---|---|
 | GW-A01-HF01-UTF8 | Remove native narrow fixture serialization; retain native fs paths | [x] Implemented; Linux Debug/Release and vcpkg Debug pass 33 CTest checks; 67 unit cases / 640 assertions; ASan/UBSan with leaks disabled | Windows original-TEMP owner validation passed 34/34 each |
 | GW-A01-HF01-REGRESS | Unicode profile shape, ö/spaces/default temp, config/CLI, invalid bytes | [x] Two new portable cases, native Windows UTF-16 case, four real executable Unicode tests; production UTF-8 validator unchanged | Windows actually passed 34/34 CTest each (unit case counts not independently posted) |
-| GW-A01-HF01-TOOLS | CMake/CTest pairing, explicit overrides, Unicode environment, x64 diagnostics and fresh configure | [~] Source implemented and PowerShell grammar parsed; 18 native tooling checks registered | Owner Windows PowerShell 5.1/MSVC execution passed 34/34 CTest each |
+| GW-A01-HF01-TOOLS | CMake/CTest pairing, explicit overrides, Unicode environment, x64 diagnostics and fresh configure | [x] Source implemented and owner native tests passed; 18 native tooling checks registered | Owner Windows PowerShell 5.1/MSVC execution passed 34/34 CTest each |
 | GW-A01-HF01-VCPKG | Windows doctest 2.4.12 configure failure | [!] Unresolved owner report; pins/modes preserved; Linux vcpkg passing does not resolve Windows failure | Capture full configure/buildtree logs and pass Debug/Release + CTest before closure |
 | GW-A01-HF01-ACCEPT | Original Windows TEMP/TMP and ordinary-shell acceptance | [x] Owner procedure in checklist; results recorded in GW-A01-HF01-HOST-ACCEPTANCE.md | Windows portable Debug/Release accepted; original TEMP/TMP |
 
-macOS x64/ARM64, full LSan, clang-tidy and hosted CI remain unverified/incomplete.
+The prior HF02 macOS matrix and hosted runs now have evidence; new A02 native
+execution, full A02 leak checks and clang-tidy remain incomplete.
 No new runtime scope, private persistence or authorization exception is granted.
+
+## A02 remaining acceptance gates
+
+| ID | Remaining work | Current status |
+|---|---|---|
+| GW-A02-WIN | Windows10 x64 / VS2026 Debug/Release with original TEMP/TMP | [ ] New 35-check suite, process job/console/Unicode and DPAPI API probe need owner execution; see native checklist |
+| GW-A02-MAC | macOS x64/ARM64 Debug/Release | [ ] New 34-check suite including spawn/group/stop/Keychain API probe unexecuted; prior HF02 CI is not A02 evidence |
+| GW-A02-CI | Hosted build/test matrix for A02 source | [ ] No remote changes/runs performed; user controls publication |
+| GW-A02-LEAK | Default full A02 LeakSanitizer | [!] Local /proc task inspection failure; separate leak-disabled ASan/UBSan passes; supported host required |
+| GW-A02-TIDY | clang-tidy | [!] Tool unavailable locally; compiler warnings-as-errors, format and boundaries are separate checks |
+| GW-A02-ACCEPT | Independent review and owner Windows acceptance | [ ] Required before explicit A03 authorization; no crypto/identity/network implementation begun |
+| GW-A01-HF01-VCPKG-LOCAL | Owner's Windows vcpkg/doctest configuration | [!] Still unresolved on that host; preserve both routes and gather actual buildtree logs |
+
+A02 does not hard-limit child CPU/RSS, sandbox hostile code, guarantee hard-kill
+or OS-stall cleanup deadlines, or implement secret persistence. These limits are
+explicit in PLATFORM_ABSTRACTIONS.md and do not weaken A11-PRE/AUTH-PRE.

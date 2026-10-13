@@ -22,7 +22,15 @@ enum class ErrorReason {
     resource_exhausted,
     admission_closed,
     invalid_budget,
-    outstanding_work
+    outstanding_work,
+    invalid_process_options,
+    process_launch_failed,
+    process_control_failed,
+    process_wait_failed,
+    output_read_failed,
+    unsupported,
+    unavailable,
+    native_failure
 };
 
 // Messages must be developer-authored, contain no input values, paths or secrets.

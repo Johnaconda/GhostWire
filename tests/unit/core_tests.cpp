@@ -60,7 +60,7 @@ TEST_CASE("version roundtrip and compiled identity") {
     CHECK(version.value() == Version{12, 34, 56});
     CHECK(version.value().to_string() == "12.34.56");
     CHECK(Version::parse(version_string()));
-    CHECK(checkpoint() == "GW-A01-HF02-MACOS-CI-RECOVERY");
+    CHECK(checkpoint() == "GW-A02-PLATFORM-ABSTRACTIONS");
 }
 TEST_CASE("version rejects malformed and overflowing numbers") {
     for (auto value : {"", "1", "1.2", "1.2.3.4", "+1.2.3", "-1.2.3", "01.2.3", "1..3", "1.2.3-alpha",

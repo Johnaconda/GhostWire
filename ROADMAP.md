@@ -1,5 +1,5 @@
 # GhostWire implementation roadmap
-The A00–A25 IDs from the master contract are preserved. This is a dependency plan, not authorization to execute future work. The owner accepted HF01 Windows portable Debug/Release (34/34 each) with original TEMP/TMP and subsequently authorized A02. Published Linux and Windows CI passed; macOS-14 failed compilation and HF02 is a narrowly scoped candidate repair awaiting CI. The owner's separate Windows vcpkg/doctest path remains unresolved. Do not mix HF02 with A02 implementation.
+The A00–A25 IDs and security ordering gates remain unchanged. HF01 is accepted on the owner Windows host; the subsequently supplied HF02 repository has prior hosted Linux/Windows/macOS evidence. A02 platform foundations are implemented and locally Linux-validated, with new native acceptance pending. A03 is a proposal only; stop after A02.
 ## Required ordering gates
 - **A11-PRE:** a minimum reviewed protected key store must precede persistent A04 identities and A08 session/history state. Full vault UI/policy stays A11/A12.
 - **AUTH-PRE:** basic action/resource authorization must precede any A06 listener or A13 admin operation. A21 adds moderation workflows.
@@ -10,9 +10,9 @@ A02/A03 plus the protected-store slice may need iteration before A04 persistence
 ## Checkpoints
 | ID | Checkpoint | Dependencies | Planned source | Acceptance | State |
 |---|---|---|---|---|---|
-| GW-A00 | Repository & Build Foundation | none | apps; src/core; src/platform; cmake; tools | Four targets, strict CLI/config, redacted logging, explicit paths and lifecycle, Debug/Release/CTest, docs and cumulative ZIP. | A00 implemented; Linux evidence recorded; Windows/macOS/user acceptance pending |
-| GW-A01 | Core Lifecycle & Services | A00 source; explicit owner continuation authorization | include/ghostwire/core; src/core | Owned context/clock/services; deterministic dependency startup and rollback; reverse cleanup with cooperative cancellation/deadlines; bounded admission and diagnostics. | Implemented; Linux evidence and owner-reported Windows portable Debug/Release with TEMP workaround. HF01 original-TEMP Windows acceptance passed; cooperative limits accepted. HF02 macOS CI candidate still pending. |
-| GW-A02 | Platform Abstractions | A01 | include/ghostwire/platform; src/platform | Prove native paths, secure-storage capabilities, owned-process and stop-event APIs on Windows/Linux/macOS; unsupported states explicit. | Planned |
+| GW-A00 | Repository & Build Foundation | none | apps; src/core; src/platform; cmake; tools | Four targets, strict CLI/config, redacted logging, explicit paths and lifecycle, Debug/Release/CTest, docs and cumulative ZIP. | Foundation preserved through owner-accepted HF01; prior HF02 hosted native evidence recorded separately |
+| GW-A01 | Core Lifecycle & Services | A00 source; explicit owner continuation authorization | include/ghostwire/core; src/core | Owned context/clock/services; deterministic dependency startup and rollback; reverse cleanup with cooperative cancellation/deadlines; bounded admission and diagnostics. | Implemented; Linux evidence and owner-reported Windows portable Debug/Release with TEMP workaround. HF01 original-TEMP Windows acceptance passed; cooperative limits accepted. HF02 supplied repository macOS26 CI passes; no owner-local vcpkg resolution inferred. |
+| GW-A02 | Platform Abstractions | A01 | include/ghostwire/platform; src/platform | Prove native paths, secure-storage capabilities, owned-process and stop-event APIs on Windows/Linux/macOS; unsupported states explicit. | Implemented; Linux Debug/Release 34/34 each. A02 Windows/macOS/hosted and independent acceptance pending. |
 | GW-A03 | Cryptographic Provider | A02 | include/ghostwire/crypto; src/crypto | Adopt reviewed pinned provider with license/advisory review; upstream vectors, entropy failure, key/nonce bounds, handle lifetimes and secret-memory limits. | Planned |
 | GW-A04 | Identity & Device Trust | A03; A11-PRE for persistence | include/ghostwire/identity; src/identity | Generate/verify root and authorized device identities; rotation/revocation/contact proof; alias collision/change tests; no raw key files. | Planned |
 | GW-A05 | Protocol Schemas & Versioning | A04 public identity contracts | schemas; include/ghostwire/protocol; src/protocol | Canonical versioned codecs with bounded fields and negotiation; reject malformed/unsupported input; corpus/fuzz/interop fixtures. | Planned |
@@ -74,3 +74,15 @@ new dependency adopted by recording them. A02 is a proposal only, in
 HF01 repairs A01 fixture encoding and Windows development tooling; it does not
 add an A02 platform service or reorder any checkpoint. Current report and native
 acceptance steps are in docs/checkpoints/GW-A01-HF01.md and its Windows checklist.
+
+## Current handover
+
+A02 adds owned native processes, bounded capture/waits, explicit process-stop
+bridging and API-only storage capability discovery. The module DAG, four one-shot
+executables, dependency modes, accepted Unicode behavior and security gates remain.
+See [A02 evidence](docs/checkpoints/GW-A02.md) and the
+[native checklist](docs/checkpoints/GW-A02-NATIVE-ACCEPTANCE.md).
+The [A03 prompt](docs/checkpoints/GW-A03-PROMPT.md) is a continuation proposal,
+not authorization. Persistent identities still require A03 and A11-PRE; networking
+still requires AUTH-PRE and its accepted checkpoint. Future browser/AI/media ideas
+remain in FUTURE_FEATURES.md without implementation or sequence changes.

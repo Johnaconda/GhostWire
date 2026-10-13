@@ -1,0 +1,99 @@
+{
+  "observed_date": "2026-10-12",
+  "repository": "https://github.com/Johnaconda/GhostWire",
+  "commit": "713750550d6fa7bbde7200c494554d1c4f9e008f",
+  "git_tree": "7913ddbd8a7e8d8cd559c2a6217b8da335ace6d3",
+  "scope": "Supplied pre-A02 HF02 repository state only. Read-only inspection; no remote mutations.",
+  "jobs": [
+    {
+      "id": 114829670759,
+      "name": "build (Release)",
+      "run_id": 38254708270,
+      "conclusion": "success",
+      "evidence": [
+        "2026-10-12T13:19:11.4618267Z -- The CXX compiler identification is MSVC 19.44.35229.0\r",
+        "2026-10-12T13:19:39.3081594Z 100% tests passed, 0 tests failed out of 34\r"
+      ]
+    },
+    {
+      "id": 114829670797,
+      "name": "build (debug)",
+      "run_id": 38254708287,
+      "conclusion": "success",
+      "evidence": [
+        "2026-10-12T13:18:24.0189126Z -- The CXX compiler identification is GNU 13.3.0",
+        "2026-10-12T13:18:34.8344862Z 100% tests passed, 0 tests failed out of 33"
+      ]
+    },
+    {
+      "id": 114829670976,
+      "name": "build (release)",
+      "run_id": 38254708287,
+      "conclusion": "success",
+      "evidence": [
+        "2026-10-12T13:18:22.0416612Z -- The CXX compiler identification is GNU 13.3.0",
+        "2026-10-12T13:18:36.8307962Z 100% tests passed, 0 tests failed out of 33"
+      ]
+    },
+    {
+      "id": 114829671223,
+      "name": "sanitizers",
+      "run_id": 38254708287,
+      "conclusion": "success",
+      "evidence": [
+        "2026-10-12T13:18:06.5545935Z -- The CXX compiler identification is GNU 13.3.0",
+        "2026-10-12T13:18:36.5391362Z 100% tests passed, 0 tests failed out of 33"
+      ]
+    },
+    {
+      "id": 114829671282,
+      "name": "build (Debug)",
+      "run_id": 38254708270,
+      "conclusion": "success",
+      "evidence": [
+        "2026-10-12T13:18:53.5759252Z -- The CXX compiler identification is MSVC 19.44.35229.0\r",
+        "2026-10-12T13:19:15.4766754Z 100% tests passed, 0 tests failed out of 34\r"
+      ]
+    },
+    {
+      "id": 114829671673,
+      "name": "build (macos-26-intel, debug)",
+      "run_id": 38254708593,
+      "conclusion": "success",
+      "evidence": [
+        "2026-10-12T13:18:52.7249100Z -- The CXX compiler identification is AppleClang 21.0.0.21000101",
+        "2026-10-12T13:19:12.6190420Z 100% tests passed out of 33"
+      ]
+    },
+    {
+      "id": 114829672105,
+      "name": "build (macos-26, release)",
+      "run_id": 38254708593,
+      "conclusion": "success",
+      "evidence": [
+        "2026-10-12T13:18:41.4886040Z -- The CXX compiler identification is AppleClang 21.0.0.21000101",
+        "2026-10-12T13:18:55.6772890Z 100% tests passed out of 33"
+      ]
+    },
+    {
+      "id": 114829672128,
+      "name": "build (macos-26-intel, release)",
+      "run_id": 38254708593,
+      "conclusion": "success",
+      "evidence": [
+        "2026-10-12T13:18:41.7754370Z -- The CXX compiler identification is AppleClang 21.0.0.21000101",
+        "2026-10-12T13:19:04.0763910Z 100% tests passed out of 33"
+      ]
+    },
+    {
+      "id": 114829672139,
+      "name": "build (macos-26, debug)",
+      "run_id": 38254708593,
+      "conclusion": "success",
+      "evidence": [
+        "2026-10-12T13:18:37.6673530Z -- The CXX compiler identification is AppleClang 21.0.0.21000101",
+        "2026-10-12T13:18:50.4525930Z 100% tests passed out of 33"
+      ]
+    }
+  ]
+}

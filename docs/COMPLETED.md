@@ -1,8 +1,8 @@
 # Completed implementation records
 
 Updated: 2026-10-12. These records concern implemented work and the stated evidence,
-not user acceptance of the entire checkpoint. Windows/macOS acceptance remains
-open in TODO. No future crypto, network or UI feature is complete.
+not user acceptance of the entire checkpoint. Entries below A02 retain their
+historical scope; current native acceptance is tracked separately in TODO. No future crypto, network or UI feature is complete.
 
 | ID | Implemented work | Validation evidence |
 |---|---|---|
@@ -49,3 +49,21 @@ a permanent fix or Windows vcpkg as validated.
 | HF01-CLI | Four Unicode argv/config/bootstrap/no-write/negative subprocess tests | All 33 Linux CTest checks pass, including prior lifecycle regressions |
 | HF01-TOOLS | Unicode environment transfer, matching CTest, x64 diagnostics and -Fresh | PowerShell grammar check passed; 18 Windows-only checks implemented but not run here |
 | HF01-HANDOVER | Report, changed-file inventory, original-TEMP checklist and updated A02 prompt | Cumulative package validation in GW-A01-HF01.md; A02 remains unstarted |
+
+## Subsequent acceptance and A02 implementation, 2026-10-12
+
+The owner accepted HF01 Windows10/VS2026 portable Debug/Release, 34/34 each with
+original TEMP/TMP. The supplied HF02 GitHub commit 7137505 has directly inspected
+Linux/Windows/macOS CI success. Historical pending statements above reflect the
+then-current checkpoints, not the latest evidence. See GW-A02-INPUT-EVIDENCE.md.
+
+| ID | Implemented work | Executed evidence / limits |
+|---|---|---|
+| A02-PROCESS | Owned child/group/job, explicit argv/cwd/env, bounded capture, cancellation/deadline waits and joined cleanup | Linux real-child tests; native Windows/macOS A02 gates pending |
+| A02-STOP | Restricted callback latch and explicit owner cancellation dispatch | Linux native delivery/restoration/reinstall and duplicate/owner checks; Windows native branch unexecuted |
+| A02-CAPABILITY | DPAPI/Keychain API probe, unsupported Linux result, disabled/failure semantics | Linux unsupported/disabled/cancel tests; never authorizes persistence |
+| A02-INTEGRATION | Existing one-shot roots forward stop into Application; real child-service fixture | Linux Debug/Release 34/34 each; 67 core + 18 platform cases, 831 assertions |
+| A02-HANDOVER | Platform contracts/ADR-005, source provenance/CI evidence, current records, native checklist and A03 proposal | Complete measured matrix and source archive verification in GW-A02.md |
+
+A02 is implemented with local evidence, **not owner accepted**. No A03 provider,
+identity, private persistence, network, GUI or AI implementation was added.

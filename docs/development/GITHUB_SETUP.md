@@ -41,3 +41,14 @@ char-to-unsigned-char conversions rejected under -Wsign-conversion.
 HF02 is a proposed repair: macos-26 ARM64/Intel with supported C++20 library
 and source-level conversion corrections. A green rerun is required before
 macOS acceptance; publishing the workflow edit is not validation.
+
+## A02 input update
+
+The owner later supplied main commit `713750550d6fa7bbde7200c494554d1c4f9e008f`.
+Its Linux, Windows and macOS26 ARM64/Intel jobs now have successful observed logs;
+see [exact input evidence](../checkpoints/GW-A02-INPUT-EVIDENCE.md). Earlier
+candidate statements above preserve the initial failure/repair sequence.
+A02 preserves these repairs and the README changes. No A02 remote branch, push,
+PR, run or setting change was performed. The cumulative A02 ZIP needs independent
+review/native host acceptance; apply it only to the intended checkout after
+reviewing local changes. Do not overwrite .git or untracked private data.

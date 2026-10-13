@@ -1,4 +1,4 @@
-# Building GhostWire A01 HF01
+# Building GhostWire A02
 
 ## Tool requirements
 
@@ -23,8 +23,8 @@ beside the selected CMake before PATH fallback, with a matching version check.
 Unicode and preserves the original process TEMP/TMP. No permanent environment
 or execution-policy change is made.
 
-HF01 acceptance starts with the portable/vendored mode that the owner already
-built successfully in A01. Open a new ordinary PowerShell from Start (not a child
+A02 acceptance starts with the portable/vendored mode already accepted by the owner
+for HF01 with original TEMP/TMP. Open a new ordinary PowerShell from Start (not a child
 of the old workaround shell), leave TEMP/TMP unchanged, then from the source root:
 
 ```powershell
@@ -140,9 +140,9 @@ triplets; do not report success until both build and CTest actually pass.
 For current CI macOS support, use Xcode 26 and its C++20 libc++ with
 `std::stop_source`/`std::stop_token`; the historical macos-14 AppleClang 15
 runner lacks those required library types. HF02 uses hosted macos-26 ARM64/Intel
-for candidate CI runs. Do not turn off `-Werror` or silently substitute a
-nonstandard cancellation API to get older SDKs building. macOS CI validation
-is pending until those hosted jobs complete successfully.
+for CI runs, preserved in A02. Do not turn off `-Werror` or silently substitute a
+nonstandard cancellation API to get older SDKs building. The supplied HF02 repository commit passed that hosted matrix; A02 introduces
+new native code and needs a new run on both architectures. See the A02 report.
 
 
 Install a C++20 compiler (GCC/Clang or AppleClang), CMake and Ninja through your
@@ -272,3 +272,37 @@ never links doctest. Sanitizers supplement tests; they are not a security audit.
 The package script allowlists source paths, rejects symlinks/unexpected files,
 verifies archive bytes, and writes a `.zip.sha256` sidecar. No build output,
 local toolchain, .git directory, caches or private state is packaged.
+
+## A02 platform requirements and native acceptance
+
+The [A02 checklist](docs/checkpoints/GW-A02-NATIVE-ACCEPTANCE.md) supplements the
+preserved HF01 procedures. Expected CTest counts are 34 on Linux/macOS and 35 on
+Windows. The owner root is `C:\Cumpiling-shit\GhostWire`; keep original TEMP/TMP.
+The new platform suite launches a compiled test fixture, not a shell. It covers
+Unicode paths/argv/environment, output limits, cancellation, deadlines, reaping,
+handle/descriptor isolation, stop delivery and an actual child-owning service.
+The Windows test runner temporarily owns a console only when needed by CTRL_BREAK
+coverage. That test setup does not change the production process API contract.
+
+The POSIX process implementation requires spawn working-directory actions and
+foreign-descriptor isolation. Linux is currently supported with glibc 2.34+;
+CMake detects required functions and fails clearly instead of choosing an unsafe
+fallback. musl/older libc support is unvalidated and may fail this feature gate.
+macOS requires the supported C++20 library and modern spawn APIs; minimum deployment
+versions below the tested prior macOS 26 CI matrix are not established.
+
+For a serial Linux validation (used in the A02 packaging environment):
+
+```bash
+cmake --preset portable-debug
+cmake --build --preset portable-debug --parallel 1
+ctest --preset portable-debug
+cmake --preset portable-release
+cmake --build --preset portable-release --parallel 1
+ctest --preset portable-release
+```
+
+Normal presets and both dependency routes are retained. No process-control CLI
+flag, daemon, GUI, secret-store operation or network listener was added. All four
+roles remain one-shot. See [platform contracts](docs/architecture/PLATFORM_ABSTRACTIONS.md)
+for bounded-wait versus destruction semantics and API-only storage capabilities.

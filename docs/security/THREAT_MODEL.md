@@ -103,3 +103,28 @@ protocol composition, implementation and supported endpoint protections.
 
 Threats remain open until their gate is evidenced. No A00/A01 test claims to prove
 forward secrecy, post-compromise recovery, E2EE, secure erasure or anonymity.
+
+## A02 process and capability boundary
+
+A02 accepts a trusted caller's executable, native cwd, UTF-8 argv and selected
+environment; production CLI input does not expose arbitrary process launching.
+No shell/PATH interpolation occurs. Explicit handle/fd isolation avoids accidental
+inheritance of unrelated application capabilities. Replacement environment is the
+default; inherited values and captured raw bytes must be treated as private.
+They are never automatically logged, written to a cache/temp file or uploaded.
+Tests use synthetic data only, and directories are owned temporary fixtures.
+
+A process group or Windows job is a cleanup mechanism. It cannot constrain
+malicious code running with the user's OS authority; POSIX descendants can escape
+a group, external reapers can violate ownership, and parent crash can orphan work.
+No model/plugin sandbox is claimed. Owners must reserve resource budgets before
+launching children; capture bounds do not enforce child CPU, memory or disk limits.
+Deadline expiry retains ownership; RAII cleanup may wait for the OS.
+
+Native stop handlers only latch atomic state. Owner dispatch runs cancellation
+callbacks outside restricted signal/control context. Close/logoff/hard-kill/crash
+recovery is not guaranteed. Secure-storage probing loads trusted native system
+libraries and checks entry points without secret reads/writes or persistence.
+A present DPAPI/Keychain API does not prove an accessible account or a secure vault.
+No private backups, journals, indexes or key temporary files are introduced.
+A11-PRE, AUTH-PRE and future isolation/provider review remain mandatory.

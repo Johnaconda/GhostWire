@@ -46,7 +46,7 @@ runtime_info.hpp. resource_admission.hpp implements bounded reservations. A
 job_system.hpp, domain diagnostics service and executor remain future work.
 [CORE_LIFECYCLE.md](CORE_LIFECYCLE.md) supersedes the core proposal's broad wording.
 
-## Platform adapters — GW-A02 / GW-A17
+## Platform adapters — GW-A02 implemented subset / GW-A17 future
 
 1. **Ownership:** Application owns runtime adapters and exact process/secure-store handles; native resources are RAII-managed.
 
@@ -79,6 +79,13 @@ job_system.hpp, domain diagnostics service and executor remain future work.
 | `platform/capture_protection.hpp` | Supported/active/unavailable state and documented best-effort window protection. |
 
 
+
+A02 mapping: process.hpp owns real child operations; process_stop.hpp implements
+explicit stop registration instead of a generic platform_runtime registry.
+secure_storage.hpp reports API presence only and implements no sealed-key operation.
+The broader secure-store/session, hardware, capture and UI contracts above remain
+future proposals. [PLATFORM_ABSTRACTIONS.md](PLATFORM_ABSTRACTIONS.md) is the
+implemented ownership, lifetime, threading, validation, error and resource contract.
 
 ## Cryptographic provider — GW-A03
 
