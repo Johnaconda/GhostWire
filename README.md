@@ -1,6 +1,6 @@
 # GhostWire
 
-**Checkpoint candidate: GW-A02-PLATFORM-ABSTRACTIONS · Version: 0.2.0 · C++20**
+**Checkpoint candidate: GW-A03-CRYPTOGRAPHIC-PROVIDER · Version: 0.3.0 · C++20**
 
 **Your identity. Your server. Your network.**
 
@@ -18,15 +18,19 @@ communication platform. A01 extends A00 with an owned application context,
 dependency-aware service startup and rollback, cooperative cancellation,
 shutdown deadlines and bounded resource admission. All four executables use
 the same headless core. A02 adds owned native child processes, explicit process-stop
-dispatch and truthful secure-storage API discovery. It is not a messaging application
-yet. There is no network listener, account creation,
-cryptography, vault, GUI, relay forwarding, or remote AI call in this checkpoint.
+dispatch and truthful secure-storage API discovery. A03 adds a lifecycle-owned,
+pinned Botan provider for bounded volatile randomness, authenticated encryption,
+public-message signatures and hashing. It is not a messaging application yet.
+There is no network listener, account creation, vault, GUI, relay forwarding,
+private persistence or remote AI call in this checkpoint.
 
 ## Start here
 
 - [BUILD.md](BUILD.md): Windows/MSVC, Linux and macOS commands and exit codes.
-- [A02 report](docs/checkpoints/GW-A02.md): current implementation, actual validation and limits.
-- [A02 native acceptance](docs/checkpoints/GW-A02-NATIVE-ACCEPTANCE.md): Windows/macOS procedure.
+- [A03 report](docs/checkpoints/GW-A03.md): implementation, actual validation and limits.
+- [A03 native acceptance](docs/checkpoints/GW-A03-NATIVE-ACCEPTANCE.md): Windows/macOS procedure.
+- [Crypto contract](docs/architecture/CRYPTO_PROVIDER.md) and [provider decision](docs/decisions/ADR-006-CRYPTO-PROVIDER.md): ownership, bounds, algorithms and limitations.
+- [A02 report](docs/checkpoints/GW-A02.md) and [owner acceptance](docs/checkpoints/GW-A02-HOST-ACCEPTANCE.md): preserved baseline and Windows evidence.
 - [Platform contracts](docs/architecture/PLATFORM_ABSTRACTIONS.md): process ownership, stop and capability limits.
 - [HF02 report](docs/checkpoints/GW-A01-HF02.md): preserved macOS/CI repair record.
 - [Repository CI evidence](docs/checkpoints/GW-A02-INPUT-EVIDENCE.md): verified prior commit and successful hosted runs.
@@ -40,7 +44,8 @@ cryptography, vault, GUI, relay forwarding, or remote AI call in this checkpoint
 - [AGENTS.md](AGENTS.md): mandatory continuation rules.
 - [Lifecycle contracts](docs/architecture/CORE_LIFECYCLE.md): ownership, deadlines and budgets.
 - [A02 specification](docs/checkpoints/GW-A02-PROMPT.md): preserved input specification.
-- [A03 proposal](docs/checkpoints/GW-A03-PROMPT.md): requires A02 acceptance and new authorization.
+- [A03 specification](docs/checkpoints/GW-A03-PROMPT.md): preserved input, subsequently authorized by the owner.
+- [A04 proposal](docs/checkpoints/GW-A04-PROMPT.md): requires A03 acceptance and explicit new authorization.
 - [Future features](docs/architecture/FUTURE_FEATURES.md): proposals, not implemented capabilities.
 
 ## Build quickly on Windows
@@ -82,8 +87,9 @@ bash tools/dev.sh all portable-release
 
 All support `--help`, `--version`, `--check-config`, `--config PATH`,
 `--data-root ABS_PATH`, and `--print-paths`. No command starts a network service.
-A default invocation creates the role's empty directories, reports its limited
-capability, and exits after orderly shutdown. `--check-config` does not write.
+A default invocation creates the role's empty directories, initializes the actual
+crypto provider, reports its limited capability, and exits after orderly shutdown.
+`--check-config` does not write or initialize crypto.
 There is deliberately no implicit config search: pass `--config`.
 
 ## Privacy and maturity
@@ -94,10 +100,13 @@ logging does not disable redaction. No private keys or messages are persisted.
 Directory creation is not a secure-storage implementation. See the
 [threat model](docs/security/THREAT_MODEL.md) before extending persistence.
 
-The core is one reusable **static** library shared by the four targets; A01 does
-not promise a stable DLL ABI. The shipped source includes an upstream test-only
-header with its MIT notice and checksum. The production executables have no
-third-party application dependency.
+Core, platform and crypto are reusable **static** libraries shared by the four
+targets; no stable DLL ABI is promised. Botan 3.13.0 is a pinned BSD-2-Clause
+static runtime dependency; its signed source, generated subset, notices and
+regeneration script are bundled. doctest remains test-only. Ordinary builds
+need no extra Botan DLL or Python. Both portable and vcpkg modes use the same
+crypto source. AEAD nonce uniqueness belongs to the caller; memory locking is
+best effort. Primitive tests do not establish E2EE or identity-system readiness.
 
 Project code is licensed under MIT. Dependency licenses remain separate.
 Source repository: [Johnaconda/GhostWire](https://github.com/Johnaconda/GhostWire).
@@ -105,8 +114,9 @@ The owner accepted HF01 Windows 10 x64 portable Debug/Release with 34/34 CTest
 passes each using original TEMP/TMP (no ASCII override); see the host record.
 The supplied GitHub commit `7137505` includes the HF02 macOS workflow and explicit
 byte-conversion fixes; its Linux, Windows and macOS hosted jobs passed. Those
-runs predate A02. This candidate has local Linux Debug/Release evidence; its new
-native Windows/macOS code and hosted CI still require execution and review.
+runs predate A02. The owner subsequently accepted A02 on Windows Debug/Release
+35/35 each, original TEMP/TMP, on the win10dev account. This A03 candidate has
+local Linux evidence; new Windows/macOS execution and hosted CI remain gates.
 Windows owner's standard vcpkg/doctest configure failure remains a separate
 local-environment issue; passing hosted CI does not prove that route on that host.
-No runtime networking, cryptography or user directory exists at this checkpoint.
+No runtime networking, persistent identity or user directory exists at this checkpoint.

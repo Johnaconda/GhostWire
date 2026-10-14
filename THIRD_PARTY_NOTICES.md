@@ -1,7 +1,34 @@
 # Third-party notices and dependency provenance
 
-The four application binaries use the C++ standard library and platform APIs.
-They do not link doctest or any cryptographic, GUI, database or network library.
+The four application binaries use the C++ standard library, platform APIs and
+the pinned static Botan subset below. They do not link doctest, GUI, database
+or networking implementations.
+
+## Botan (runtime)
+
+Version 3.13.0, official release 2026-08-13, BSD-2-Clause, copyright 1999-2026
+The Botan Authors. The complete required license/disclaimer is preserved in
+third_party/botan/LICENSE.txt and installed with application distribution notices.
+The original signed source distribution and unmodified upstream-generated
+Linux/Windows/macOS minimized amalgamations are bundled. No external DLL is added.
+
+Official archive: https://botan.randombit.net/releases/Botan-3.13.0.tar.xz
+
+SHA-256: `12f5a8358890bbee82edfe9d2e7769b0a610b6dd0e0698aea13d20a675d84620`.
+Release revision: `2a81eef56c96c237e590c27f9a75e60317c9c700`.
+Detached signature verified using release public-key fingerprint
+`621DAF6411E1851C4CF9A2E16211EBF1EFBADFBC`; key and hash fetched from the same
+official HTTPS service, not independently certified. Per-file generated hashes
+are in third_party/botan/pins.json and checked by CMake. Offline regeneration
+procedure: third_party/botan/README.md and tools/crypto/generate_botan.py.
+
+Modules requested: system_rng, chacha20poly1305, ed25519, sha2_32,
+locking_allocator and their upstream dependency closure. Generic CPU, no assembly.
+The same exact provider is built in both existing dependency modes. This explicit
+runtime vendoring decision, current advisory/license review, alternatives and
+historical external-audit limits are in docs/decisions/ADR-006-CRYPTO-PROVIDER.md.
+Bundled upstream vector seeds and the release public key are public fixtures,
+not user secrets or operational signing credentials.
 
 ## doctest (test-only)
 
@@ -26,4 +53,4 @@ GitHub Actions checkout is pinned to
 Runner images and system compilers still evolve; CI must record their versions.
 These pins establish a reproducible starting point, not a claim that every tool
 is the latest release or free of vulnerabilities. Reassess advisories before
-publishing a release. No future candidate library is licensed or shipped here.
+publishing a release. Other future candidate libraries are not shipped here.

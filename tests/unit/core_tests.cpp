@@ -60,7 +60,7 @@ TEST_CASE("version roundtrip and compiled identity") {
     CHECK(version.value() == Version{12, 34, 56});
     CHECK(version.value().to_string() == "12.34.56");
     CHECK(Version::parse(version_string()));
-    CHECK(checkpoint() == "GW-A02-PLATFORM-ABSTRACTIONS");
+    CHECK(checkpoint() == "GW-A03-CRYPTOGRAPHIC-PROVIDER");
 }
 TEST_CASE("version rejects malformed and overflowing numbers") {
     for (auto value : {"", "1", "1.2", "1.2.3.4", "+1.2.3", "-1.2.3", "01.2.3", "1..3", "1.2.3-alpha",
@@ -348,7 +348,7 @@ TEST_CASE("config precedence is explicit and bootstrap never claims network read
     CHECK_FALSE(fs::exists(config_root));
     CHECK(fs::is_directory(override_root / "cli/data"));
     CHECK(errors.empty());
-    CHECK(output.find("no live networking or encryption implemented") != std::string::npos);
+    CHECK(output.find("no live networking or messaging implemented") != std::string::npos);
 }
 TEST_CASE("platform diagnostics report local coarse capabilities only") {
     const auto info = platform::platform_info();

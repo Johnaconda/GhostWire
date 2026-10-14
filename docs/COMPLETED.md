@@ -1,8 +1,9 @@
 # Completed implementation records
 
-Updated: 2026-10-12. These records concern implemented work and the stated evidence,
-not user acceptance of the entire checkpoint. Entries below A02 retain their
-historical scope; current native acceptance is tracked separately in TODO. No future crypto, network or UI feature is complete.
+Updated: 2026-10-13. These records concern implemented work and the stated evidence,
+not user acceptance of the entire checkpoint. Earlier entries retain their historical scope; later addenda supersede their
+then-pending acceptance statements. Current gates are tracked in TODO. No
+identity, persistent store, network or UI feature is complete.
 
 | ID | Implemented work | Validation evidence |
 |---|---|---|
@@ -67,3 +68,25 @@ then-current checkpoints, not the latest evidence. See GW-A02-INPUT-EVIDENCE.md.
 
 A02 is implemented with local evidence, **not owner accepted**. No A03 provider,
 identity, private persistence, network, GUI or AI implementation was added.
+
+
+## Owner A02 acceptance and A03 implementation — 2026-10-13
+
+Owner accepted A02 Windows clean portable Debug/Release 35/35 each, platform,
+Unicode/tooling and CLI launch, original TEMP/TMP, on the win10dev account.
+See GW-A02-HOST-ACCEPTANCE.md. Earlier A02 pending statements above are historical.
+A03 was explicitly authorized from that archive; it is not yet owner-accepted.
+
+| ID | Implemented work | Executed evidence / limits |
+|---|---|---|
+| A03-PROVIDER | Reviewed Botan 3.13.0 pin, signed source, three generic static amalgamations and deterministic regeneration | Source/signature/hash checks, offline regeneration, corrupt-source/version rejection; native Windows/macOS build pending |
+| A03-PRIMITIVES | Bounded OS RNG, ChaCha20-Poly1305, public-message Ed25519 and SHA-256 | RFC/upstream vectors, tampering/invalid sizes/signatures, OS entropy and isolated fault tests |
+| A03-OWNERSHIP | Move-only clearing buffers and purpose-specific keys; bounded shared accounting | Move/reset/provider-outliving, allocation rollback and wipe observer tests; memory locking remains best effort |
+| A03-CANCEL | Synchronous immediate admission, stop tokens and nonblocking close | Cancellation, deterministic in-flight stop/busy, contention and ThreadSanitizer unit evidence |
+| A03-INTEGRATION | Lifecycle-owned CryptoService in all four roots; exact prior CLI/schema/exits retained | Linux portable Debug/Release and vcpkg Debug 37/37 each, 114 cases / 2369 assertions; no production test fault symbols |
+| A03-HANDOVER | Contracts/ADR-006, current records, native checklist, inventory and proposed A04 | Actual complete matrix and archive verification in GW-A03.md; independent review/owner acceptance still required |
+
+ASan/UBSan passes the full suite with leak detection disabled; default LSan fails
+in this executor. Native A03 Windows/macOS, owner Windows vcpkg, full leaks,
+clang-tidy and hosted A03 CI remain open. Primitive correctness is not identity,
+protocol, persistent-storage or E2EE acceptance. Stop after A03.

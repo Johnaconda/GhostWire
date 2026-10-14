@@ -154,3 +154,17 @@ shutdown timeout are composition options in A01, not new config-file keys.
 There is no scheduler, fairness guarantee, queue payload, executor or GPU
 allocator. Future GPU reservations need backend/device/VRAM capability and
 privacy-aware scheduling decisions, recorded in FUTURE_FEATURES.md.
+
+
+## A03 composition addition
+
+All four ordinary bootstraps explicitly register a real CryptoService (ID 2)
+in addition to the existing path initializer. Provider creation validates limits,
+initializes the pinned backend and probes actual OS entropy. A failed creation
+returns a fixed lifecycle error and follows existing rollback rules; it does not
+log backend text or report ready. Help/version/check-config/print-paths still
+return before these startup effects. No CLI/config option or context registry is
+added. Future consumers inject a provider reference and declare its service ID.
+They stop and join before this dependency is destroyed. Busy provider shutdown
+returns outstanding_work, retaining ownership for retry. See CRYPTO_PROVIDER.md
+for nonce, memory, cancellation, budget and destruction constraints.

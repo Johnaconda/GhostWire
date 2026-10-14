@@ -1,7 +1,9 @@
 # Initial threat model
 
 Status: design baseline, not an audited secure product. A00/A01 accept local CLI
-and nonsecret configuration only; no keys, messages or network connections exist.
+and nonsecret configuration. A02 adds owned native processes and API discovery.
+A03 adds volatile cryptographic operations; no persistent identity, private store,
+message protocol or network connection exists. Historical sections retain scope.
 
 ## Assets, principals and scope
 
@@ -128,3 +130,22 @@ libraries and checks entry points without secret reads/writes or persistence.
 A present DPAPI/Keychain API does not prove an accessible account or a secure vault.
 No private backups, journals, indexes or key temporary files are introduced.
 A11-PRE, AUTH-PRE and future isolation/provider review remain mandatory.
+
+
+## A03 volatile cryptography boundary
+
+| Threat | Implemented response | Remaining limit |
+|---|---|---|
+| Entropy failure / predictable substitute | Actual OS RNG probe and typed failure, bounded random requests, no fallback; production Linux getrandom failure test | OS RNG call is not forcibly interruptible; native BCrypt/CommonCrypto failures unexecuted here |
+| Modified ciphertext or signature | Fixed reviewed AEAD/signature suites; strict sizes, known-answer and mutation tests; decryption only publishes authenticated bytes | No protocol, replay defense, identity authorization, channel binding or forward secrecy |
+| Memory exhaustion / concurrent overload | Message/AAD/random caps, live secret count/byte accounting, conservative workspace admission, immediate busy | Not an OS RSS/CPU cap; independent providers and caller-owned public output need composition-level budgets |
+| Key misuse or accidental copy | Distinct move-only AEAD/signing handles; no serializer/export/logger; clearing allocation and scoped borrowing | Imports can contain equal bytes; C++ types cannot prove historical purpose; caller copies/borrow misuse remain caller obligations |
+| Plaintext remaining in memory | Clearing private decrypt/RNG work and secure scrub on returned-secret release | Locking best effort; registers/stack/compiler copies, swap, dumps, hibernation, VM snapshots and endpoint compromise remain |
+| Signing-message confidentiality confusion | sign_public/verify_public explicitly public-content only because upstream Pure Ed25519 buffers ordinary heap bytes | No private-message signing-memory guarantee; identity records must use approved public domains |
+| Nonce reuse | Exact RFC 8439 nonce shape and prominent per-key uniqueness contract | Stateless primitive cannot enforce uniqueness; future storage/protocol design must do so before use |
+| Supply-chain drift / test bypass | Signed official source, precise version/hash, generated-source checks, reproducible generator, test faults in separate library | Same-origin signing-key acquisition is not independent trust certification; audits remain version/platform-specific |
+| Shutdown / diagnostic disclosure | Owned cancellation, nonblocking close, consumer-join contract, enum-only errors and fixed lifecycle message | Destruction may not race calls; no hard preemption or memory-confidential diagnostic dump |
+
+The accepted security ordering is unchanged: no persistence before A11-PRE,
+no privileged remote listener/action before AUTH-PRE, and no production E2EE
+claim from primitive tests. New module dependencies confer no authority to keys.

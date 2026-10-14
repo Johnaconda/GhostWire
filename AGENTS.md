@@ -7,17 +7,18 @@
 2. Inspect actual headers/sources, build settings, tests and decisions for the
    affected modules. Confirm the supplied archive/checkpoint/hash.
 3. Identify the user's authorized checkpoint and bounded change scope. The owner
-   accepted HF01 on Windows 10 x64 / VS2026 with original TEMP/TMP: clean portable
-   Debug/Release builds and 34/34 CTest each, Unicode/tooling and CLI launch pass.
-   GW-A02-PLATFORM-ABSTRACTIONS is explicitly authorized from that exact archive.
-   Implement owned processes, process-stop bridging and truthful secure-storage
-   capabilities. Identity/profile persistence and networking are not authorized.
-   Stop after A02 for independent review and Windows host acceptance. Windows
-   vcpkg on the owner host and clang-tidy remain outstanding. The owner also
-   supplied GitHub commit 713750550d6fa7bbde7200c494554d1c4f9e008f with HF02
-   macOS/CI repairs and README changes; preserve them. Prior hosted success
-   applies to that commit only. A02 native validation, full local LSan and
-   independent acceptance are separate gates; see the current A02 report.
+   accepted A02 on Windows 10 x64 / VS2026 / MSVC 19.51.36260, win10dev account,
+   portable Debug/Release 35/35 CTest each, original TEMP/TMP and CLI exit 0.
+   A03 alone is authorized from the accepted A02 archive, SHA-256
+   404fbea230ff612693754d8fa70c56e2a653d85e4a98fea6d80242e2243a5dd7.
+   See GW-A02-HOST-ACCEPTANCE.md and GW-A03.md for source and execution evidence.
+   Implement the bounded volatile crypto provider; persistent identity, profiles,
+   vault and networking remain unauthorized. Stop after A03 for review and owner
+   Windows acceptance. A04-PROMPT.md is a proposal, never authorization itself.
+   Preserve supplied HF02 commit 713750550d6fa7bbde7200c494554d1c4f9e008f and all
+   historical records. Read-only main reconciliation found that same commit.
+   Windows vcpkg/doctest, native macOS, full local LSan, clang-tidy and new hosted
+   CI remain separate gates. No new-account or prior-CI success closes them.
 4. Record the implemented, experimental, planned and blocked boundaries before
    making changes. Existing source is authoritative over memory or old packages.
 

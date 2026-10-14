@@ -14,7 +14,18 @@ for folder in ['src/platform', 'include/ghostwire/platform']:
         for name in re.findall(r'#include\s+"ghostwire/([^"]+)"', path.read_text()):
             if not name.startswith('platform/') and name not in allowed_core:
                 errors.append(f'{path.relative_to(root)} includes forbidden {name}')
-for folder in ['src/core', 'src/platform', 'include/ghostwire/core', 'include/ghostwire/platform']:
+for folder in ['src/crypto', 'include/ghostwire/crypto']:
+    for path in (root / folder).rglob('*'):
+        if path.suffix not in {'.cpp', '.hpp'}:
+            continue
+        for name in re.findall(r'#include\s*[<"]ghostwire/([^">]+)[">]', path.read_text()):
+            if not name.startswith('crypto/') and name != 'core/result.hpp':
+                errors.append(f'{path.relative_to(root)} includes forbidden {name}')
+for path in (root / 'include/ghostwire').rglob('*.hpp'):
+    if re.search(r'#include\s*[<"](?:botan|windows\.h|bcrypt\.h)|\bBotan::', path.read_text()):
+        errors.append(f'{path.relative_to(root)} exposes a backend/native dependency')
+for folder in ['src/core', 'src/platform', 'src/crypto', 'include/ghostwire/core',
+               'include/ghostwire/platform', 'include/ghostwire/crypto']:
     for path in (root / folder).rglob('*'):
         if path.suffix not in {'.cpp', '.hpp'}:
             continue

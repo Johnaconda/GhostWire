@@ -1,7 +1,7 @@
 {
   "name": "ghostwire",
-  "version-semver": "0.2.0",
-  "description": "GhostWire A02 platform abstractions; no network or cryptographic runtime yet",
+  "version-semver": "0.3.0",
+  "description": "GhostWire A03; pinned static Botan provider shared by portable and vcpkg test modes",
   "license": "MIT",
   "builtin-baseline": "9e593bb18ea69cc5095e012465dcd675a822ed0d",
   "dependencies": [],

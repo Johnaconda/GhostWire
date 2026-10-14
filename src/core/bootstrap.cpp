@@ -1,5 +1,6 @@
 #include "ghostwire/core/bootstrap.hpp"
 #include "ghostwire/core/application.hpp"
+#include "ghostwire/core/crypto_service.hpp"
 #include "ghostwire/core/version.hpp"
 #include "ghostwire/platform/arguments.hpp"
 #include "ghostwire/platform/platform_info.hpp"
@@ -73,7 +74,7 @@ int report(const Error &error, std::ostream &err) {
     return exit_code(error.code);
 }
 void help(Role role, std::ostream &out) {
-    out << "ghostwire-" << role_name(role) << " — A02 platform foundation\n"
+    out << "ghostwire-" << role_name(role) << " — A03 cryptographic foundation\n"
         << "Usage: ghostwire-" << role_name(role) << " [command] [options]\n"
         << "  --help                  Show this help\n"
         << "  --version               Show project/checkpoint/platform identity\n"
@@ -81,8 +82,8 @@ void help(Role role, std::ostream &out) {
         << "  --print-paths           Explicitly disclose resolved local paths; no writes\n"
         << "  --config PATH           Read this config (no implicit config search)\n"
         << "  --data-root ABS_PATH    Override storage roots; each role is isolated\n"
-        << "Without a command: initialize directories, then shut down gracefully.\n"
-        << "No GUI, listening socket, relay service, identity, vault or messaging exists in A02.\n"
+        << "Without a command: initialize directories and crypto provider, then shut down gracefully.\n"
+        << "No GUI, listening socket, relay service, identity, vault or messaging exists in A03.\n"
         << "Exit codes: 0 success; 2 usage; 3 configuration; 4 filesystem; 70 internal.\n";
 }
 } // namespace
@@ -115,7 +116,7 @@ int run_cli(Role role, std::span<const std::string_view> args, std::ostream &out
     if (!valid)
         return report(valid.error(), err);
     if (options.command == Command::check_config) {
-        out << "Configuration valid (schema 1). Policy values are validated; A02 has no transport.\n";
+        out << "Configuration valid (schema 1). Policy values are validated; A03 has no transport.\n";
         return out.good() ? 0 : 70;
     }
     platform::UserDirectories defaults;
@@ -141,6 +142,9 @@ int run_cli(Role role, std::span<const std::string_view> args, std::ostream &out
     if (!bridge)
         return report(bridge.error(), err);
     Application app(role, std::move(config), std::move(paths).value(), logger);
+    auto registered = app.add_service(cryptographic_provider_service, std::make_unique<CryptoService>());
+    if (!registered)
+        return report(registered.error(), err);
     std::stop_callback forward_stop(bridge.value()->stop_token(), [&app] { app.request_stop(); });
     auto delivered = bridge.value()->dispatch();
     if (!delivered)
@@ -152,7 +156,7 @@ int run_cli(Role role, std::span<const std::string_view> args, std::ostream &out
     if (!delivered)
         return report(delivered.error(), err);
     out << "ghostwire-" << role_name(role)
-        << ": A02 bootstrap complete; no live networking or encryption implemented.\n";
+        << ": A03 bootstrap complete; crypto provider ready; no live networking or messaging implemented.\n";
     auto stopped = app.shutdown();
     if (!stopped)
         return report(stopped.error(), err);

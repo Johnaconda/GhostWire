@@ -1,5 +1,32 @@
 # Changelog
 
+## 0.3.0 — GW-A03-CRYPTOGRAPHIC-PROVIDER — 2026-10-13 (owner acceptance pending)
+
+- Continue the verified owner-accepted A02 source (125 manifest hashes); preserve
+  owner changes and historical reports; record A02 Windows 35/35 Debug/Release
+  acceptance on win10dev with original TEMP/TMP. No remote write.
+- Select Botan 3.13.0 after maintenance/advisory/license/platform and alternative
+  review; bundle signed source and reproducible, pinned static generic subsets
+  for Linux, Windows and macOS. Ordinary offline builds need no Python/Botan DLL.
+- Add explicitly owned bounded OS randomness, RFC 8439 ChaCha20-Poly1305, RFC 8032
+  pure Ed25519 for public messages and SHA-256. No algorithm-string API/protocol.
+- Add enum-only failures, move-only purpose-specific keys/clearing buffers,
+  shared lifetime accounting, input/workspace quotas, immediate busy admission
+  and cooperative stop tokens. Document nonce uniqueness and memory limitations.
+- Integrate a real owned CryptoService in all four one-shot roles. Preserve CLI,
+  config/exit/path/Unicode/privacy contracts and existing portable/vcpkg modes.
+- Add upstream vectors, exhaustive small-vector tampering, ownership/cleanup,
+  cancellation/concurrency, isolated faults and real Linux OS entropy failure.
+  No test fault symbols are present in production targets.
+- Record complete Linux Debug/Release and vcpkg Debug regressions, limited
+  sanitizer evidence and blocked native/leak/static-analysis gates in GW-A03.md.
+- Update contracts, invariant/threat maps, TODO/roadmap, native acceptance,
+  source inventory and A04 proposal. A11-PRE and AUTH-PRE remain mandatory.
+
+No identity, persistent key/profile/vault, networking, messaging, GUI or AI is
+implemented. No A04 work or GitHub publication. Historical entries below retain
+their then-current acceptance status; A02's later acceptance has its own addendum.
+
 ## 0.2.0 — GW-A02-PLATFORM-ABSTRACTIONS — 2026-10-12 (acceptance pending)
 
 - Continue verified accepted HF01 and reconcile supplied GitHub commit 7137505;

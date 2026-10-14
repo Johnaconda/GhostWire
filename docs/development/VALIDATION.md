@@ -1,7 +1,25 @@
-# Validation policy and current A02 evidence
+# Validation policy and current A03 evidence
 
-The measured A02 matrix is in [GW-A02](../checkpoints/GW-A02.md). Earlier reports
-remain historical records. [Input evidence](../checkpoints/GW-A02-INPUT-EVIDENCE.md)
+The current measured matrix and commands are in [GW-A03](../checkpoints/GW-A03.md):
+Linux portable Debug/Release and vcpkg Debug 37/37 each, 114 cases / 2369 assertions,
+separate leak-disabled ASan/UBSan 37/37 and TSan five unit runners 5/5. The provider
+is instrumented too. Default LSan failed at runtime after assertions passed;
+clang-tidy, native A03 Windows/macOS and hosted A03 CI remain open. Source pin,
+regeneration, negative dependency rejection and production fault-symbol isolation
+are recorded separately. No A04 authorization follows from these results.
+The pinned upstream minimized-module suite linked to GhostWire's built static
+Botan passed 485,213 upstream checks; excluded modules/online/long tests are not
+covered. This does not replace independent cryptographic review.
+
+[A03 native acceptance](../checkpoints/GW-A03-NATIVE-ACCEPTANCE.md) gives exact
+owner commands and expected counts: Windows 37, macOS 36. The Windows vcpkg issue
+is still unresolved. A02 owner Windows acceptance is now recorded in
+[the addendum](../checkpoints/GW-A02-HOST-ACCEPTANCE.md).
+
+The retained sections below describe the **historical A02 validation policy and
+then-current evidence**, including gates that have since received that Windows
+acceptance. The measured A02 matrix is in [GW-A02](../checkpoints/GW-A02.md). Earlier
+reports remain historical records. [Input evidence](../checkpoints/GW-A02-INPUT-EVIDENCE.md)
 separates owner HF01 acceptance and supplied HF02 hosted results from new A02 tests.
 Implementation, execution evidence and owner acceptance are different states.
 

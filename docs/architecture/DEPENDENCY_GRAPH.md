@@ -6,6 +6,9 @@ An arrow means “may depend on”. No reverse edges or implicit service lookup.
 flowchart TD
     Apps["Four composition roots"] --> Core["ghostwire_core"]
     Core --> Platform["ghostwire_platform"]
+    Core --> Crypto["ghostwire_crypto"]
+    Crypto --> Botan["Pinned static Botan"]
+    Crypto --> Contracts
     Core --> Contracts["Value contracts"]
     Platform --> Contracts
     Tests["doctest and CLI tests"] --> Core
@@ -16,13 +19,14 @@ paths. The platform implementation may include only core/error.hpp,
 core/result.hpp and core/resource_limits.hpp, alongside platform contracts.
 These are header-only values; platform never links the core implementation.
 `tools/check_boundaries.py` enforces these current include boundaries and rejects
-UI imports from core/platform. Future extension must refine the check explicitly.
+UI imports from core/platform/crypto. Crypto may include only core/result.hpp
+among core headers; it links no core implementation or platform target. Botan's
+native RNG/memory code stays private. Public headers reject backend/native types.
 
 Future permitted edges (not existing CMake targets):
 
 | Module | Dependencies it may use | Excluded |
 |---|---|---|
-| crypto | core values, platform secure memory/RNG adapter, reviewed provider | UI, community admin, transport routing |
 | identity | crypto, permissions, protected key store | hardware serials as identity, UI |
 | protocol | core values, schema codecs | UI, vault, sockets, crypto key storage |
 | permissions | core values and immutable identity references | transport internals, UI |
@@ -77,3 +81,21 @@ No new third-party runtime dependency is added.
 
 See [PLATFORM_ABSTRACTIONS.md](PLATFORM_ABSTRACTIONS.md). A platform adapter does
 not perform service lookup and service dependency IDs are not permissions.
+
+## A03 runtime ownership
+
+The current DAG adds core -> crypto -> Botan/contracts. The earlier A01/A02
+paragraphs describe those checkpoints' historical edges, not the complete A03 DAG.
+core::Result<T,E> is a header-only value; its default core error remains unchanged.
+Both dependency modes use one exact pinned static runtime provider (ADR-006).
+
+| Owner | Owns or borrows | Constraint |
+|---|---|---|
+| ServiceManager | CryptoService, ID 2 | Actual provider initialization and rollback; no service lookup |
+| CryptoService | unique_ptr CryptoProvider | Terminal stop; busy cleanup retains provider until retry |
+| CryptoProvider | Backend state, stop source, limits and admission mutex | No implicit executor; simultaneous calls fail busy |
+| Secret/key allocation | Clearing bytes and shared accounting | Move-only; may outlive provider; no generic serialization |
+| Future consumer service | Explicit borrowed provider reference | Declare dependency, stop/join all callers before owner teardown |
+
+See [CRYPTO_PROVIDER.md](CRYPTO_PROVIDER.md) for bounds, nonce obligations,
+public-message-only signing, threading, error and secure-memory limitations.

@@ -6,30 +6,30 @@
 #include <variant>
 
 namespace ghostwire::core {
-template <typename T> class [[nodiscard]] Result {
+template <typename T, typename E = Error> class [[nodiscard]] Result {
   public:
     Result(T value) : storage_(std::move(value)) {}
-    Result(Error error) : storage_(std::move(error)) {}
+    Result(E error) : storage_(std::move(error)) {}
     [[nodiscard]] bool has_value() const noexcept { return std::holds_alternative<T>(storage_); }
     explicit operator bool() const noexcept { return has_value(); }
     T &value() & { return std::get<T>(storage_); }
     const T &value() const & { return std::get<T>(storage_); }
     T &&value() && { return std::get<T>(std::move(storage_)); }
-    const Error &error() const { return std::get<Error>(storage_); }
+    const E &error() const { return std::get<E>(storage_); }
 
   private:
-    std::variant<T, Error> storage_;
+    std::variant<T, E> storage_;
 };
 
-template <> class [[nodiscard]] Result<void> {
+template <typename E> class [[nodiscard]] Result<void, E> {
   public:
     Result() = default;
-    Result(Error error) : error_(std::move(error)) {}
+    Result(E error) : error_(std::move(error)) {}
     [[nodiscard]] bool has_value() const noexcept { return !error_.has_value(); }
     explicit operator bool() const noexcept { return has_value(); }
-    const Error &error() const { return error_.value(); }
+    const E &error() const { return error_.value(); }
 
   private:
-    std::optional<Error> error_;
+    std::optional<E> error_;
 };
 } // namespace ghostwire::core

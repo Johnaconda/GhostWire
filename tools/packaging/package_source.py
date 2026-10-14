@@ -14,11 +14,14 @@ DIRECTORIES = {'.github', 'apps', 'include', 'src', 'cmake', 'tests', 'tools', '
                'examples', 'third_party'}
 SUFFIXES = {'.cpp', '.hpp', '.h', '.md', '.txt', '.cmake', '.in', '.json', '.yml', '.yaml',
             '.ps1', '.sh', '.py', '.conf'}
+# Exact signed source-distribution exceptions, never a blanket binary/cache rule.
+SOURCE_DISTRIBUTIONS = {'third_party/botan/Botan-3.13.0.tar.xz',
+                        'third_party/botan/Botan-3.13.0.tar.xz.asc'}
 parser = argparse.ArgumentParser()
 parser.add_argument('--output', type=Path)
 args = parser.parse_args()
 root = Path(__file__).resolve().parents[2]
-destination = args.output or root / 'dist/GHOSTWIRE-GW-A02-PLATFORM-ABSTRACTIONS-source.zip'
+destination = args.output or root / 'dist/GHOSTWIRE-GW-A03-CRYPTOGRAPHIC-PROVIDER-source.zip'
 destination = destination.resolve()
 files = []
 for name in sorted(ROOT_FILES):
@@ -33,19 +36,19 @@ for directory in sorted(DIRECTORIES):
         if '__pycache__' in path.parts:
             continue
         if path.is_file():
-            if path.suffix not in SUFFIXES:
+            if path.suffix not in SUFFIXES and path.relative_to(root).as_posix() not in SOURCE_DISTRIBUTIONS:
                 parser.error(f'Unexpected file in source directory: {path.relative_to(root)}')
             files.append(path)
 files.sort(key=lambda p: p.relative_to(root).as_posix())
 if destination == root or destination.is_relative_to(root / 'docs') or destination in files:
     parser.error('Output must not overwrite source')
 inventory = {path.relative_to(root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest() for path in files}
-manifest = json.dumps({'checkpoint': 'GW-A02-PLATFORM-ABSTRACTIONS', 'algorithm': 'SHA-256',
+manifest = json.dumps({'checkpoint': 'GW-A03-CRYPTOGRAPHIC-PROVIDER', 'algorithm': 'SHA-256',
                        'files': inventory}, indent=2, sort_keys=True).encode() + b'\n'
 destination.parent.mkdir(parents=True, exist_ok=True)
 with zipfile.ZipFile(destination, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
     def add(name, data, executable=False):
-        info = zipfile.ZipInfo('GhostWire/' + name, (2026, 10, 12, 0, 0, 0))
+        info = zipfile.ZipInfo('GhostWire/' + name, (2026, 10, 13, 0, 0, 0))
         info.compress_type = zipfile.ZIP_DEFLATED
         info.create_system = 3
         info.external_attr = (0o100755 if executable else 0o100644) << 16

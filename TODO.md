@@ -10,7 +10,7 @@ Legend: `[ ]` planned, `[~]` partial/experimental, `[x]` implemented and validat
 | GW-A00-TIDY | Run clang-tidy in supported tooling environment | .clang-tidy; CMakeLists.txt | clang-tidy installed | [ ] Integration configured | Not run locally | Record actual static-analysis version/findings; resolve relevant defects | Pending |
 | GW-A11-PRE | Minimum encrypted key and session-state store | src/vault; platform/secure_storage.hpp | A02; A03; provider/license review | [ ] Planned | Not run | No raw keys on disk; OS-protected wrapping + bounded KDF; atomic authenticated state and rollback/crash tests before persistent A04/A08 | Architecture decision recorded; implementation unaccepted |
 | GW-AUTH-PRE | Base scoped authorization | src/permissions; include/ghostwire/permissions | A01; A04 public principal contract | [ ] Planned | Not run | Deny by default; action/resource/expiry; no admin/agent ambient vault rights; negative matrix before listeners | Architecture decision recorded; implementation unaccepted |
-| GW-PROTOCOL-LIB | DM/MLS implementation feasibility | docs/decisions; src/crypto adapters | A03; current upstream review | [!] Provider not selected | Not run | Reviewed implementation, maintenance/license/FFI decision, upstream vectors/interop and durable state integration | Candidates only |
+| GW-PROTOCOL-LIB | DM/MLS implementation feasibility | docs/decisions; src/crypto adapters | A03; current upstream review | [!] DM/MLS protocol provider not selected | Not run | Reviewed protocol implementation, maintenance/license/FFI decision, upstream vectors/interop and durable state integration | A03 primitive provider selection does not select a messaging protocol |
 | GW-UI-SPIKE | Native accessible UI feasibility | ui/framework; ui/rendering; docs/decisions | A02 | [ ] Planned | Not run | Working hit tests/controls/IME/Unicode/accessibility/DPI and idle profile on three OSes before polish | Candidate SDL3; not selected runtime dependency |
 
 ## Implementation and validation work by checkpoint
@@ -19,10 +19,10 @@ Legend: `[ ]` planned, `[~]` partial/experimental, `[x]` implemented and validat
 |---|---|---|---|---|---|---|---|
 | GW-A01-IMPL | Core Lifecycle & Services | include/ghostwire/core; src/core | Verified A00; explicit owner authorization | [x] Implemented | Linux Debug/Release: 65 cases, 589 assertions; all 29 CTest checks | Owned context; deterministic graph validation; rollback/reverse cleanup; cancellation/deadline retry; bounded admission and diagnostics | Owner A01/HF01 acceptance recorded below |
 | GW-A01-EVIDENCE | Core Lifecycle & Services: tests and handover | tests; docs/checkpoints/GW-A01.md; ADR-004 | GW-A01-IMPL | [x] Recorded for executed environment | ASan/UBSan with leaks disabled; TSan unit suite; format/boundaries and package verification | Full cumulative source, changed files, commands, actual limits and A02 proposal; native/leak gates remain below | Owner HF01 Windows portable accepted; prior records preserved |
-| GW-A02-IMPL | Platform Abstractions | include/ghostwire/platform; src/platform | Accepted HF01 + supplied HF02 repository | [x] Implemented; Linux validated | Portable Debug/Release 34/34 each; 85 cases / 831 assertions | Owned process/group/job, bounded capture/waits, owner-dispatched stop and truthful API-only storage capability | Authorized implementation; independent/native acceptance pending |
-| GW-A02-EVIDENCE | Platform tests and handover | tests; docs/checkpoints/GW-A02.md; ADR-005 | GW-A02-IMPL | [x] Source and evidence recorded | Actual matrix and limitations in GW-A02.md | Cumulative ZIP/SHA, source inventory, native checklist and A03 proposal | Stop after A02; A03 not authorized |
-| GW-A03-IMPL | Cryptographic Provider | include/ghostwire/crypto; src/crypto | A02 | [ ] Planned | Not run | Adopt reviewed pinned provider with license/advisory review; upstream vectors, entropy failure, key/nonce bounds, handle lifetimes and secret-memory limits. | Proposed; not accepted |
-| GW-A03-EVIDENCE | Cryptographic Provider: tests and handover | tests; docs/checkpoints/GW-A03.md; relevant ADRs | GW-A03-IMPL | [ ] Planned | Not run | Add relevant failure/security tests; run available host/build checks; update invariant map, TODO, changes, limits and cumulative ZIP/SHA. | Proposed; not accepted |
+| GW-A02-IMPL | Platform Abstractions | include/ghostwire/platform; src/platform | Accepted HF01 + supplied HF02 | [x] Implemented and owner-accepted | Linux Debug/Release 34/34; owner Windows Debug/Release 35/35 each, original TEMP/TMP | Preserve owned processes, stop bridging, capability and Unicode regressions | GW-A02-HOST-ACCEPTANCE.md; macOS remains open |
+| GW-A02-EVIDENCE | Platform tests and handover | tests; docs/checkpoints/GW-A02.md; ADR-005 | GW-A02-IMPL | [x] Historical report plus acceptance addendum | Verified accepted ZIP and all 125 hashes | Preserve cumulative source and original reports | Owner explicitly authorized A03 only |
+| GW-A03-IMPL | Cryptographic Provider | include/ghostwire/crypto; src/crypto; core/crypto_service | Accepted A02 | [x] Implemented, local Linux validated | Debug/Release 37/37 each; 114 cases / 2369 assertions | Pinned Botan; bounded volatile operations; failure, tamper, cancellation, ownership and memory checks | Native A03 owner acceptance pending |
+| GW-A03-EVIDENCE | Cryptographic Provider: tests and handover | tests; docs/checkpoints/GW-A03.md; ADR-006 | GW-A03-IMPL | [x] Recorded for executed environment | Actual sanitizer/dependency/source/package evidence in GW-A03.md | Full cumulative ZIP/SHA, inventory, native checklist and A04 proposal | Stop after A03; A04 unstarted |
 | GW-A04-IMPL | Identity & Device Trust | include/ghostwire/identity; src/identity | A03; A11-PRE for persistence | [ ] Planned | Not run | Generate/verify root and authorized device identities; rotation/revocation/contact proof; alias collision/change tests; no raw key files. | Proposed; not accepted |
 | GW-A04-EVIDENCE | Identity & Device Trust: tests and handover | tests; docs/checkpoints/GW-A04.md; relevant ADRs | GW-A04-IMPL | [ ] Planned | Not run | Add relevant failure/security tests; run available host/build checks; update invariant map, TODO, changes, limits and cumulative ZIP/SHA. | Proposed; not accepted |
 | GW-A05-IMPL | Protocol Schemas & Versioning | schemas; include/ghostwire/protocol; src/protocol | A04 public identity contracts | [ ] Planned | Not run | Canonical versioned codecs with bounded fields and negotiation; reject malformed/unsupported input; corpus/fuzz/interop fixtures. | Proposed; not accepted |
@@ -113,22 +113,41 @@ and the exact supplied A01 ZIP, SHA-256 recorded in GW-A01-HF01.md.
 | GW-A01-HF01-VCPKG | Windows doctest 2.4.12 configure failure | [!] Unresolved owner report; pins/modes preserved; Linux vcpkg passing does not resolve Windows failure | Capture full configure/buildtree logs and pass Debug/Release + CTest before closure |
 | GW-A01-HF01-ACCEPT | Original Windows TEMP/TMP and ordinary-shell acceptance | [x] Owner procedure in checklist; results recorded in GW-A01-HF01-HOST-ACCEPTANCE.md | Windows portable Debug/Release accepted; original TEMP/TMP |
 
-The prior HF02 macOS matrix and hosted runs now have evidence; new A02 native
-execution, full A02 leak checks and clang-tidy remain incomplete.
+The prior HF02 macOS matrix and hosted runs now have evidence; A02 Windows owner acceptance is now recorded. Native macOS, full local leak
+checks, clang-tidy and new hosted CI remain incomplete.
 No new runtime scope, private persistence or authorization exception is granted.
 
 ## A02 remaining acceptance gates
 
 | ID | Remaining work | Current status |
 |---|---|---|
-| GW-A02-WIN | Windows10 x64 / VS2026 Debug/Release with original TEMP/TMP | [ ] New 35-check suite, process job/console/Unicode and DPAPI API probe need owner execution; see native checklist |
+| GW-A02-WIN | Windows10 x64 / VS2026 Debug/Release with original TEMP/TMP | [x] Owner reports clean builds and 35/35 each, platform/Unicode/tooling pass, CLI exit 0; win10dev account |
 | GW-A02-MAC | macOS x64/ARM64 Debug/Release | [ ] New 34-check suite including spawn/group/stop/Keychain API probe unexecuted; prior HF02 CI is not A02 evidence |
 | GW-A02-CI | Hosted build/test matrix for A02 source | [ ] No remote changes/runs performed; user controls publication |
 | GW-A02-LEAK | Default full A02 LeakSanitizer | [!] Local /proc task inspection failure; separate leak-disabled ASan/UBSan passes; supported host required |
 | GW-A02-TIDY | clang-tidy | [!] Tool unavailable locally; compiler warnings-as-errors, format and boundaries are separate checks |
-| GW-A02-ACCEPT | Independent review and owner Windows acceptance | [ ] Required before explicit A03 authorization; no crypto/identity/network implementation begun |
+| GW-A02-ACCEPT | Independent review and owner Windows acceptance | [x] Owner accepted A02 and explicitly authorized A03; see acceptance addendum |
 | GW-A01-HF01-VCPKG-LOCAL | Owner's Windows vcpkg/doctest configuration | [!] Still unresolved on that host; preserve both routes and gather actual buildtree logs |
 
 A02 does not hard-limit child CPU/RSS, sandbox hostile code, guarantee hard-kill
 or OS-stall cleanup deadlines, or implement secret persistence. These limits are
 explicit in PLATFORM_ABSTRACTIONS.md and do not weaken A11-PRE/AUTH-PRE.
+
+## A03 remaining acceptance gates
+
+| ID | Gate | State |
+|---|---|---|
+| GW-A03-WIN | Windows10 / VS2026 / win10dev, original TEMP/TMP | [ ] Clean portable Debug/Release expected 37/37 each; crypto, Unicode, tooling and CLI native execution required |
+| GW-A03-MAC | macOS x64/ARM64 | [ ] Clean Debug/Release expected 36/36 each; new Botan and retained A02 native branches unexecuted here |
+| GW-A03-VCPKG-WIN | Owner standard vcpkg/doctest route | [!] Still unresolved; new account and Linux success do not close this issue |
+| GW-A03-LEAK | Full default LeakSanitizer | [!] Runtime blocked locally; separate leak-disabled ASan/UBSan evidence in A03 report |
+| GW-A03-TIDY | clang-tidy | [!] Unavailable locally; warnings/format/boundaries are different checks |
+| GW-A03-CI | Hosted A03 workflows | [ ] Not triggered; prior HF02 hosted success is not A03 evidence; user owns pushes |
+| GW-A03-REVIEW | Independent crypto facade/native review and owner acceptance | [ ] Required before explicit A04 authorization; no production E2EE claim |
+
+Nonce uniqueness, public-message-only Ed25519, best-effort memory locking,
+cooperative cancellation and logical (not RSS) budgets are explicit current
+contracts. Protocol selection remains unresolved despite primitive-provider
+selection. A11-PRE and AUTH-PRE remain mandatory and unimplemented. Identity,
+profile collision/namespace decisions and persistent storage are not smuggled
+into this checkpoint. Proposed continuation: GW-A04-PROMPT.md.

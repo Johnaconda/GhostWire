@@ -1,0 +1,188 @@
+A03 actual validation output excerpts, 2026-10-13
+
+Selected lines from executed commands; full commands, failure attempts and limits
+are in GW-A03.md. Workspace paths are replaced with <workspace>. No claim of
+Windows/macOS execution, clang-tidy, full leak validation or independent audit.
+
+
+baseline-ctest-retry.log
+100% tests passed out of 34
+Total Test time (real) =   1.71 sec
+
+
+final-debug-ctest.log
+1: [doctest] test cases:  67 |  67 passed | 0 failed | 0 skipped
+1: [doctest] assertions: 640 | 640 passed | 0 failed |
+1: [doctest] Status: SUCCESS!
+2: [doctest] test cases:  18 |  18 passed | 0 failed | 0 skipped
+2: [doctest] assertions: 191 | 191 passed | 0 failed |
+2: [doctest] Status: SUCCESS!
+3: [doctest] test cases:   20 |   20 passed | 0 failed | 0 skipped
+3: [doctest] assertions: 1449 | 1449 passed | 0 failed |
+3: [doctest] Status: SUCCESS!
+4: [doctest] test cases:  7 |  7 passed | 0 failed | 0 skipped
+4: [doctest] assertions: 67 | 67 passed | 0 failed |
+4: [doctest] Status: SUCCESS!
+5: [doctest] test cases:  2 |  2 passed | 0 failed | 0 skipped
+5: [doctest] assertions: 22 | 22 passed | 0 failed |
+5: [doctest] Status: SUCCESS!
+100% tests passed out of 37
+Total Test time (real) =   0.56 sec
+
+
+final-release-ctest.log
+1: [doctest] test cases:  67 |  67 passed | 0 failed | 0 skipped
+1: [doctest] assertions: 640 | 640 passed | 0 failed |
+1: [doctest] Status: SUCCESS!
+2: [doctest] test cases:  18 |  18 passed | 0 failed | 0 skipped
+2: [doctest] assertions: 191 | 191 passed | 0 failed |
+2: [doctest] Status: SUCCESS!
+3: [doctest] test cases:   20 |   20 passed | 0 failed | 0 skipped
+3: [doctest] assertions: 1449 | 1449 passed | 0 failed |
+3: [doctest] Status: SUCCESS!
+4: [doctest] test cases:  7 |  7 passed | 0 failed | 0 skipped
+4: [doctest] assertions: 67 | 67 passed | 0 failed |
+4: [doctest] Status: SUCCESS!
+5: [doctest] test cases:  2 |  2 passed | 0 failed | 0 skipped
+5: [doctest] assertions: 22 | 22 passed | 0 failed |
+5: [doctest] Status: SUCCESS!
+100% tests passed out of 37
+Total Test time (real) =   0.54 sec
+
+
+vcpkg-ctest.log
+1: [doctest] test cases:  67 |  67 passed | 0 failed | 0 skipped
+1: [doctest] assertions: 640 | 640 passed | 0 failed |
+1: [doctest] Status: SUCCESS!
+2: [doctest] test cases:  18 |  18 passed | 0 failed | 0 skipped
+2: [doctest] assertions: 191 | 191 passed | 0 failed |
+2: [doctest] Status: SUCCESS!
+3: [doctest] test cases:   20 |   20 passed | 0 failed | 0 skipped
+3: [doctest] assertions: 1449 | 1449 passed | 0 failed |
+3: [doctest] Status: SUCCESS!
+4: [doctest] test cases:  7 |  7 passed | 0 failed | 0 skipped
+4: [doctest] assertions: 67 | 67 passed | 0 failed |
+4: [doctest] Status: SUCCESS!
+5: [doctest] test cases:  2 |  2 passed | 0 failed | 0 skipped
+5: [doctest] assertions: 22 | 22 passed | 0 failed |
+5: [doctest] Status: SUCCESS!
+100% tests passed out of 37
+Total Test time (real) =   0.62 sec
+
+
+asan-default-lsan.log
+3: [doctest] test cases:   20 |   20 passed | 0 failed | 0 skipped
+3: [doctest] assertions: 1449 | 1449 passed | 0 failed |
+3: [doctest] Status: SUCCESS!
+3: ==6==LeakSanitizer has encountered a fatal error.
+3: ==6==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1
+3: ==6==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)
+[doctest] test cases:   20 |   20 passed | 0 failed | 0 skipped
+[doctest] assertions: 1449 | 1449 passed | 0 failed |
+[doctest] Status: SUCCESS!
+==6==LeakSanitizer has encountered a fatal error.
+==6==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1
+==6==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)
+0% tests passed, 1 tests failed out of 1
+Total Test time (real) =   0.21 sec
+
+
+asan-no-leaks-retry.log
+1: [doctest] test cases:  67 |  67 passed | 0 failed | 0 skipped
+1: [doctest] assertions: 640 | 640 passed | 0 failed |
+1: [doctest] Status: SUCCESS!
+2: [doctest] test cases:  18 |  18 passed | 0 failed | 0 skipped
+2: [doctest] assertions: 191 | 191 passed | 0 failed |
+2: [doctest] Status: SUCCESS!
+3: [doctest] test cases:   20 |   20 passed | 0 failed | 0 skipped
+3: [doctest] assertions: 1449 | 1449 passed | 0 failed |
+3: [doctest] Status: SUCCESS!
+4: [doctest] test cases:  7 |  7 passed | 0 failed | 0 skipped
+4: [doctest] assertions: 67 | 67 passed | 0 failed |
+4: [doctest] Status: SUCCESS!
+5: [doctest] test cases:  2 |  2 passed | 0 failed | 0 skipped
+5: [doctest] assertions: 22 | 22 passed | 0 failed |
+5: [doctest] Status: SUCCESS!
+100% tests passed out of 37
+Total Test time (real) =   1.70 sec
+
+
+tsan-ctest.log
+1: [doctest] test cases:  67 |  67 passed | 0 failed | 0 skipped
+1: [doctest] assertions: 640 | 640 passed | 0 failed |
+1: [doctest] Status: SUCCESS!
+2: [doctest] test cases:  18 |  18 passed | 0 failed | 0 skipped
+2: [doctest] assertions: 191 | 191 passed | 0 failed |
+2: [doctest] Status: SUCCESS!
+3: [doctest] test cases:   20 |   20 passed | 0 failed | 0 skipped
+3: [doctest] assertions: 1449 | 1449 passed | 0 failed |
+3: [doctest] Status: SUCCESS!
+4: [doctest] test cases:  7 |  7 passed | 0 failed | 0 skipped
+4: [doctest] assertions: 67 | 67 passed | 0 failed |
+4: [doctest] Status: SUCCESS!
+5: [doctest] test cases:  2 |  2 passed | 0 failed | 0 skipped
+5: [doctest] assertions: 22 | 22 passed | 0 failed |
+5: [doctest] Status: SUCCESS!
+100% tests passed out of 5
+Total Test time (real) =   0.87 sec
+
+
+botan-regeneration.log
+Botan source pin and all three portable amalgamations verified
+
+
+dependency-negative.log
+generated source: rejected as required
+upstream archive: rejected as required
+version: rejected as required
+
+
+production-symbols.log
+libghostwire_crypto.a: no test fault API symbols
+ghostwire-desktop: no test fault API symbols
+ghostwire-server: no test fault API symbols
+ghostwire-relay: no test fault API symbols
+ghostwire-cli: no test fault API symbols
+Isolated test library: fault API present as expected
+desktop: no shared Botan dependency
+server: no shared Botan dependency
+relay: no shared Botan dependency
+cli: no shared Botan dependency
+
+
+boundaries.log
+Boundary check: PASS
+
+
+Upstream suite linked against GhostWire-built static Botan
+Testing Botan 3.13.0 (release, dated 20260813, revision git:2a81eef56c96c237e590c27f9a75e60317c9c700, distribution 'GhostWire-A03')
+ChaCha20Poly1305 ran 112150 tests in 1.09 sec all ok
+SHA-256 ran 5079 tests in 31.18 msec all ok
+Ed25519 CURDLE format ran 3 tests all ok
+Ed25519 key validity ran 10 tests in 2.46 msec all ok
+Ed25519 keygen ran 27 tests in 2.09 msec all ok
+Ed25519/Ed25519ph signature generation ran 25 tests in 14.15 msec all ok
+Ed25519/Pure signature generation ran 17725 tests in 7.16 sec all ok
+Ed25519/SHA-256 signature generation ran 25 tests in 12.90 msec all ok
+Ed25519/Pure signature verification ran 124 tests in 17.09 msec all ok
+System_RNG ran 3 tests all ok
+Tests complete ran 485213 tests in 98.85 sec all tests ok
+
+Fresh source-package Release CTest
+1: [doctest] test cases:  67 |  67 passed | 0 failed | 0 skipped
+1: [doctest] assertions: 640 | 640 passed | 0 failed |
+1: [doctest] Status: SUCCESS!
+2: [doctest] test cases:  18 |  18 passed | 0 failed | 0 skipped
+2: [doctest] assertions: 191 | 191 passed | 0 failed |
+2: [doctest] Status: SUCCESS!
+3: [doctest] test cases:   20 |   20 passed | 0 failed | 0 skipped
+3: [doctest] assertions: 1449 | 1449 passed | 0 failed |
+3: [doctest] Status: SUCCESS!
+4: [doctest] test cases:  7 |  7 passed | 0 failed | 0 skipped
+4: [doctest] assertions: 67 | 67 passed | 0 failed |
+4: [doctest] Status: SUCCESS!
+5: [doctest] test cases:  2 |  2 passed | 0 failed | 0 skipped
+5: [doctest] assertions: 22 | 22 passed | 0 failed |
+5: [doctest] Status: SUCCESS!
+100% tests passed out of 37
+Total Test time (real) =   0.53 sec

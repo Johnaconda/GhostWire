@@ -1,10 +1,10 @@
 # Technology decisions and source review
 
-Reviewed 2026-10-11. “Candidate” means no dependency, implementation or security
-claim exists in A00. Recheck upstream maintenance, licensing, advisories and
+Initial review 2026-10-11; crypto decision updated 2026-10-13 in ADR-006.
+“Candidate” means no adoption or security claim. Recheck upstream maintenance, licensing, advisories and
 platform support at the checkpoint that actually adopts a dependency.
 
-| Area | A00 decision | Rationale / remaining gate |
+| Area | Current decision | Rationale / remaining gate |
 |---|---|---|
 | Host language | C++20 | User toolchain; no second language at bootstrap. ADR-001 compares alternatives. |
 | Build | CMake >=3.25, Ninja, vcpkg manifest | Explicit profiles and pinned ports; vendored exact test fallback. |
@@ -12,7 +12,7 @@ platform support at the checkpoint that actually adopts a dependency.
 | Core linkage | Static reusable libraries | No plugin ABI or DLL deployment promise at A00. |
 | Config | Bounded nonsecret key=value schema 1 | Small bootstrap grammar; no unnecessary JSON/TOML runtime dependency. |
 | Log | Typed synchronous JSON-lines | Fixed event names and sensitive-key redaction; stdout/stderr only. |
-| Crypto primitives | libsodium candidate | Provider adapter, RNG, AEAD and memory-hard KDF evaluation at A03; not a messaging protocol. |
+| Crypto primitives | Botan 3.13.0 pinned static subset | A03 owns OS RNG, ChaCha20-Poly1305, pure Ed25519 for public messages, SHA-256 and clearing handles; ADR-006 compares libsodium/OpenSSL. KDF, protocol and protected persistence remain future. |
 | DM protocol | Evaluate reviewed Signal-family implementations and established alternatives | Library license, external support, FFI, multi-device and async state consistency need an explicit decision. |
 | Group protocol | MLS candidate | RFC 9420 protocol and RFC 9750 architecture; validate authentication/delivery integration and implementations. |
 | Vault | SQLCipher candidate | Key management, temp stores, journals, encrypted indexes and atomic ratchet transactions need a prototype and audit. |
@@ -67,4 +67,5 @@ https://github.com/microsoft/vcpkg/releases/tag/2026.07.29 .
 The Windows script preserves an explicitly supplied/incoming VCPKG_ROOT across
 VsDevCmd initialization, honors an explicit Visual Studio root, and diagnoses
 a tool predating VS2026 support. It does not silently change or update the
-user's dependency checkout. Native MSVC/SDK execution remains unverified here.
+user's dependency checkout. Owner portable A02 MSVC acceptance is recorded in
+GW-A02-HOST-ACCEPTANCE.md; Windows vcpkg and all new A03 native acceptance remain open.

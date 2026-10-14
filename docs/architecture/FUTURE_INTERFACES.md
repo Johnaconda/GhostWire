@@ -20,7 +20,7 @@ For **every header in each group**, the eight numbered fields below form its con
 
 7. **Platform constraints:** No desktop types. Later OS stop events enter an adapter; C++20 stop tokens remain the portable API.
 
-8. **Dependencies:** core values, platform bootstrap; no crypto, UI or transport implementation dependency.
+8. **Dependencies:** A01 core values and platform bootstrap; A03 additionally composes the real crypto service through an acyclic dependency. No UI or transport implementation dependency.
 
 
 | Proposed header | Header-specific responsibility / refinement |
@@ -87,7 +87,17 @@ The broader secure-store/session, hardware, capture and UI contracts above remai
 future proposals. [PLATFORM_ABSTRACTIONS.md](PLATFORM_ABSTRACTIONS.md) is the
 implemented ownership, lifetime, threading, validation, error and resource contract.
 
-## Cryptographic provider — GW-A03
+## Cryptographic provider — GW-A03 implemented subset
+
+The numbered design proposal below is retained for traceability. The implemented
+contract in [CRYPTO_PROVIDER.md](CRYPTO_PROVIDER.md) supersedes it: no KDF,
+revocation, backup/export, queued jobs or extra platform entropy facade exists.
+crypto_provider.hpp includes checked random generation directly, avoiding a
+second owner in secure_random.hpp. key_handle.hpp and crypto_error.hpp are real.
+Thread-safe nonblocking admission returns busy; callers own/join executors.
+Key reset is memory cleanup, not identity/device revocation. Native RNG/memory
+adapters belong to the pinned Botan implementation. No further proposed header
+is a compilable success-shaped stub.
 
 1. **Ownership:** Provider owns reviewed backend resources; secret material is kept behind move-only key handles.
 

@@ -15,7 +15,9 @@
 | Owned processes | platform/process.hpp | Caller-owned process/group/job, bounded capture and joined monitor |
 | Process stop | platform/process_stop.hpp | Explicit owner-thread registration/dispatch, native callback latch |
 | Storage capability | platform/secure_storage.hpp | API-entry-point probe only; no secret operations or persistence |
-| Tests | tests/unit, tests/fixtures/platform_child.cpp, tests/integration, tests/windows | Two doctest runners, compiled native child fixture, real CLI and Unicode/tooling regressions |
+| Crypto | crypto/crypto_provider.hpp, crypto_error.hpp, key_handle.hpp | Explicit provider, purpose-specific move-only keys, clearing buffers, bounds, typed errors and cancellation; pinned static Botan private to implementation |
+| Crypto lifecycle | core/crypto_service.hpp | ServiceManager-owned adapter, real initialization/stop/rollback in all roles |
+| Tests | tests/unit, tests/security, tests/fixtures, tests/integration, tests/windows | Core/platform/crypto/fault runners, Linux OS entropy failure runner, real native child/CLI/Unicode/tooling regressions |
 | Build | CMakeLists.txt, cmake, presets, vcpkg manifests | Repository-local build directories |
 
 A00 platform filesystem is suitable for nonsecret configuration and empty
@@ -26,7 +28,7 @@ monitor thread per explicitly launched child.
 
 ## Planned only
 
-Identity, crypto, vault, permissions, protocol, transport, discovery, messaging,
+Identity, vault, permissions, protocol, transport, discovery, messaging,
 friends, groups, communities, federation, storage, files, media, moderation,
 AI, plugins, diagnostics services and all ui/ and schemas/ trees are documented
 but not populated with stubs. Create a directory when real functionality or a
@@ -40,4 +42,7 @@ and media proposals are in [FUTURE_FEATURES.md](FUTURE_FEATURES.md).
 
 A02 implements the bounded platform subset in
 [PLATFORM_ABSTRACTIONS.md](PLATFORM_ABSTRACTIONS.md); sealed-key operations,
-hardware/GPU policies, secure memory and capture protection remain future work.
+hardware/GPU policies and capture protection remain future work.
+A03 implements the bounded volatile [crypto contract](CRYPTO_PROVIDER.md), including
+best-effort clearing allocation; protected persistence and full memory secrecy
+remain unavailable. No general platform secure-memory API is introduced.

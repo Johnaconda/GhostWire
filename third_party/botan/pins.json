@@ -1,0 +1,20 @@
+{
+  "archive_sha256": "12f5a8358890bbee82edfe9d2e7769b0a610b6dd0e0698aea13d20a675d84620",
+  "generated_sha256": {
+    "linux/botan_all.cpp": "922d6786470a38c0881c3a02ae0640f3f898c2152371c94b50bfad26094ae4fd",
+    "linux/botan_all.h": "a3832bba1eed441efdbcb9ea4277d4dd4d4ecd700697b2d3cb4b1cf684425d71",
+    "macos/botan_all.cpp": "6cb17d1c1edee2ea71f9b9ae4b4118c75c3fc240026a7c3218aa27e6dbd18c8b",
+    "macos/botan_all.h": "a3832bba1eed441efdbcb9ea4277d4dd4d4ecd700697b2d3cb4b1cf684425d71",
+    "windows/botan_all.cpp": "1d809c4d31c26973571e67aebc009bf5cb1aa425856c03b37115f174d6f534d0",
+    "windows/botan_all.h": "7cd98136bb9fa8373bbed27d6af0f477a79890762f2cdf7c4e4b5453b1b41874"
+  },
+  "modules": [
+    "system_rng",
+    "chacha20poly1305",
+    "ed25519",
+    "sha2_32",
+    "locking_allocator"
+  ],
+  "revision": "2a81eef56c96c237e590c27f9a75e60317c9c700",
+  "version": "3.13.0"
+}

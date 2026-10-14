@@ -12,7 +12,7 @@ if(BUILD_TESTING AND GW_TEST_DEPENDENCY STREQUAL "vcpkg")
 endif()
 set(VCPKG_MANIFEST_NO_DEFAULT_FEATURES ON)
 
-project(GhostWire VERSION 0.2.0 LANGUAGES CXX)
+project(GhostWire VERSION 0.3.0 LANGUAGES CXX)
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
     message(FATAL_ERROR "Use an out-of-source build: cmake --preset portable-debug")
 endif()
@@ -33,6 +33,12 @@ find_package(Threads REQUIRED)
 add_library(ghostwire_contracts INTERFACE)
 target_compile_features(ghostwire_contracts INTERFACE cxx_std_20)
 target_include_directories(ghostwire_contracts INTERFACE "${CMAKE_CURRENT_SOURCE_DIR}/include")
+
+include(cmake/VendoredBotan.cmake)
+add_library(ghostwire_crypto STATIC src/crypto/crypto_provider.cpp)
+target_link_libraries(ghostwire_crypto PUBLIC ghostwire_contracts
+    PRIVATE ghostwire_botan ghostwire_options Threads::Threads)
+add_library(GhostWire::crypto ALIAS ghostwire_crypto)
 
 add_library(ghostwire_platform STATIC src/platform/arguments.cpp src/platform/filesystem.cpp
     src/platform/platform_info.cpp src/platform/process.cpp src/platform/process_stop.cpp
@@ -62,10 +68,10 @@ endif()
 
 configure_file(cmake/build_version.hpp.in generated/ghostwire/build_version.hpp @ONLY)
 add_library(ghostwire_core STATIC
-    src/core/application.cpp src/core/bootstrap.cpp src/core/config.cpp
+    src/core/application.cpp src/core/bootstrap.cpp src/core/config.cpp src/core/crypto_service.cpp
     src/core/clock.cpp src/core/resource_admission.cpp src/core/service_manager.cpp
     src/core/logger.cpp src/core/paths.cpp src/core/version.cpp)
-target_link_libraries(ghostwire_core PUBLIC ghostwire_contracts ghostwire_platform
+target_link_libraries(ghostwire_core PUBLIC ghostwire_contracts ghostwire_platform GhostWire::crypto
                       PRIVATE ghostwire_options Threads::Threads)
 target_include_directories(ghostwire_core PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/generated")
 add_library(GhostWire::core ALIAS ghostwire_core)
@@ -76,6 +82,7 @@ foreach(role IN ITEMS desktop server relay cli)
     install(TARGETS ghostwire-${role} RUNTIME DESTINATION bin)
 endforeach()
 install(FILES LICENSE README.md BUILD.md THIRD_PARTY_NOTICES.md DESTINATION share/ghostwire)
+install(FILES third_party/botan/LICENSE.txt DESTINATION share/ghostwire/licenses RENAME Botan-LICENSE.txt)
 
 include(CTest)
 if(BUILD_TESTING)
@@ -94,6 +101,29 @@ if(BUILD_TESTING)
     target_link_libraries(ghostwire-platform-tests PRIVATE GhostWire::core ghostwire_options doctest::doctest Threads::Threads)
     add_test(NAME platform-unit COMMAND ghostwire-platform-tests "$<TARGET_FILE:ghostwire-platform-fixture>")
     set_tests_properties(platform-unit PROPERTIES TIMEOUT 30 LABELS "unit;platform;security")
+    add_executable(ghostwire-crypto-tests tests/unit/crypto_tests.cpp)
+    target_link_libraries(ghostwire-crypto-tests PRIVATE GhostWire::core ghostwire_options doctest::doctest Threads::Threads)
+    add_test(NAME crypto-unit COMMAND ghostwire-crypto-tests --no-colors)
+    set_tests_properties(crypto-unit PROPERTIES TIMEOUT 30 LABELS "unit;crypto;security")
+    # Production targets never link this library. No test fault API is present in
+    # ghostwire_crypto; private hooks use the same implementation in isolation.
+    add_library(ghostwire_crypto_faults STATIC src/crypto/crypto_provider.cpp)
+    target_compile_definitions(ghostwire_crypto_faults PRIVATE GW_CRYPTO_TESTING=1)
+    target_link_libraries(ghostwire_crypto_faults PUBLIC ghostwire_contracts
+        PRIVATE ghostwire_botan ghostwire_options Threads::Threads)
+    add_executable(ghostwire-crypto-fault-tests tests/unit/crypto_fault_tests.cpp)
+    target_compile_definitions(ghostwire-crypto-fault-tests PRIVATE GW_CRYPTO_TESTING=1)
+    target_include_directories(ghostwire-crypto-fault-tests PRIVATE "${CMAKE_SOURCE_DIR}/src/crypto")
+    target_link_libraries(ghostwire-crypto-fault-tests PRIVATE ghostwire_crypto_faults ghostwire_options doctest::doctest Threads::Threads)
+    add_test(NAME crypto-faults COMMAND ghostwire-crypto-fault-tests --no-colors)
+    set_tests_properties(crypto-faults PROPERTIES TIMEOUT 30 LABELS "unit;crypto;security")
+    if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang)$")
+        add_executable(ghostwire-crypto-entropy-tests tests/security/crypto_entropy_failure.cpp)
+        target_link_libraries(ghostwire-crypto-entropy-tests PRIVATE GhostWire::core ghostwire_options doctest::doctest)
+        target_link_options(ghostwire-crypto-entropy-tests PRIVATE -Wl,--wrap=getrandom)
+        add_test(NAME crypto-system-entropy-failure COMMAND ghostwire-crypto-entropy-tests --no-colors)
+        set_tests_properties(crypto-system-entropy-failure PROPERTIES TIMEOUT 30 LABELS "unit;crypto;security")
+    endif()
     foreach(role IN ITEMS desktop server relay cli)
         foreach(case IN ITEMS help version check-config unknown invalid-config missing-config bootstrap)
             add_test(NAME ${role}-${case}

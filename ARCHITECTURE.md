@@ -10,7 +10,7 @@ Production path validation and the runtime dependency graph are unchanged.
 Windows development-tool environment transfer uses explicit Unicode decoding;
 tooling helpers and their subprocess checks do not add an application process API.
 
-## What exists through A02
+## What exists through A03
 
 The four composition roots retain the A00 strict CLI, configuration, logging,
 paths and one-shot behavior. Application now owns an immutable ApplicationContext,
@@ -24,10 +24,14 @@ See [core lifecycle contracts](docs/architecture/CORE_LIFECYCLE.md) and
 diagnostics and resource semantics. A02 adds real owned process monitoring, an
 explicit native-stop registration and secure-storage API capability discovery.
 See [platform contracts](docs/architecture/PLATFORM_ABSTRACTIONS.md) and
-[ADR-005](docs/decisions/ADR-005-PLATFORM-OWNERSHIP.md). There are no domain services,
-GUI, networking, cryptography or persistent private data.
+[ADR-005](docs/decisions/ADR-005-PLATFORM-OWNERSHIP.md). A03 adds a real lifecycle-owned
+Botan provider for bounded volatile randomness, AEAD, public-message signatures
+and hashing. See [crypto contracts](docs/architecture/CRYPTO_PROVIDER.md) and
+[ADR-006](docs/decisions/ADR-006-CRYPTO-PROVIDER.md). No identity, GUI, networking
+or persistent private data is implemented.
 
-`ghostwire_core` and `ghostwire_platform` are static libraries. “Shared core”
+`ghostwire_core`, `ghostwire_platform`, `ghostwire_crypto` and the pinned Botan
+subset are static libraries. “Shared core”
 means common code used by all executable roles, not a shared binary ABI. This
 avoids an unnecessary exported ABI/DLL deployment commitment at bootstrap.
 If dynamic linkage becomes necessary, introduce exports and ABI testing in a
@@ -48,8 +52,11 @@ separate accepted change; do not silently convert these contracts into a plugin 
    Process launch defaults to replacement; optional inheritance snapshots must
    not race POSIX environment mutation. No module changes the parent process
    environment during normal operation.
-5. UI, networking, vault and crypto ownership are separate future service
-   domains. Their public headers must not expose native OS or renderer types.
+5. CryptoService owns CryptoProvider. Future consumers receive explicit references
+   and declare lifecycle dependencies; they join before provider destruction.
+   Move-only secret allocations can outlive the provider through bounded shared
+   accounting. UI, networking and vault remain future service domains. Public
+   headers expose no backend, native OS or renderer types.
 6. A result containing Error is a failure, never a success-shaped stub. Errors
    must contain static diagnostic descriptions and bounded structural counters,
    not raw peer input, exception text or paths.
@@ -92,7 +99,9 @@ defines proposed headers without providing misleading compilable security stubs.
 
 A01 creates no production worker pool. A02 Process owns one joined monitor per
 explicitly launched child for bounded pipe I/O and reaping. The bootstrap creates
-no child/monitor. Restricted native stop callbacks latch state; only owner-thread
+no child/monitor. A03 crypto is synchronous with one nonblocking admission slot
+per provider and no queue/worker. Secret handles cannot be mutated concurrently
+with use. Restricted native stop callbacks latch state; only owner-thread
 dispatch calls C++ cancellation callbacks. Test fixtures verify real cleanup. Future networking
 owns bounded event loops; each vault owns a serialized transaction executor;
 crypto/file jobs run on bounded workers and return immutable results. UI and

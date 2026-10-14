@@ -1,11 +1,15 @@
-# Building GhostWire A02
+# Building GhostWire A03
 
 ## Tool requirements
 
 C++20 compiler; CMake 3.25+; Ninja; Git for vcpkg. Python 3.9+ is needed only
 for formatting, boundary checks and packaging. Test dependency: doctest 2.4.12.
 The vcpkg baseline is `9e593bb18ea69cc5095e012465dcd675a822ed0d`
-(upstream tag 2026.07.29). Runtime dependencies are standard C++ and OS APIs.
+(upstream tag 2026.07.29). Runtime dependencies are standard C++, OS APIs and
+the bundled static Botan 3.13.0 subset. Normal builds remain fully offline in
+portable mode. No Python, extra Botan DLL, Perl or assembly tool is needed to
+compile the included provider. Python 3.12+ on a POSIX host is needed only when
+regenerating the pinned provider sources; see third_party/botan/README.md.
 
 Presets use single-configuration Ninja. Debug and Release have separate build
 directories; no Ninja Multi-Config or configuration subdirectory is required.
@@ -23,11 +27,14 @@ beside the selected CMake before PATH fallback, with a matching version check.
 Unicode and preserves the original process TEMP/TMP. No permanent environment
 or execution-policy change is made.
 
-A02 acceptance starts with the portable/vendored mode already accepted by the owner
-for HF01 with original TEMP/TMP. Open a new ordinary PowerShell from Start (not a child
+A03 acceptance starts with the portable/vendored mode already accepted by the owner
+through A02 with original TEMP/TMP. Primary account: win10dev; project root
+`C:\Cumpiling-shit\GhostWire`; TEMP `C:\Users\win10dev\AppData\Local\Temp`.
+Open a new ordinary PowerShell from Start (not a child
 of the old workaround shell), leave TEMP/TMP unchanged, then from the source root:
 
 ```powershell
+Set-Location 'C:\Cumpiling-shit\GhostWire'
 powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\dev-windows.ps1 -Action diagnostics -OfflineTests
 powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\dev-windows.ps1 -Action all -Configuration Debug -OfflineTests -Fresh
 powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\dev-windows.ps1 -Action all -Configuration Release -OfflineTests -Fresh
@@ -60,7 +67,8 @@ blocks scripts, use the manual CMake route from an authorized developer shell.
 failure on the standard vcpkg route; no complete diagnostic log establishing its
 cause accompanies the acceptance report. The earlier x86 SDK/link mismatch was
 recovered separately. Do not assume the two have the same cause or call vcpkg
-fixed because the portable route passes. HF01 preserves the pin and both modes.
+fixed because the portable route passes or the owner created a new account.
+A03 preserves the pin and both modes; its crypto source is identical in both.
 
 Precedence: explicit `-VcpkgRoot`, process `VCPKG_ROOT`, then VS's `VC/vcpkg`.
 The root must contain `scripts/buildsystems/vcpkg.cmake` and `vcpkg.exe`.
@@ -142,7 +150,8 @@ For current CI macOS support, use Xcode 26 and its C++20 libc++ with
 runner lacks those required library types. HF02 uses hosted macos-26 ARM64/Intel
 for CI runs, preserved in A02. Do not turn off `-Werror` or silently substitute a
 nonstandard cancellation API to get older SDKs building. The supplied HF02 repository commit passed that hosted matrix; A02 introduces
-new native code and needs a new run on both architectures. See the A02 report.
+new native code and A03 adds crypto. Both require a new native run on both
+architectures. See the A03 report; prior HF02 CI is not current validation.
 
 
 Install a C++20 compiler (GCC/Clang or AppleClang), CMake and Ninja through your
@@ -153,6 +162,7 @@ bash tools/dev.sh all portable-debug
 bash tools/dev.sh all portable-release
 bash tools/dev.sh all portable-sanitize  # GCC/Clang ASan+UBSan
 python3 tools/check_boundaries.py
+python3 tools/crypto/generate_botan.py --check # regeneration host: POSIX Python 3.12+
 ```
 
 For vcpkg:
@@ -273,11 +283,13 @@ The package script allowlists source paths, rejects symlinks/unexpected files,
 verifies archive bytes, and writes a `.zip.sha256` sidecar. No build output,
 local toolchain, .git directory, caches or private state is packaged.
 
-## A02 platform requirements and native acceptance
+## Retained A02 platform requirements and A03 native acceptance
 
-The [A02 checklist](docs/checkpoints/GW-A02-NATIVE-ACCEPTANCE.md) supplements the
-preserved HF01 procedures. Expected CTest counts are 34 on Linux/macOS and 35 on
-Windows. The owner root is `C:\Cumpiling-shit\GhostWire`; keep original TEMP/TMP.
+The [A03 checklist](docs/checkpoints/GW-A03-NATIVE-ACCEPTANCE.md) supplements the
+preserved A02/HF01 procedures. Expected A03 CTest counts are 37 on Linux/Windows
+and 36 on macOS. Linux has an OS getrandom failure test; Windows has its tooling
+test instead. Owner A02 Windows results were 35/35 each; that is not A03 evidence.
+The owner root is `C:\Cumpiling-shit\GhostWire`; keep original TEMP/TMP.
 The new platform suite launches a compiled test fixture, not a shell. It covers
 Unicode paths/argv/environment, output limits, cancellation, deadlines, reaping,
 handle/descriptor isolation, stop delivery and an actual child-owning service.
@@ -306,3 +318,25 @@ Normal presets and both dependency routes are retained. No process-control CLI
 flag, daemon, GUI, secret-store operation or network listener was added. All four
 roles remain one-shot. See [platform contracts](docs/architecture/PLATFORM_ABSTRACTIONS.md)
 for bounded-wait versus destruction semantics and API-only storage capabilities.
+
+## A03 provider and acceptance
+
+Every configuration verifies the bundled Botan source SHA-256 and the selected
+platform's generated files. No download or system-library substitution occurs.
+The Windows static provider links the system bcrypt library; macOS uses the
+system CommonCrypto RNG; Linux uses getrandom. Existing compiler/C++ runtime
+deployment requirements still apply. Only 64-bit native MSVC Windows, Linux and
+macOS are selected by this integration. Generic CPU code avoids assembly and
+hardware acceleration. Native Windows/macOS A03 validation remains outstanding.
+
+Ordinary bootstrap now initializes real entropy/crypto and fails with exit 70
+if unavailable. Help/version/config/path-only commands do not initialize it.
+CLI options, schema, exits, Unicode validation and directory behavior are retained.
+There is no new crypto CLI or key file; test seeds are published vectors only.
+
+Run clean Debug/Release and all registered tests; retain compiler/tool versions,
+archive SHA, CTest output and unit case/assertion counts. Expected Windows:
+**37/37 per configuration**, all four binaries built and CLI version 0.3.0 /
+GW-A03-CRYPTOGRAPHIC-PROVIDER. Record results rather than copying that expectation.
+Use [GW-A03.md](docs/checkpoints/GW-A03.md) for actual Linux commands and limits.
+Do not accept A04 or persistent identities merely because primitive tests pass.
