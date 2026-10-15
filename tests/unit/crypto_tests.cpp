@@ -476,7 +476,9 @@ TEST_CASE("crypto real lifecycle service starts stops and propagates application
     namespace core = ghostwire::core;
     std::ostringstream logs;
     core::Logger logger(logs, core::LogLevel::off);
-    const auto path = std::filesystem::temp_directory_path() /
+    // Native macOS TEMP commonly starts with /var -> /private/var. Resolve only
+    // the trusted test base; production still rejects symlink application roots.
+    const auto path = std::filesystem::canonical(std::filesystem::temp_directory_path()) /
                       ("ghostwire-crypto-lifecycle-" +
                        std::to_string(std::chrono::steady_clock::now().time_since_epoch().count()));
     struct Cleanup {

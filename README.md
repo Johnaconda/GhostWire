@@ -1,6 +1,6 @@
 # GhostWire
 
-**Checkpoint candidate: GW-A03-CRYPTOGRAPHIC-PROVIDER · Version: 0.3.0 · C++20**
+**Checkpoint candidate: GW-A03-HF01-MACOS-RECOVERY · Version: 0.3.1 · C++20**
 
 **Your identity. Your server. Your network.**
 
@@ -26,6 +26,9 @@ private persistence or remote AI call in this checkpoint.
 
 ## Start here
 
+- [A03 HF01 recovery](docs/checkpoints/GW-A03-HF01.md): macOS corrections, actual tests and open native acceptance.
+- [A03 host acceptance](docs/checkpoints/GW-A03-HOST-ACCEPTANCE.md): Windows owner results and the exact pushed CI failures.
+- [Recovery acceptance and A04 handover](docs/checkpoints/GW-A03-HF01-HANDOVER.md): next host commands and identity design boundaries.
 - [BUILD.md](BUILD.md): Windows/MSVC, Linux and macOS commands and exit codes.
 - [A03 report](docs/checkpoints/GW-A03.md): implementation, actual validation and limits.
 - [A03 native acceptance](docs/checkpoints/GW-A03-NATIVE-ACCEPTANCE.md): Windows/macOS procedure.
@@ -65,8 +68,9 @@ Pass `-VcpkgRoot`, `-VisualStudioRoot`, `-CMakePath`, `-CTestPath` or `-NinjaPat
 when needed. The script pairs CTest with CMake and diagnoses mixed MSVC tools
 and x86/x64 libraries. `-Fresh` resets only the selected CMake configuration
 cache. No permanent PATH/execution-policy change or temp-directory workaround.
-Omit `-OfflineTests` for the preserved vcpkg route; its reported Windows doctest
-configuration failure remains unresolved. See BUILD.md before retrying it.
+Omit `-OfflineTests` for the preserved vcpkg route. A03 passed that route on
+GitHub's Windows runner; the owner's earlier local doctest configuration issue
+remains unresolved. See BUILD.md before retrying it.
 
 On Linux/macOS with CMake, Ninja and a C++20 compiler:
 

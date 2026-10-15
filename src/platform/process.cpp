@@ -24,6 +24,9 @@
 #include <spawn.h>
 #include <sys/wait.h>
 #include <unistd.h>
+#ifdef __APPLE__
+#include <sys/sysctl.h>
+#endif
 extern char **environ;
 #endif
 
@@ -224,6 +227,41 @@ Result<std::vector<std::string>> environment_block(const ProcessOptions &options
         result.push_back(name + '=' + value);
     return result;
 }
+#ifdef __APPLE__
+// Darwin skips zombies when signaling a group and reports EPERM when none of
+// its members can be signaled. Do not confuse that with a live denied target.
+// The caller holds the ownership mutex and has not reaped the group leader.
+bool exited_group_has_no_live_members(pid_t leader) {
+    siginfo_t info{};
+    if (waitid(P_PID, static_cast<id_t>(leader), &info, WEXITED | WNOHANG | WNOWAIT) != 0 ||
+        info.si_pid != leader)
+        return false;
+    // Request only this owned group's records, not a whole-host process listing.
+    // A larger group, incomplete result or query failure stays a control error.
+    std::array<kinfo_proc, 64> members{};
+    std::size_t bytes = sizeof(members);
+    int query[] = {CTL_KERN, KERN_PROC, KERN_PROC_PGRP, leader};
+    if (sysctl(query, 4, members.data(), &bytes, nullptr, 0) != 0 || bytes > sizeof(members) ||
+        bytes % sizeof(kinfo_proc) != 0)
+        return false;
+    bool leader_present = false;
+    for (std::size_t i = 0; i < bytes / sizeof(kinfo_proc); ++i) {
+        if (members[i].kp_eproc.e_pgid != leader || members[i].kp_proc.p_stat != SZOMB)
+            return false;
+        leader_present = leader_present || members[i].kp_proc.p_pid == leader;
+    }
+    return leader_present;
+}
+#endif
+bool signal_owned_group(pid_t leader, int signal) {
+    if (kill(-leader, signal) == 0 || errno == ESRCH)
+        return true;
+#ifdef __APPLE__
+    return errno == EPERM && exited_group_has_no_live_members(leader);
+#else
+    return false;
+#endif
+}
 #endif
 } // namespace
 
@@ -404,7 +442,7 @@ struct Process::Impl {
                                   : TerminateProcess(process.value, 1) != FALSE)
                   : GenerateConsoleCtrlEvent(CTRL_BREAK_EVENT, static_cast<DWORD>(state.identifier)) != FALSE;
 #else
-        const bool success = kill(-child, force ? SIGKILL : SIGTERM) == 0 || errno == ESRCH;
+        const bool success = signal_owned_group(child, force ? SIGKILL : SIGTERM);
 #endif
         if (!success)
             return process_error(ErrorReason::process_control_failed);
@@ -506,7 +544,7 @@ struct Process::Impl {
         }
         if (info.si_pid == 0)
             return {};
-        if (kill(-child, SIGKILL) != 0 && errno != ESRCH)
+        if (!signal_owned_group(child, SIGKILL))
             state.failure = process_error(ErrorReason::process_control_failed);
         int status = 0;
         pid_t waited;

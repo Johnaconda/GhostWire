@@ -1,5 +1,20 @@
 # Authoritative TODO
 Legend: `[ ]` planned, `[~]` partial/experimental, `[x]` implemented and validated in the stated environment, `[!]` blocked. Design/owner acceptance is tracked separately from implementation and runtime validation. Completed narrow work is recorded in docs/COMPLETED.md; pending platform acceptance stays here.
+## Current recovery status — 2026-10-14
+
+This table and the A03 gate updates below supersede earlier checkpoint snapshots.
+Historical results remain evidence for their exact source, not for this candidate.
+
+| ID | Work / source | Implementation and validation | Acceptance requirement |
+|---|---|---|---|
+| GW-A03-OWNER | A03 owner acceptance; docs/checkpoints/GW-A03-HOST-ACCEPTANCE.md | [x] Windows10/VS2026 portable Debug/Release 37/37 each, original TEMP/TMP; all four binary identities | Owner evidence received; do not ask to repeat A03 acceptance |
+| GW-A03-REPO | Exact published source and CI reconciliation | [x] All 158 source files match 95c9128; Linux/Windows each 37/37; all four macOS jobs failed 34/36 | Preserve owner changes and pushes; no remote mutation |
+| GW-A03-HF01-PROCESS | Darwin zombie-only group cleanup; src/platform/process.cpp; ADR-007 | [~] Candidate implemented; new real-process regression passes on Linux; Darwin-only query unexecuted locally | macOS26 ARM64/Intel Debug/Release 37/37 each; no masking of live permission failures |
+| GW-A03-HF01-TEMP | Crypto lifecycle fixture and tests/integration/crypto_temp_path.cmake | [x] Original A03 fails with Linux symlink TMPDIR; fixed Debug/Release passes, production symlink rejection retained | Confirm original macOS TEMP in native runs |
+| GW-A03-HF01-EVIDENCE | Full regression, cumulative source and changed inventory | [x] Linux Debug/Release 38/38 each; further measured checks in recovery report | New Windows/macOS review and source-package evidence remain distinct |
+| GW-A03-CONSOLE | Legacy Windows help-banner em dash rendering | [ ] Cosmetic issue observed in owner log; CLI/UTF-8 path tests pass | Future console-output pass; do not weaken UTF-8 inputs |
+| GW-A04-DESIGN | Identity ADR under existing A04 prompt | [ ] Not approved/implemented; isolated profiles and collision-safe memberships are owner requirements | Resolve credentials, trust, rotation/recovery and public encodings with owner review before implementation |
+
 ## Current acceptance gates
 | ID | Title | Planned source | Dependencies | Implementation | Validation | Acceptance criteria | Design/owner acceptance |
 |---|---|---|---|---|---|---|---|
@@ -21,7 +36,7 @@ Legend: `[ ]` planned, `[~]` partial/experimental, `[x]` implemented and validat
 | GW-A01-EVIDENCE | Core Lifecycle & Services: tests and handover | tests; docs/checkpoints/GW-A01.md; ADR-004 | GW-A01-IMPL | [x] Recorded for executed environment | ASan/UBSan with leaks disabled; TSan unit suite; format/boundaries and package verification | Full cumulative source, changed files, commands, actual limits and A02 proposal; native/leak gates remain below | Owner HF01 Windows portable accepted; prior records preserved |
 | GW-A02-IMPL | Platform Abstractions | include/ghostwire/platform; src/platform | Accepted HF01 + supplied HF02 | [x] Implemented and owner-accepted | Linux Debug/Release 34/34; owner Windows Debug/Release 35/35 each, original TEMP/TMP | Preserve owned processes, stop bridging, capability and Unicode regressions | GW-A02-HOST-ACCEPTANCE.md; macOS remains open |
 | GW-A02-EVIDENCE | Platform tests and handover | tests; docs/checkpoints/GW-A02.md; ADR-005 | GW-A02-IMPL | [x] Historical report plus acceptance addendum | Verified accepted ZIP and all 125 hashes | Preserve cumulative source and original reports | Owner explicitly authorized A03 only |
-| GW-A03-IMPL | Cryptographic Provider | include/ghostwire/crypto; src/crypto; core/crypto_service | Accepted A02 | [x] Implemented, local Linux validated | Debug/Release 37/37 each; 114 cases / 2369 assertions | Pinned Botan; bounded volatile operations; failure, tamper, cancellation, ownership and memory checks | Native A03 owner acceptance pending |
+| GW-A03-IMPL | Cryptographic Provider | include/ghostwire/crypto; src/crypto; core/crypto_service | Accepted A02 | [x] Implemented, local Linux validated | Debug/Release 37/37 each; 114 cases / 2369 assertions | Pinned Botan; bounded volatile operations; failure, tamper, cancellation, ownership and memory checks | Owner Windows accepted; macOS recovery and independent review remain |
 | GW-A03-EVIDENCE | Cryptographic Provider: tests and handover | tests; docs/checkpoints/GW-A03.md; ADR-006 | GW-A03-IMPL | [x] Recorded for executed environment | Actual sanitizer/dependency/source/package evidence in GW-A03.md | Full cumulative ZIP/SHA, inventory, native checklist and A04 proposal | Stop after A03; A04 unstarted |
 | GW-A04-IMPL | Identity & Device Trust | include/ghostwire/identity; src/identity | A03; A11-PRE for persistence | [ ] Planned | Not run | Generate/verify root and authorized device identities; rotation/revocation/contact proof; alias collision/change tests; no raw key files. | Proposed; not accepted |
 | GW-A04-EVIDENCE | Identity & Device Trust: tests and handover | tests; docs/checkpoints/GW-A04.md; relevant ADRs | GW-A04-IMPL | [ ] Planned | Not run | Add relevant failure/security tests; run available host/build checks; update invariant map, TODO, changes, limits and cumulative ZIP/SHA. | Proposed; not accepted |
@@ -137,13 +152,13 @@ explicit in PLATFORM_ABSTRACTIONS.md and do not weaken A11-PRE/AUTH-PRE.
 
 | ID | Gate | State |
 |---|---|---|
-| GW-A03-WIN | Windows10 / VS2026 / win10dev, original TEMP/TMP | [ ] Clean portable Debug/Release expected 37/37 each; crypto, Unicode, tooling and CLI native execution required |
-| GW-A03-MAC | macOS x64/ARM64 | [ ] Clean Debug/Release expected 36/36 each; new Botan and retained A02 native branches unexecuted here |
+| GW-A03-WIN | Windows10 / VS2026 / win10dev, original TEMP/TMP | [x] A03 clean portable Debug/Release 37/37 each plus CLI identities/help; HF01 retest remains separate |
+| GW-A03-MAC | macOS x64/ARM64 | [!] Actual A03 Debug/Release on both architectures: 34/36, platform-unit and crypto-unit failed; HF01 expected 37/37 needs native execution |
 | GW-A03-VCPKG-WIN | Owner standard vcpkg/doctest route | [!] Still unresolved; new account and Linux success do not close this issue |
-| GW-A03-LEAK | Full default LeakSanitizer | [!] Runtime blocked locally; separate leak-disabled ASan/UBSan evidence in A03 report |
+| GW-A03-LEAK | Default sanitizer workload / local LSan | [~] A03 hosted default ASan/UBSan passed 37/37 without suppression; local LSan restriction and exhaustive leak audit remain separate |
 | GW-A03-TIDY | clang-tidy | [!] Unavailable locally; warnings/format/boundaries are different checks |
-| GW-A03-CI | Hosted A03 workflows | [ ] Not triggered; prior HF02 hosted success is not A03 evidence; user owns pushes |
-| GW-A03-REVIEW | Independent crypto facade/native review and owner acceptance | [ ] Required before explicit A04 authorization; no production E2EE claim |
+| GW-A03-CI | Hosted A03 workflows | [x] Exact 95c9128 jobs inspected: Linux/Windows pass, macOS fails; HF01 not pushed/run; user owns pushes |
+| GW-A03-REVIEW | Independent crypto facade/native review and owner acceptance | [~] Owner Windows acceptance received; native recovery and independent crypto review remain; no production E2EE claim |
 
 Nonce uniqueness, public-message-only Ed25519, best-effort memory locking,
 cooperative cancellation and logical (not RSS) budgets are explicit current

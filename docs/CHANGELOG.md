@@ -1,5 +1,18 @@
 # Changelog
 
+## 0.3.1 — GW-A03-HF01-MACOS-RECOVERY — 2026-10-14 (native acceptance pending)
+
+- Record owner A03 Windows Debug/Release 37/37 each with original TEMP/TMP and
+  exact main reconciliation. Hosted Linux/Windows pass; macOS failed 34/36 in
+  all four ARM64/Intel Debug/Release jobs. Historical reports remain unchanged.
+- Handle Darwin's zombie-only process-group EPERM with bounded group inspection;
+  preserve live permission failures, unreaped leader ownership and fixed errors.
+- Canonicalize the crypto lifecycle fixture's trusted temporary base. Production
+  filesystem validation is unchanged. Add a Unix symlink-TEMP integration test
+  and a repeated completed-child cleanup regression.
+- Preserve both dependency modes, warning policy, CLI behavior and A11-PRE/AUTH-PRE.
+  No A04 functionality or remote write. Updated native checklist and handover.
+
 ## 0.3.0 — GW-A03-CRYPTOGRAPHIC-PROVIDER — 2026-10-13 (owner acceptance pending)
 
 - Continue the verified owner-accepted A02 source (125 manifest hashes); preserve

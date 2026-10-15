@@ -133,6 +133,31 @@ TEST_CASE("owned process preserves Unicode executable cwd argv quotes empty valu
     CHECK(child.value()->terminate());
     CHECK(no_owned_child(state.identifier));
 }
+TEST_CASE("completed children without descendants preserve exit status and repeat-safe cleanup") {
+    for (const auto output : {ProcessOutput::capture, ProcessOutput::discard}) {
+        for (unsigned attempt = 0; attempt < 4; ++attempt) {
+            auto specification = options("echo");
+            specification.output = output;
+            auto child = Process::launch(specification);
+            REQUIRE(child);
+            const auto exit = child.value()->wait_for(3s);
+            const int reason = exit ? 0 : static_cast<int>(exit.error().reason);
+            CAPTURE(reason);
+            REQUIRE(exit);
+            CHECK(exit.value() == ProcessExit{23, 0});
+            const auto state = child.value()->snapshot();
+            CHECK_FALSE(state.failure);
+            CHECK_FALSE(state.running);
+            CHECK(state.exit == exit.value());
+            CHECK(child.value()->request_stop());
+            CHECK(child.value()->terminate());
+            const auto repeated = child.value()->wait_for(0ms);
+            REQUIRE(repeated);
+            CHECK(repeated.value() == exit.value());
+            CHECK(no_owned_child(state.identifier));
+        }
+    }
+}
 TEST_CASE("process launch rejects invalid paths encoding options and duplicate environment names") {
     const auto check = [](const ProcessOptions &specification) {
         auto child = Process::launch(specification);

@@ -1,6 +1,15 @@
-# Validation policy and current A03 evidence
+# Validation policy and current recovery evidence
 
-The current measured matrix and commands are in [GW-A03](../checkpoints/GW-A03.md):
+Current source: A03-HF01. [Recovery results](../checkpoints/GW-A03-HF01.md)
+record Linux Debug/Release 38/38 each and remaining candidate-native checks.
+[A03 owner/hosted acceptance](../checkpoints/GW-A03-HOST-ACCEPTANCE.md) records
+Windows owner 37/37 twice, hosted Windows/Linux success, and four macOS failures.
+No original source report is rewritten into a later success. Expected HF01 counts
+are Linux38, macOS37 and Windows37; only executed counts are validation results.
+The new Unix symlink-TEMP integration intentionally selects one lifecycle case;
+its other 19 crypto cases run in the full crypto-unit entry, not silently omitted.
+
+The historical A03 measured matrix and commands are in [GW-A03](../checkpoints/GW-A03.md):
 Linux portable Debug/Release and vcpkg Debug 37/37 each, 114 cases / 2369 assertions,
 separate leak-disabled ASan/UBSan 37/37 and TSan five unit runners 5/5. The provider
 is instrumented too. Default LSan failed at runtime after assertions passed;

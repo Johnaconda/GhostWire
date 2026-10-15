@@ -1,0 +1,74 @@
+A03-HF01 measured local excerpts, 2026-10-14. Native candidate checks are pending.
+
+debug-configure.log
+-- The CXX compiler identification is GNU 13.3.0
+-- Crypto provider: Botan 3.13.0, pinned static portable linux subset
+
+release-configure.log
+-- The CXX compiler identification is GNU 13.3.0
+-- Crypto provider: Botan 3.13.0, pinned static portable linux subset
+
+debug-ctest.log
+1: [doctest] test cases:  67 |  67 passed | 0 failed | 0 skipped
+1: [doctest] assertions: 640 | 640 passed | 0 failed |
+2: [doctest] test cases:  19 |  19 passed | 0 failed | 0 skipped
+2: [doctest] assertions: 279 | 279 passed | 0 failed |
+3: [doctest] test cases:   20 |   20 passed | 0 failed | 0 skipped
+3: [doctest] assertions: 1449 | 1449 passed | 0 failed |
+5: [doctest] test cases:  7 |  7 passed | 0 failed | 0 skipped
+5: [doctest] assertions: 67 | 67 passed | 0 failed |
+6: [doctest] test cases:  2 |  2 passed | 0 failed | 0 skipped
+6: [doctest] assertions: 22 | 22 passed | 0 failed |
+100% tests passed out of 38
+Total Test time (real) =   0.91 sec
+
+release-ctest.log
+1: [doctest] test cases:  67 |  67 passed | 0 failed | 0 skipped
+1: [doctest] assertions: 640 | 640 passed | 0 failed |
+2: [doctest] test cases:  19 |  19 passed | 0 failed | 0 skipped
+2: [doctest] assertions: 279 | 279 passed | 0 failed |
+3: [doctest] test cases:   20 |   20 passed | 0 failed | 0 skipped
+3: [doctest] assertions: 1449 | 1449 passed | 0 failed |
+5: [doctest] test cases:  7 |  7 passed | 0 failed | 0 skipped
+5: [doctest] assertions: 67 | 67 passed | 0 failed |
+6: [doctest] test cases:  2 |  2 passed | 0 failed | 0 skipped
+6: [doctest] assertions: 22 | 22 passed | 0 failed |
+100% tests passed out of 38
+Total Test time (real) =   0.81 sec
+
+sanitize-final.log
+1: [doctest] test cases:  67 |  67 passed | 0 failed | 0 skipped
+1: [doctest] assertions: 640 | 640 passed | 0 failed |
+2: [doctest] test cases:  19 |  19 passed | 0 failed | 0 skipped
+2: [doctest] assertions: 279 | 279 passed | 0 failed |
+3: [doctest] test cases:   20 |   20 passed | 0 failed | 0 skipped
+3: [doctest] assertions: 1449 | 1449 passed | 0 failed |
+5: [doctest] test cases:  7 |  7 passed | 0 failed | 0 skipped
+5: [doctest] assertions: 67 | 67 passed | 0 failed |
+6: [doctest] test cases:  2 |  2 passed | 0 failed | 0 skipped
+6: [doctest] assertions: 22 | 22 passed | 0 failed |
+100% tests passed out of 38
+Total Test time (real) =   1.52 sec
+
+default-lsan.log
+[doctest] test cases:   20 |   20 passed | 0 failed | 0 skipped
+[doctest] assertions: 1449 | 1449 passed | 0 failed |
+==6==LeakSanitizer has encountered a fatal error.
+==6==HINT: For debugging, try setting environment variable LSAN_OPTIONS=verbosity=1:log_threads=1
+==6==HINT: LeakSanitizer does not work under ptrace (strace, gdb, etc)
+
+Original A03 under symlink TMPDIR: exit1; lifecycle app.start REQUIRE failed; 3/4 assertions pass.
+
+Fresh package Release CTest
+1: [doctest] test cases:  67 |  67 passed | 0 failed | 0 skipped
+1: [doctest] assertions: 640 | 640 passed | 0 failed |
+2: [doctest] test cases:  19 |  19 passed | 0 failed | 0 skipped
+2: [doctest] assertions: 279 | 279 passed | 0 failed |
+3: [doctest] test cases:   20 |   20 passed | 0 failed | 0 skipped
+3: [doctest] assertions: 1449 | 1449 passed | 0 failed |
+5: [doctest] test cases:  7 |  7 passed | 0 failed | 0 skipped
+5: [doctest] assertions: 67 | 67 passed | 0 failed |
+6: [doctest] test cases:  2 |  2 passed | 0 failed | 0 skipped
+6: [doctest] assertions: 22 | 22 passed | 0 failed |
+100% tests passed out of 38
+Total Test time (real) =   0.61 sec

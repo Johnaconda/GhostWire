@@ -1,5 +1,12 @@
 # Architecture authority
 
+Current recovery: A03-HF01 corrects Darwin cleanup of exited owned groups and a
+symlinked test TEMP base. It adds no public API, target dependency or identity
+feature. Native macOS retesting is pending. See
+[ADR-007](docs/decisions/ADR-007-MACOS-EXIT-CLEANUP.md) and the
+[recovery report](docs/checkpoints/GW-A03-HF01.md). Earlier checkpoint reports
+remain historical; current A03 owner/CI acceptance is recorded in its addendum.
+
 Checkpoint authority is `docs/development/MASTER_CONTRACT.md` plus the supplied
 current source and the explicit decisions below. This is a clean-room project;
 no TASE source, renderer, database, identity or protocol has been migrated.

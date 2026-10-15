@@ -340,3 +340,20 @@ archive SHA, CTest output and unit case/assertion counts. Expected Windows:
 GW-A03-CRYPTOGRAPHIC-PROVIDER. Record results rather than copying that expectation.
 Use [GW-A03.md](docs/checkpoints/GW-A03.md) for actual Linux commands and limits.
 Do not accept A04 or persistent identities merely because primitive tests pass.
+
+
+## A03-HF01 recovery acceptance
+
+Current version: 0.3.1 / GW-A03-HF01-MACOS-RECOVERY. See
+[the recovery checklist](docs/checkpoints/GW-A03-HF01-HANDOVER.md) for exact
+Windows/macOS commands. Keep original TEMP/TMP. Expected CTest registrations:
+Linux38, macOS37, Windows37; the Unix-only extra check verifies the crypto
+lifecycle fixture under a symlink TEMP base. The native child cleanup case is
+inside platform-unit. No dependency pin, preset, warning or toolchain is relaxed.
+
+A03 owner Windows Debug/Release passed 37/37 each. Published A03 Windows CI
+also passed pinned-vcpkg doctest2.4.12 on MSVC19.44; this does not close the owner's
+separate local VS2026 configuration failure. All four published A03 macOS builds
+compiled, then failed 34/36; this recovery's macOS branch needs a fresh run.
+Historical A03 instructions/counts above describe 0.3.0. New expected counts
+are not claims of native success. A11-PRE and AUTH-PRE stay mandatory.

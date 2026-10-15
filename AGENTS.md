@@ -7,18 +7,22 @@
 2. Inspect actual headers/sources, build settings, tests and decisions for the
    affected modules. Confirm the supplied archive/checkpoint/hash.
 3. Identify the user's authorized checkpoint and bounded change scope. The owner
-   accepted A02 on Windows 10 x64 / VS2026 / MSVC 19.51.36260, win10dev account,
-   portable Debug/Release 35/35 CTest each, original TEMP/TMP and CLI exit 0.
-   A03 alone is authorized from the accepted A02 archive, SHA-256
-   404fbea230ff612693754d8fa70c56e2a653d85e4a98fea6d80242e2243a5dd7.
-   See GW-A02-HOST-ACCEPTANCE.md and GW-A03.md for source and execution evidence.
-   Implement the bounded volatile crypto provider; persistent identity, profiles,
-   vault and networking remain unauthorized. Stop after A03 for review and owner
-   Windows acceptance. A04-PROMPT.md is a proposal, never authorization itself.
-   Preserve supplied HF02 commit 713750550d6fa7bbde7200c494554d1c4f9e008f and all
-   historical records. Read-only main reconciliation found that same commit.
-   Windows vcpkg/doctest, native macOS, full local LSan, clang-tidy and new hosted
-   CI remain separate gates. No new-account or prior-CI success closes them.
+   supplied A03 Windows10 / VS2026 / MSVC19.51.36260 portable Debug/Release
+   acceptance: 37/37 each, original TEMP/TMP, all four binary identities and CLI.
+   Their main commit 95c9128ea5438663b14038c66f4986dfb4b90279 matches all 158 source
+   files in delivered A03 ZIP, SHA-256
+   b3d3d39e1a369185a1309e41213568f88ef3b212c80898bb577334b0616f3c64.
+   The continuation pass found macOS CI failures and repairs only those A03/A02
+   regressions as GW-A03-HF01-MACOS-RECOVERY. See GW-A03-HOST-ACCEPTANCE.md and
+   GW-A03-HF01.md. Preserve all earlier source/history and user-owned pushes.
+   A03 hosted Windows/Linux passed; all four macOS jobs failed 34/36. New HF01
+   native Windows/macOS and hosted results require actual evidence. Hosted
+   Windows vcpkg success does not close the owner's separate local issue.
+   Local LSan, clang-tidy and independent crypto audit remain separate limits.
+   Stop after this recovery for review. A04's first pass is identity design under
+   GW-A04-PROMPT.md plus GW-A03-HF01-HANDOVER.md; implementation follows design
+   approval. Persistence, profiles on disk, vault and networking remain outside
+   this pass. A continuation proposal is never authorization by itself.
 4. Record the implemented, experimental, planned and blocked boundaries before
    making changes. Existing source is authoritative over memory or old packages.
 

@@ -12,7 +12,7 @@ if(BUILD_TESTING AND GW_TEST_DEPENDENCY STREQUAL "vcpkg")
 endif()
 set(VCPKG_MANIFEST_NO_DEFAULT_FEATURES ON)
 
-project(GhostWire VERSION 0.3.0 LANGUAGES CXX)
+project(GhostWire VERSION 0.3.1 LANGUAGES CXX)
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
     message(FATAL_ERROR "Use an out-of-source build: cmake --preset portable-debug")
 endif()
@@ -105,6 +105,13 @@ if(BUILD_TESTING)
     target_link_libraries(ghostwire-crypto-tests PRIVATE GhostWire::core ghostwire_options doctest::doctest Threads::Threads)
     add_test(NAME crypto-unit COMMAND ghostwire-crypto-tests --no-colors)
     set_tests_properties(crypto-unit PROPERTIES TIMEOUT 30 LABELS "unit;crypto;security")
+    if(UNIX)
+        add_test(NAME crypto-symlink-temp
+            COMMAND "${CMAKE_COMMAND}" "-DEXE=$<TARGET_FILE:ghostwire-crypto-tests>"
+            "-DWORK=${CMAKE_BINARY_DIR}/test-runtime/crypto-symlink-temp"
+            -P "${CMAKE_SOURCE_DIR}/tests/integration/crypto_temp_path.cmake")
+        set_tests_properties(crypto-symlink-temp PROPERTIES TIMEOUT 30 LABELS "integration;crypto;platform")
+    endif()
     # Production targets never link this library. No test fault API is present in
     # ghostwire_crypto; private hooks use the same implementation in isolation.
     add_library(ghostwire_crypto_faults STATIC src/crypto/crypto_provider.cpp)

@@ -1,0 +1,143 @@
+{
+  "checkpoint": "GW-A03-CRYPTOGRAPHIC-PROVIDER",
+  "checked_at": "2026-10-14",
+  "commit": "95c9128ea5438663b14038c66f4986dfb4b90279",
+  "tree": "24e39264d507826c3ae7da62430b8ae66a4cce73",
+  "archive_sha256": "b3d3d39e1a369185a1309e41213568f88ef3b212c80898bb577334b0616f3c64",
+  "reconciliation": {
+    "source_files": 158,
+    "changed": 0,
+    "missing_from_github": [
+      "SOURCE_MANIFEST.json"
+    ],
+    "note": "Package-generated manifest is excluded by .gitignore; all source bytes match Git blob hashes."
+  },
+  "runs": [
+    {
+      "id": 38543593637,
+      "name": "linux",
+      "url": "https://github.com/Johnaconda/GhostWire/actions/runs/38543593637",
+      "conclusion": "success",
+      "head_sha": "95c9128ea5438663b14038c66f4986dfb4b90279",
+      "jobs": [
+        {
+          "id": 115784068635,
+          "name": "build (release)",
+          "conclusion": "success",
+          "ctest_passed": 37,
+          "ctest_total": 37,
+          "failed_ctest": [],
+          "scope": "Ubuntu 24.04, GCC 13.3.0, pinned vcpkg"
+        },
+        {
+          "id": 115784068890,
+          "name": "sanitizers",
+          "conclusion": "success",
+          "ctest_passed": 37,
+          "ctest_total": 37,
+          "failed_ctest": [],
+          "scope": "Ubuntu 24.04, GCC 13.3.0, default ASan/UBSan preset; no leak suppression in workflow or logs"
+        },
+        {
+          "id": 115784069098,
+          "name": "build (debug)",
+          "conclusion": "success",
+          "ctest_passed": 37,
+          "ctest_total": 37,
+          "failed_ctest": [],
+          "scope": "Ubuntu 24.04, GCC 13.3.0, pinned vcpkg"
+        }
+      ]
+    },
+    {
+      "id": 38543593596,
+      "name": "macos",
+      "url": "https://github.com/Johnaconda/GhostWire/actions/runs/38543593596",
+      "conclusion": "failure",
+      "head_sha": "95c9128ea5438663b14038c66f4986dfb4b90279",
+      "jobs": [
+        {
+          "id": 115784068293,
+          "name": "build (macos-26-intel, release)",
+          "conclusion": "failure",
+          "ctest_passed": 34,
+          "ctest_total": 36,
+          "failed_ctest": [
+            "platform-unit",
+            "crypto-unit"
+          ],
+          "scope": "macOS 26 ARM64/Intel, AppleClang 21.0.0.21000101, pinned vcpkg"
+        },
+        {
+          "id": 115784068310,
+          "name": "build (macos-26-intel, debug)",
+          "conclusion": "failure",
+          "ctest_passed": 34,
+          "ctest_total": 36,
+          "failed_ctest": [
+            "platform-unit",
+            "crypto-unit"
+          ],
+          "scope": "macOS 26 ARM64/Intel, AppleClang 21.0.0.21000101, pinned vcpkg"
+        },
+        {
+          "id": 115784068338,
+          "name": "build (macos-26, debug)",
+          "conclusion": "failure",
+          "ctest_passed": 34,
+          "ctest_total": 36,
+          "failed_ctest": [
+            "platform-unit",
+            "crypto-unit"
+          ],
+          "scope": "macOS 26 ARM64/Intel, AppleClang 21.0.0.21000101, pinned vcpkg"
+        },
+        {
+          "id": 115784068506,
+          "name": "build (macos-26, release)",
+          "conclusion": "failure",
+          "ctest_passed": 34,
+          "ctest_total": 36,
+          "failed_ctest": [
+            "platform-unit",
+            "crypto-unit"
+          ],
+          "scope": "macOS 26 ARM64/Intel, AppleClang 21.0.0.21000101, pinned vcpkg"
+        }
+      ]
+    },
+    {
+      "id": 38543593616,
+      "name": "windows",
+      "url": "https://github.com/Johnaconda/GhostWire/actions/runs/38543593616",
+      "conclusion": "success",
+      "head_sha": "95c9128ea5438663b14038c66f4986dfb4b90279",
+      "jobs": [
+        {
+          "id": 115784068234,
+          "name": "build (Debug)",
+          "conclusion": "success",
+          "ctest_passed": 37,
+          "ctest_total": 37,
+          "failed_ctest": [],
+          "scope": "Windows Server 2022, MSVC 19.44.35229.0, pinned vcpkg doctest 2.4.12"
+        },
+        {
+          "id": 115784068345,
+          "name": "build (Release)",
+          "conclusion": "success",
+          "ctest_passed": 37,
+          "ctest_total": 37,
+          "failed_ctest": [],
+          "scope": "Windows Server 2022, MSVC 19.44.35229.0, pinned vcpkg doctest 2.4.12"
+        }
+      ]
+    }
+  ],
+  "limits": [
+    "No HF01 hosted run was triggered or observed.",
+    "Hosted Windows vcpkg success does not resolve the owner's separate local vcpkg failure.",
+    "A successful sanitizer job is workload evidence, not a proof that every leak can be detected.",
+    "No clang-tidy or independent cryptographic audit evidence."
+  ]
+}

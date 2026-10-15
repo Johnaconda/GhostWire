@@ -1,5 +1,10 @@
 # A02 platform contracts
 
+Current addendum: A03 owner Windows and hosted Linux/Windows acceptance are in
+[GW-A03-HOST-ACCEPTANCE](../checkpoints/GW-A03-HOST-ACCEPTANCE.md). A03-HF01 repairs
+the newly observed macOS group-cleanup failure; native retesting is required.
+The following implementation contracts remain in force.
+
 Status: implemented C++20 source; Linux execution is recorded in
 [GW-A02](../checkpoints/GW-A02.md). New Windows/macOS branches need native A02
 acceptance. Earlier HF02 CI evidence is not A02 validation. Public headers expose
@@ -90,6 +95,15 @@ kernel. A01's cooperative shutdown and retained-dependency contracts still apply
   SIGCHLD handler/reaper may consume owned children; SIG_IGN/SA_NOCLDWAIT is
   rejected at launch. Unexpected ECHILD reports a failure without signaling a
   potentially reused PID. Windows retains the owned kernel handle.
+- A03-HF01 handles Darwin's EPERM result for a group containing only zombies.
+  It first verifies the owned leader is exited but unreaped, then requests only
+  that group's records with KERN_PROC_PGRP. The fixed 64-record buffer must hold
+  a complete result, include the leader, and contain only zombies. A live member,
+  absent leader, malformed result, over-capacity group or query failure remains
+  a control failure. Records are temporary native metadata, never logged or
+  exported. This exception is Darwin-only; EPERM is not generally ignored.
+  The ownership mutex covers query, signaling and reaping. There is no PID
+  adoption or whole-host process listing. See ADR-007 for source evidence and limits.
 - After leader exit, final pipe draining is bounded to 200 ms; still-open pipes
   are closed with truncation reported. Ordinary group/job descendants are stopped.
   A hostile POSIX child can escape a group or delegate work; parent crash can

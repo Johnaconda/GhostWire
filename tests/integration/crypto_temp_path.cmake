@@ -1,0 +1,25 @@
+# Exercise the real lifecycle fixture with an OS-style symlink TEMP root on
+# Linux and macOS. No production path rule or parent environment is changed.
+if(NOT DEFINED EXE OR NOT DEFINED WORK)
+    message(FATAL_ERROR "Missing crypto temporary-path test arguments")
+endif()
+file(MAKE_DIRECTORY "${WORK}/real")
+file(REAL_PATH "${WORK}" root)
+set(alias "${root}/alias")
+if(IS_SYMLINK "${alias}")
+    file(REMOVE "${alias}")
+endif()
+file(CREATE_LINK "${root}/real" "${alias}" SYMBOLIC RESULT link_result)
+if(NOT link_result STREQUAL "0")
+    message(FATAL_ERROR "Cannot create required temporary-path regression symlink")
+endif()
+execute_process(COMMAND "${CMAKE_COMMAND}" -E env "TMPDIR=${alias}" "${EXE}"
+    --no-colors "--test-case=crypto real lifecycle*"
+    RESULT_VARIABLE result OUTPUT_VARIABLE output ERROR_VARIABLE errors TIMEOUT 20)
+file(REMOVE "${alias}")
+if(NOT result STREQUAL "0")
+    message(FATAL_ERROR "Crypto lifecycle failed with symlink TEMP: ${output}${errors}")
+endif()
+if(NOT output MATCHES "1 passed.*0 failed.*19 skipped")
+    message(FATAL_ERROR "Crypto lifecycle selector did not execute the expected regression")
+endif()

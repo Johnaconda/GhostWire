@@ -1,5 +1,13 @@
 # Security invariants and test mapping
 
+Current A03-HF01 addendum: SI-025/SI-026 retain owned group identity until reap.
+Darwin EPERM is accepted only after bounded native inspection establishes that
+the owned, unreaped leader's group contains no live members. Other failures stay
+structured errors; native retesting is pending. The crypto fixture canonicalizes
+its trusted TEMP base; production symlink rejection under SI-004 is unchanged.
+No key, secret, private profile or process metadata persistence is introduced.
+A11-PRE/AUTH-PRE and all A03 crypto limitations remain in force.
+
 “Implemented” refers to narrow A00–A03 behavior, not a future security capability.
 Future tests are named acceptance tasks, not passing tests hidden by missing code.
 

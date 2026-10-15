@@ -90,3 +90,20 @@ ASan/UBSan passes the full suite with leak detection disabled; default LSan fail
 in this executor. Native A03 Windows/macOS, owner Windows vcpkg, full leaks,
 clang-tidy and hosted A03 CI remain open. Primitive correctness is not identity,
 protocol, persistent-storage or E2EE acceptance. Stop after A03.
+
+
+## A03 acceptance and scoped HF01 recovery — 2026-10-14
+
+Owner A03 Windows10/VS2026 portable Debug/Release passed 37/37 each with original
+TEMP/TMP; all four binaries launched for version reporting. Exact main 95c9128
+matches all delivered source bytes. Hosted Linux/Windows passed; macOS failed
+34/36 in each ARM64/Intel configuration. See GW-A03-HOST-ACCEPTANCE.md.
+
+HF01's crypto fixture now resolves its trusted TEMP base; the added Linux
+symlink-TEMP regression fails on old A03 and passes on the candidate. A repeated
+real-child cleanup regression and full Linux Debug/Release 38/38 pass. Darwin
+zombie-only group handling is implemented with bounded inspection and remains
+native-unvalidated. It is not listed as completed native recovery. The precise
+sanitizer/package outcomes and remaining gates are in GW-A03-HF01.md.
+No identity implementation, private storage, networking or remote publication
+is included; A04 design remains pending owner review.

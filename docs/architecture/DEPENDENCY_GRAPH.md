@@ -2,6 +2,10 @@
 
 An arrow means “may depend on”. No reverse edges or implicit service lookup.
 
+A03-HF01 preserves every edge below. Its bounded Darwin process-group query
+stays inside process.cpp and uses the existing system library; no public native
+types, process registry, new package or identity target is added.
+
 ```mermaid
 flowchart TD
     Apps["Four composition roots"] --> Core["ghostwire_core"]
