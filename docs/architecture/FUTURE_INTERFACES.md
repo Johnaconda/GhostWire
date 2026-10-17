@@ -129,7 +129,25 @@ is a compilable success-shaped stub.
 
 
 
-## Identity and trust — GW-A04 / GW-A10
+## Identity and trust — GW-A04-P02 implemented subset / GW-A10 future
+
+The owner-accepted A04-P01 design in [IDENTITY_DESIGN.md](IDENTITY_DESIGN.md) and
+[ADR-008](../decisions/ADR-008-IDENTITY-AND-DEVICE-TRUST.md) refines the broad
+future sketch below. P02 implements synchronous bounded operations with no new
+executor, separate membership authority/device keys, a composition-level
+lifecycle adapter and volatile-only trust state. The numbered future sketch is
+retained for traceability and is superseded by the implemented contract where
+they differ. There is no dependency on permissions, no signing worker/queue,
+no alias in signed DeviceSets and no root recovery or protected store.
+
+Implemented mapping: identity_id.hpp, identity_record.hpp, identity_error.hpp
+and identity_service.hpp contain the actual contracts. Device mutation and local
+trust operations are methods on IdentityService; record verification is in
+identity_record.hpp. composition/identity_service_adapter.hpp joins that owner
+to the lifecycle. No empty device_identity.hpp, contact_verification.hpp,
+trust_record.hpp or key_rotation.hpp is shipped. The opt-in CLI exposes profile,
+membership and device operations; later contact UX, remote possession, backup,
+root continuity and persistence still require their own approved scope.
 
 1. **Ownership:** Identity service owns root/device trust state; contacts receive immutable public records and scoped verification results.
 

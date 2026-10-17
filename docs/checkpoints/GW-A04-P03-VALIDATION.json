@@ -1,0 +1,64 @@
+{
+  "checkpoint": "GW-A04-P03-IDENTITY-HARDENING",
+  "runtime": "0.4.1",
+  "date": "2026-10-16",
+  "input_sha256": "e755c9b994541dbf66e061d799b31621b2f91034cda7741d1473699426783b59",
+  "input_source_files": 194,
+  "platform": "Ubuntu 24.04.3 x86_64",
+  "debug": {
+    "ctest_passed": 41,
+    "ctest_total": 41,
+    "seconds": 1.18
+  },
+  "release": {
+    "ctest_passed": 41,
+    "ctest_total": 41,
+    "seconds": 0.71
+  },
+  "asan_ubsan": {
+    "ctest_passed": 41,
+    "ctest_total": 41,
+    "seconds": 2.66,
+    "ASAN_OPTIONS": "detect_leaks=0",
+    "UBSAN_OPTIONS": "halt_on_error=1",
+    "exit_code": 0
+  },
+  "unit_cases_per_normal_configuration": 167,
+  "unit_assertions_per_normal_configuration": 4383,
+  "unit_skipped_per_normal_configuration": 0,
+  "regression_before": {
+    "cases": 1,
+    "failed": 1,
+    "assertions": 37,
+    "failed_assertions": 1,
+    "other_cases_excluded_by_filter": 40
+  },
+  "regression_after": {
+    "cases": 1,
+    "passed": 1,
+    "assertions": 58,
+    "other_cases_excluded_by_filter": 40
+  },
+  "full_lsan": "blocked: fatal ptrace restriction after 41/41 identity cases passed",
+  "clang_tidy": "unavailable",
+  "new_windows_macos_hosted_ci": "not run",
+  "native_p03_acceptance": "pending",
+  "owner_windows_p02": {
+    "debug_ctest": "40/40",
+    "release_ctest": "40/40",
+    "interactive": "startup banner only; manual command/quit not captured"
+  },
+  "independent_review": "parallel assistant review, not external security audit",
+  "log_sha256": {
+    "debug-ctest-final.log": "60b259f26677cd895052dbf5c41d675dee2cf76f240b17eaa64ad17f3393e23b",
+    "release-ctest-final.log": "bcee4b6bf5a26abde838261d0108184f24c6abd56fc285dd579e51ba81b819f5",
+    "sanitize-final-summary.log": "f032c536d0c18525f7c9305922ebd1c8e714a4f13c5a72012dbda4f8c6f63de6",
+    "default-lsan-identity.log": "e07a8f6b109aa47258d765c50580eef57838c59418943ac06e875b8c73f72ab7",
+    "self-trust-before.log": "6e436a39ddbe211ceae059798ea53b66d0499857ed3aef2f540f4db7f32ece75",
+    "self-trust-after.log": "9df50246e3664cdb03897df64a538af41053b155e5fddd8a276cfd66de3c8c19",
+    "portable-debug-build-final.log": "0f54c950e1d46c5d1b1254a27a54af4e1fd1c0628fba27b9ece2508d8e3608ab",
+    "portable-release-build-final.log": "709806ec1a9cd24ffc572680471fd3726538c37a61cc30b3034b495e06f9cb14",
+    "sanitize-build-confirm.log": "a43d95bde2f7bbad2fdcc54e3c93e21bb1229d697981bcc0419da435bbcfaa09",
+    "environment.txt": "92140a423aaf694dc87555178a203d7101ad24e0d8b9be90ddbc2a09944305e6"
+  }
+}

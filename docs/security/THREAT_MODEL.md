@@ -1,9 +1,49 @@
 # Initial threat model
 
+## P03 scoped update
+
+P03 review reproduced a stale self-record resurrection after local membership
+deletion. The fix invalidates exact-authority self-trust in the deleting profile
+so removing the owned revocation record cannot revive an existing capability.
+Independent observer profiles retain their explicit accepted state; this is not
+network-wide revocation. Fresh explicit re-pinning is a new local trust decision.
+
+
+## A04-P02 volatile identity and interactive boundary
+
+The owner accepted ADR-008 and IDENTITY_DESIGN before authorizing P02. The new
+runtime owns isolated volatile profiles and separate community membership/device
+keys. Its public-record parser and explicit local console add attack surfaces
+within the bounded scope below. Actual tests are recorded in GW-A04-P02.md;
+independent implementation review and native Windows acceptance remain pending.
+
+| Threat | P02 response | Explicit limit |
+|---|---|---|
+| Alias collision/copy merges accounts | Full typed scoped principals and separate local profile handles | UI disambiguation and community admission still future |
+| Cross-profile confused deputy | Explicit owner/generation/profile context on each operation; no global active profile | Trusted process separation, not protection from a compromised OS/plugin running in-process |
+| Cross-community correlation or credential reuse | Independent scoped membership authority/device keys; no global link certificate by default | Reused names, traffic and explicit disclosure can still correlate users |
+| Self-signed substitution / stale authorization | Independently selected authority, explicit trust pins, typed canonical records and retained revision/conflict checks | Public signature is not live possession or action permission |
+| Revocation rollback / offline withholding | Complete signed device sets and per-session high-water marks | No durable restart freshness or network revocation distribution in A04 |
+| Root/device theft and recovery confusion | Separate root/device roles; replace devices; no invented backup/root continuity | Root loss without authorized backup remains unrecoverable; compromised authority can authorize attackers |
+| Clock abuse / resource exhaustion | Explicit wall time plus monotonic budgets, strict bounds, no implicit trust eviction | Local time trust and OS call latency remain limits |
+| Console disclosure or injected control input | Bounded command lines, validated UTF-8 labels, fixed errors and explicit public show/list commands | The terminal may retain typed labels/public values; GhostWire cannot erase external shell captures or defend a compromised terminal |
+| Stale local self-pin after owned revocation | Recognition also intersects the same profile's current owned set | A separate profile/service must explicitly accept the updated public set; there is no implicit cross-profile synchronization |
+
+No private record, profile-to-community mapping, backup or raw key is written to
+disk. A11-PRE and AUTH-PRE remain unchanged. The signed public frame excludes
+private labels/contact graphs; sign_public's ordinary-message-memory boundary
+remains explicit. Future network authentication needs reviewed channel binding,
+replay handling and possession proof, independently of local record recognition.
+The console's local profile selection is caller-owned state, never a global
+identity selector. Its membership command explicitly pins the supplied full
+community key before preparing independent credentials; a failure after pinning
+is reported as such and does not imply community admission.
+
 Status: design baseline, not an audited secure product. A00/A01 accept local CLI
 and nonsecret configuration. A02 adds owned native processes and API discovery.
-A03 adds volatile cryptographic operations; no persistent identity, private store,
-message protocol or network connection exists. Historical sections retain scope.
+A03 adds volatile cryptographic operations and P02 adds volatile identity/trust.
+No persistent identity, private store, message protocol or network connection
+exists. Historical sections retain their exact checkpoint scope.
 
 ## Assets, principals and scope
 

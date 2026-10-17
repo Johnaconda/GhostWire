@@ -1,6 +1,7 @@
 # Security boundary map
 
-These are intended authority boundaries. A00 bootstrap, A01 core and the bounded A02 platform rows exist at runtime.
+These are authority boundaries. A00 bootstrap, A01 core, bounded A02 platform,
+A03 crypto and A04-P02 volatile identity/composition rows exist at runtime.
 A process boundary is stronger isolation than a C++ module; modules in a single
 compromised process cannot protect secrets from one another by convention alone.
 
@@ -10,8 +11,12 @@ compromised process cannot protect secrets from one another by convention alone.
 | A01 lifecycle/admission | Immutable nonsecret settings, local paths, bounded structural diagnostics | None | None used | No additional records; the owned paths service preserves A00 directory behavior |
 | A02 Process / stop bridge | Caller-supplied local argv/environment and opt-in captured bytes; never automatic logs | No key interface | None used by GhostWire | No output file persistence; trusted child has ordinary OS authority |
 | A02 storage probe | Fixed capability metadata only | None read, created or written | None used | No persistence operations; native API loading only |
+| A03 crypto provider | Explicit bounded crypto inputs; public-message signing only | Purpose-specific move-only volatile handles and clearing buffers | None used | No persistence API; memory locking is best effort |
+| A04-P02 identity | Private labels/profile-to-membership associations stay local; explicit public DeviceSets | Own independent root/profile-device/membership-authority/membership-device handles | None used | None; trust pins, high-water marks and private keys disappear at shutdown |
+| A04-P02 composition | Narrow service/clock/admission references and fixed errors | No raw key access; owns identity service lifetime | None used | None; identity stops before crypto dependency |
+| A04-P02 CLI session | Explicit local commands, selected handles and opt-in labels/public records | No private export/import or generic signing command | No connection or lookup | No identity/history file; terminal or external redirection can capture explicit public output |
 | Future unlocked client messaging/vault | Authorized user's selected chats | Scoped key handles; vault owns wrapping material | Via policy facade only | Encrypted history, indexes, ratchet state |
-| Future identity/crypto service | Only requested crypto inputs | Root/device/key-handle operations with separate lifecycles | No reason to receive routing endpoints | Protected key envelopes, no raw key exports by default |
+| Future identity persistence | Authorized local profile/trust state through reviewed vault facade | Protected wrapping/backup operations with explicit authorization | No reason to receive routing endpoints | Protected authenticated envelopes only after A11-PRE; no plaintext fallback |
 | Future UI | Authorized view model while unlocked | No exportable root key or generic vault handle | Only explicit diagnostics/invites as policy permits | Preferences; private drafts through vault |
 | Future community host | Public channels or content deliberately provided to it | Its own community/service keys | Connecting endpoints visible to its network stack | Server policy and bounded encrypted envelopes |
 | Future relay | No payload plaintext | Its own transport/service keys, not participant E2EE keys | Ingress/egress hop addresses and timing | Minimal operational records, encrypted/access-controlled if needed |
@@ -26,6 +31,14 @@ A host operator is not automatically an E2EE member. Public server-readable
 channels and private E2EE channels must be visibly distinguishable. Account
 root identity, device authorization, community identity, alias and performance
 capability discovery are independent objects.
+
+P02 local signature verification, trusted-device recognition, future live
+possession, community admission and action authorization are separate decisions.
+Explicitly pinning a key in one local profile does not pin it in another.
+Profile and membership keys are independent; revoking a profile device does not
+silently revoke its separate membership devices. An incoming record cannot
+delete owned keys or clear a conflict. Local self-pins additionally check that
+profile's current owned device set; cross-profile public updates remain explicit.
 
 A relay conceals a peer's direct endpoint from the other peer only if every
 related subsystem obeys the route policy. The relay and ISP still observe

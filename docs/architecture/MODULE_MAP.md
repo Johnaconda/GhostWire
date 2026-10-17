@@ -1,5 +1,12 @@
 # Module map and source ownership
 
+## P03 scoped update
+
+P03 refines IdentityService::delete_membership: invalidate matching self-trust
+in the owning profile before removing its owned record; preserve other profiles.
+No new module or public API is introduced. See ../checkpoints/GW-A04-P03.md.
+
+
 ## Implemented
 
 | Module | Public headers | Sources and ownership |
@@ -17,7 +24,11 @@
 | Storage capability | platform/secure_storage.hpp | API-entry-point probe only; no secret operations or persistence |
 | Crypto | crypto/crypto_provider.hpp, crypto_error.hpp, key_handle.hpp | Explicit provider, purpose-specific move-only keys, clearing buffers, bounds, typed errors and cancellation; pinned static Botan private to implementation |
 | Crypto lifecycle | core/crypto_service.hpp | ServiceManager-owned adapter, real initialization/stop/rollback in all roles |
-| Tests | tests/unit, tests/security, tests/fixtures, tests/integration, tests/windows | Core/platform/crypto/fault runners, Linux OS entropy failure runner, real native child/CLI/Unicode/tooling regressions |
+| Identity values/records | identity/identity_id.hpp, identity_record.hpp, identity_error.hpp | Fixed typed IDs, bounded canonical public DeviceSet, pure Ed25519 signing/verification through crypto; enum-only errors |
+| Identity state | identity/identity_service.hpp | Explicitly owned volatile profiles, independent membership/device keys, trust pins, revision/conflict/time state and scoped mutation; provider/clock borrowed |
+| Identity lifecycle | composition/identity_service_adapter.hpp | Separate core Service adapter, declared admission reservation and injected CryptoService dependency; no core-to-identity edge |
+| Identity console | apps/cli/identity_session.hpp | Explicit --identity-session; bounded owner-thread input, selected profile handle and public-only display; no persistence or networking |
+| Tests | tests/unit, tests/security, tests/fixtures, tests/integration, tests/windows | Core/platform/crypto/identity/fault runners, Linux OS entropy failure runner, real native child/CLI/Unicode/tooling regressions |
 | Build | CMakeLists.txt, cmake, presets, vcpkg manifests | Repository-local build directories |
 
 A00 platform filesystem is suitable for nonsecret configuration and empty
@@ -28,7 +39,17 @@ monitor thread per explicitly launched child.
 
 ## Planned only
 
-Identity, vault, permissions, protocol, transport, discovery, messaging,
+A04-P01 supplied the owner-accepted design in
+[IDENTITY_DESIGN.md](IDENTITY_DESIGN.md) and
+[ADR-008](../decisions/ADR-008-IDENTITY-AND-DEVICE-TRUST.md). It covers isolated
+profiles, typed scopes, separate membership credentials, device authorization,
+revocation and explicit recovery limits. P02 implements the bounded volatile
+portion listed above. Public record verification lives in identity_record.hpp;
+there is no empty identity_verification.hpp or key_rotation.hpp placeholder.
+Protected storage, root continuity/recovery, cross-device enrollment, live
+remote possession and community admission remain unimplemented.
+
+Vault, permissions, protocol, transport, discovery, messaging,
 friends, groups, communities, federation, storage, files, media, moderation,
 AI, plugins, diagnostics services and all ui/ and schemas/ trees are documented
 but not populated with stubs. Create a directory when real functionality or a

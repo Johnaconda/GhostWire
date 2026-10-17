@@ -1,0 +1,41 @@
+{
+  "checkpoint": "GW-A04-P02-IDENTITY-DEVICE-TRUST",
+  "date": "2026-10-16",
+  "platform": "Ubuntu 24.04.3 x86_64",
+  "debug_ctest": {
+    "passed": 41,
+    "total": 41,
+    "seconds": 1.05
+  },
+  "release_ctest": {
+    "passed": 41,
+    "total": 41,
+    "seconds": 0.77
+  },
+  "asan_ubsan_ctest": {
+    "passed": 41,
+    "total": 41,
+    "seconds": 3.43,
+    "ASAN_OPTIONS": "detect_leaks=0",
+    "UBSAN_OPTIONS": "halt_on_error=1"
+  },
+  "unit_cases_per_normal_configuration": 166,
+  "unit_assertions_per_normal_configuration": 4325,
+  "skipped": 0,
+  "full_lsan": "blocked: ptrace runtime fatal after identity tests passed",
+  "windows_p02": "not run",
+  "macos_p02": "not run",
+  "hosted_p02": "not run",
+  "clang_tidy": "unavailable",
+  "owner_acceptance": "pending",
+  "log_sha256": {
+    "debug-ctest-final.log": "8eddd829bed40bbfceae1fe792c5308b11b59f6b396cb1142e2ab6c749702659",
+    "release-ctest-final.log": "eb0f4f0ad24b486f6e8b14613eef42da0d90686696ff903c612c08b6056ddbbc",
+    "sanitize-ctest-final.log": "d2ef20f27b097af0a06b17cabbe1b25530844b41f60db5ec97d68af0d6295b3f",
+    "default-lsan-identity.log": "30138cabf3c631a7c22657d4f7313fadc218a3593a53786b8faaae0c3d00fbb0",
+    "debug-build-final.log": "710b6b07ebe1080745c872918b5a118c8dbdcb656ac52ecf0316108e01f64e17",
+    "release-build-final.log": "710b6b07ebe1080745c872918b5a118c8dbdcb656ac52ecf0316108e01f64e17",
+    "sanitize-build-final.log": "89bb92683e8b6e0b2b88f2e16db9d6c8ad79151e034fdd5baab14a99fabb9a91",
+    "sanitize-relink-final.log": "b896302d5b737ffadbd93850e241ac0528b82f240eeae2880778ace88360f619"
+  }
+}

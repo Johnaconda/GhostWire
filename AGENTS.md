@@ -1,5 +1,54 @@
 # GhostWire coding-agent contract
 
+## Current authority — A04-P03, 2026-10-16
+
+The owner supplied P02 Windows Debug/Release 40/40 each plus identity-console
+launch, and instructed continuation. See docs/checkpoints/GW-A04-P02-HOST-ACCEPTANCE.md.
+P03 uses the exact P02 archive SHA e755c9b994541dbf66e061d799b31621b2f91034cda7741d1473699426783b59.
+Current runtime is 0.4.1 / GW-A04-P03-IDENTITY-HARDENING. This bounded pass
+reviews identity and repairs concrete deletion/revocation findings only.
+P03 execution/acceptance is separate from supplied P02 evidence. Stop after P03;
+A05 is a proposal only. No remote writes, persistent keys, networking or GUI.
+Older sections below retain checkpoint context and are superseded on current status.
+
+
+## Current authority — 2026-10-16
+
+The owner accepted A03-HF01 Windows portable Debug/Release 37/37 each and
+authorized continued work without a personal macOS machine. Published main
+1f92c5539f7eb3f6f8e3833f27df9384f260251a matches all 166 files of the HF01
+ZIP, SHA-256 5d203d63341deeb14f2128e86bb8cf5773c19c7084ef6a83caefdc273c1747a8.
+All nine hosted jobs are now inspected: macOS Intel/ARM64 Debug/Release 37/37,
+Windows Debug/Release 37/37, Linux Debug/Release and default sanitizers 38/38.
+See docs/checkpoints/GW-A03-HF01-ACCEPTANCE.md for exact environments/limits.
+
+The owner subsequently accepted GW-A04-P01-IDENTITY-DESIGN after independent
+architecture review and source-integrity verification, and explicitly authorized
+GW-A04-P02. Its authoritative cumulative P01 ZIP has SHA-256
+38fbfceccd352bc9b95990dc2b605c3e7e4212b21e3057b72bc34e7b484d6fc3.
+ADR-008 and IDENTITY_DESIGN are accepted for this bounded volatile implementation;
+do not repeat the P01 approval gate. The owner also authorized parallel agent
+work and an interactive application interface within this pass.
+
+Current package/runtime: GW-A04-P02-IDENTITY-DEVICE-TRUST / 0.4.0. The new identity
+library and separate composition adapter provide volatile profiles, independent
+community credentials, signed device sets and explicit local trust. The CLI's
+opt-in --identity-session exposes these real services; ordinary four-role
+bootstrap behavior remains intact. This is not a network login or community
+admission implementation. All keys/trust state are lost at session shutdown.
+See docs/checkpoints/GW-A04-P02.md for actual validation and
+docs/checkpoints/GW-A04-P02-WINDOWS-ACCEPTANCE.md for native acceptance.
+P02 remains subject to independent review and owner Windows testing. Stop after
+P02; do not automatically advance to P03 or A05. No persistent private storage,
+GUI, networking, messaging or future AI functionality is authorized by this pass.
+Do not ask the owner to repeat HF01 acceptance or acquire a Mac. Native hosted
+CI is valid evidence for its exact source; older-OS/physical-host coverage stays
+separate. Owner-local vcpkg, local LSan, clang-tidy and crypto review remain open.
+
+The earlier acceptance snapshot in item 3 below is retained for traceability
+and is superseded by this section. The owner controls every GitHub push. No
+remote write, PR, merge, tag or workflow dispatch is authorized by packaging.
+
 ## Read before editing
 
 1. Read docs/development/MASTER_CONTRACT.md, ARCHITECTURE.md, ROADMAP.md,

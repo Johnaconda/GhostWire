@@ -1,0 +1,191 @@
+{
+  "date": "2026-10-15",
+  "repository": "Johnaconda/GhostWire",
+  "commit": "1f92c5539f7eb3f6f8e3833f27df9384f260251a",
+  "tree": "b116ccee2cfc77029b090dc79c33e1c8f236ccf0",
+  "input_archive": "GHOSTWIRE-GW-A03-HF01-MACOS-RECOVERY-source.zip",
+  "input_sha256": "5d203d63341deeb14f2128e86bb8cf5773c19c7084ef6a83caefdc273c1747a8",
+  "source_files_compared": 166,
+  "source_differences": [],
+  "remote_extras": [],
+  "owner": {
+    "file": "Pasted text(8).txt",
+    "sha256": "ceb9a69ce7348de40c793352b1bab63427b49bb3bb9d44c0db52c0002b8c4415",
+    "platform": "Windows 10 x64",
+    "compiler": "MSVC 19.51.36260.0",
+    "dependency_mode": "portable/vendored",
+    "debug_ctest": "37/37",
+    "release_ctest": "37/37",
+    "debug_seconds": 5.8,
+    "release_seconds": 5.37,
+    "cli_identity": "GhostWire 0.3.1 | GW-A03-HF01-MACOS-RECOVERY | cli | Windows | x86_64",
+    "original_temp_override_in_commands": false
+  },
+  "jobs": [
+    {
+      "id": 116244568438,
+      "run_id": 38680770477,
+      "platform": "macos",
+      "name": "build (macos-26, debug)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Johnaconda/GhostWire/actions/runs/38680770477/job/116244568438",
+      "log_inspected": true,
+      "excerpts": [
+        "2026-10-15T04:19:02.5576210Z -- The CXX compiler identification is AppleClang 21.0.0.21000101",
+        "2026-10-15T04:19:27.8731000Z  2/37 Test  #2: platform-unit ....................   Passed    0.73 sec",
+        "2026-10-15T04:19:28.0196640Z  4/37 Test  #4: crypto-symlink-temp ..............   Passed    0.05 sec",
+        "2026-10-15T04:19:28.9211910Z 100% tests passed out of 37",
+        "2026-10-15T04:19:28.9219610Z Total Test time (real) =   1.84 sec"
+      ]
+    },
+    {
+      "id": 116244568639,
+      "run_id": 38680770477,
+      "platform": "macos",
+      "name": "build (macos-26, release)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Johnaconda/GhostWire/actions/runs/38680770477/job/116244568639",
+      "log_inspected": true,
+      "excerpts": [
+        "2026-10-15T04:19:08.4776780Z -- The CXX compiler identification is AppleClang 21.0.0.21000101",
+        "2026-10-15T04:19:38.6883640Z  2/37 Test  #2: platform-unit ....................   Passed    0.52 sec",
+        "2026-10-15T04:19:38.7452670Z  4/37 Test  #4: crypto-symlink-temp ..............   Passed    0.03 sec",
+        "2026-10-15T04:19:39.3965740Z 100% tests passed out of 37",
+        "2026-10-15T04:19:39.3971290Z Total Test time (real) =   1.28 sec"
+      ]
+    },
+    {
+      "id": 116244568687,
+      "run_id": 38680770477,
+      "platform": "macos",
+      "name": "build (macos-26-intel, release)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Johnaconda/GhostWire/actions/runs/38680770477/job/116244568687",
+      "log_inspected": true,
+      "excerpts": [
+        "2026-10-15T04:19:20.8225050Z -- The CXX compiler identification is AppleClang 21.0.0.21000101",
+        "2026-10-15T04:20:29.0688740Z  2/37 Test  #2: platform-unit ....................   Passed    0.61 sec",
+        "2026-10-15T04:20:29.1602590Z  4/37 Test  #4: crypto-symlink-temp ..............   Passed    0.06 sec",
+        "2026-10-15T04:20:30.5821650Z 100% tests passed out of 37",
+        "2026-10-15T04:20:30.5831830Z Total Test time (real) =   2.26 sec"
+      ]
+    },
+    {
+      "id": 116244568707,
+      "run_id": 38680770477,
+      "platform": "macos",
+      "name": "build (macos-26-intel, debug)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Johnaconda/GhostWire/actions/runs/38680770477/job/116244568707",
+      "log_inspected": true,
+      "excerpts": [
+        "2026-10-15T04:19:22.6110760Z -- The CXX compiler identification is AppleClang 21.0.0.21000101",
+        "2026-10-15T04:20:13.1512030Z  2/37 Test  #2: platform-unit ....................   Passed    0.65 sec",
+        "2026-10-15T04:20:13.3691240Z  4/37 Test  #4: crypto-symlink-temp ..............   Passed    0.09 sec",
+        "2026-10-15T04:20:15.9586800Z 100% tests passed out of 37",
+        "2026-10-15T04:20:15.9601960Z Total Test time (real) =   3.61 sec"
+      ]
+    },
+    {
+      "id": 116244568468,
+      "run_id": 38680770539,
+      "platform": "linux",
+      "name": "sanitizers",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Johnaconda/GhostWire/actions/runs/38680770539/job/116244568468",
+      "log_inspected": true,
+      "excerpts": [
+        "2026-10-15T04:18:33.5165782Z   GW_ENABLE_SANITIZERS=\"ON\"",
+        "2026-10-15T04:18:33.5165993Z   GW_TEST_DEPENDENCY=\"vendored\"",
+        "2026-10-15T04:18:33.5166449Z -- The CXX compiler identification is GNU 13.3.0",
+        "2026-10-15T04:19:04.2672943Z  2/38 Test  #2: platform-unit ....................   Passed    0.43 sec",
+        "2026-10-15T04:19:04.4494101Z  4/38 Test  #4: crypto-symlink-temp ..............   Passed    0.03 sec",
+        "2026-10-15T04:19:05.7236449Z 100% tests passed, 0 tests failed out of 38",
+        "2026-10-15T04:19:05.7299265Z Total Test time (real) =   2.16 sec"
+      ]
+    },
+    {
+      "id": 116244568581,
+      "run_id": 38680770539,
+      "platform": "linux",
+      "name": "build (release)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Johnaconda/GhostWire/actions/runs/38680770539/job/116244568581",
+      "log_inspected": true,
+      "excerpts": [
+        "2026-10-15T04:18:43.9454840Z   GW_TEST_DEPENDENCY=\"vcpkg\"",
+        "2026-10-15T04:18:49.1415491Z -- The CXX compiler identification is GNU 13.3.0",
+        "2026-10-15T04:19:23.3244208Z  2/38 Test  #2: platform-unit ....................   Passed    0.22 sec",
+        "2026-10-15T04:19:23.3431563Z  4/38 Test  #4: crypto-symlink-temp ..............   Passed    0.01 sec",
+        "2026-10-15T04:19:23.5445491Z 100% tests passed, 0 tests failed out of 38",
+        "2026-10-15T04:19:23.5448382Z Total Test time (real) =   0.61 sec"
+      ]
+    },
+    {
+      "id": 116244568666,
+      "run_id": 38680770539,
+      "platform": "linux",
+      "name": "build (debug)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Johnaconda/GhostWire/actions/runs/38680770539/job/116244568666",
+      "log_inspected": true,
+      "excerpts": [
+        "2026-10-15T04:18:45.9314140Z   GW_TEST_DEPENDENCY=\"vcpkg\"",
+        "2026-10-15T04:18:52.6862044Z -- The CXX compiler identification is GNU 13.3.0",
+        "2026-10-15T04:19:12.9514337Z  2/38 Test  #2: platform-unit ....................   Passed    0.23 sec",
+        "2026-10-15T04:19:13.0183777Z  4/38 Test  #4: crypto-symlink-temp ..............   Passed    0.01 sec",
+        "2026-10-15T04:19:13.4213086Z 100% tests passed, 0 tests failed out of 38",
+        "2026-10-15T04:19:13.4215707Z Total Test time (real) =   0.86 sec"
+      ]
+    },
+    {
+      "id": 116244568427,
+      "run_id": 38680770569,
+      "platform": "windows",
+      "name": "build (Release)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Johnaconda/GhostWire/actions/runs/38680770569/job/116244568427",
+      "log_inspected": true,
+      "excerpts": [
+        "2026-10-15T04:19:03.2440989Z   GW_TEST_DEPENDENCY=\"vcpkg\"",
+        "2026-10-15T04:19:18.9006474Z -- The CXX compiler identification is MSVC 19.44.35229.0",
+        "2026-10-15T04:20:25.4889296Z  2/37 Test  #2: platform-unit ....................   Passed    1.66 sec",
+        "2026-10-15T04:20:27.1700023Z 100% tests passed, 0 tests failed out of 37",
+        "2026-10-15T04:20:27.1707583Z Total Test time (real) =   3.43 sec"
+      ]
+    },
+    {
+      "id": 116244568718,
+      "run_id": 38680770569,
+      "platform": "windows",
+      "name": "build (Debug)",
+      "status": "completed",
+      "conclusion": "success",
+      "url": "https://github.com/Johnaconda/GhostWire/actions/runs/38680770569/job/116244568718",
+      "log_inspected": true,
+      "excerpts": [
+        "2026-10-15T04:19:02.0311624Z   GW_TEST_DEPENDENCY=\"vcpkg\"",
+        "2026-10-15T04:19:16.7018687Z -- The CXX compiler identification is MSVC 19.44.35229.0",
+        "2026-10-15T04:19:51.8308931Z  2/37 Test  #2: platform-unit ....................   Passed    1.70 sec",
+        "2026-10-15T04:19:53.6388220Z 100% tests passed, 0 tests failed out of 37",
+        "2026-10-15T04:19:53.6394498Z Total Test time (real) =   3.86 sec"
+      ]
+    }
+  ],
+  "notes": [
+    "All nine job logs inspected; no jobs triggered or remote mutations performed.",
+    "Hosted Linux sanitizer workflow uses default ASan/UBSan with no configured leak suppression. This is evidence for that workload, not an exhaustive leak audit.",
+    "Local LeakSanitizer runtime restriction remains separate.",
+    "Hosted Windows vcpkg success does not close owner-local VS2026 vcpkg/doctest configuration issue.",
+    "Native macOS hosted results do not establish older-OS support or personal physical-host acceptance.",
+    "Linux Release emits a third-party Botan/GCC -Wstringop-overread warning; successful build is not warning-free."
+  ]
+}

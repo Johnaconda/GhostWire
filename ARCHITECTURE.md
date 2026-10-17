@@ -1,8 +1,24 @@
 # Architecture authority
 
-Current recovery: A03-HF01 corrects Darwin cleanup of exited owned groups and a
-symlinked test TEMP base. It adds no public API, target dependency or identity
-feature. Native macOS retesting is pending. See
+## P03 hardening addendum
+
+P03 retains the P02 dependency graph, provider, ownership and volatile model.
+Deleting a locally owned membership also invalidates matching self-authority
+trust in the owning profile, preventing old accepted records from regaining
+recognition after the latest owned revocation record is removed. Other profiles'
+trust remains independent. See docs/checkpoints/GW-A04-P03.md.
+
+
+Current pass: A04-P02 implements the accepted identity/device architecture in
+[ADR-008](docs/decisions/ADR-008-IDENTITY-AND-DEVICE-TRUST.md) and
+[IDENTITY_DESIGN](docs/architecture/IDENTITY_DESIGN.md). The owner accepted P01's
+design and authorized bounded volatile implementation. New runtime validation
+and native acceptance are recorded separately in
+[GW-A04-P02](docs/checkpoints/GW-A04-P02.md); P02 is not yet owner-accepted.
+
+A03-HF01 corrects Darwin cleanup of exited owned groups and a symlinked test
+TEMP base. Owner Windows and all hosted native checks now pass; see
+[HF01 acceptance](docs/checkpoints/GW-A03-HF01-ACCEPTANCE.md). See also
 [ADR-007](docs/decisions/ADR-007-MACOS-EXIT-CLEANUP.md) and the
 [recovery report](docs/checkpoints/GW-A03-HF01.md). Earlier checkpoint reports
 remain historical; current A03 owner/CI acceptance is recorded in its addendum.
@@ -17,10 +33,11 @@ Production path validation and the runtime dependency graph are unchanged.
 Windows development-tool environment transfer uses explicit Unicode decoding;
 tooling helpers and their subprocess checks do not add an application process API.
 
-## What exists through A03
+## What exists through A04-P02
 
 The four composition roots retain the A00 strict CLI, configuration, logging,
-paths and one-shot behavior. Application now owns an immutable ApplicationContext,
+paths and ordinary one-shot behavior. The CLI additionally offers an explicitly
+requested interactive identity session. Application owns an immutable ApplicationContext,
 a dependency-aware ServiceManager, cooperative stop state and resource admission.
 The real path initialization runs through the manager in every executable.
 Graph validation precedes side effects; failed startup rolls back; shutdown is
@@ -34,10 +51,24 @@ See [platform contracts](docs/architecture/PLATFORM_ABSTRACTIONS.md) and
 [ADR-005](docs/decisions/ADR-005-PLATFORM-OWNERSHIP.md). A03 adds a real lifecycle-owned
 Botan provider for bounded volatile randomness, AEAD, public-message signatures
 and hashing. See [crypto contracts](docs/architecture/CRYPTO_PROVIDER.md) and
-[ADR-006](docs/decisions/ADR-006-CRYPTO-PROVIDER.md). No identity, GUI, networking
-or persistent private data is implemented.
+[ADR-006](docs/decisions/ADR-006-CRYPTO-PROVIDER.md).
 
-`ghostwire_core`, `ghostwire_platform`, `ghostwire_crypto` and the pinned Botan
+A04-P02 adds `ghostwire_identity`: bounded owner-thread profile, membership,
+device and trust state using the existing provider. Each profile owns an
+independent root/device pair; each prepared community membership owns a separate
+authority/device pair. Complete canonical signed device sets, explicit pins,
+revision/conflict handling, expiry, scoped replacement and revocation are real
+operations. Identity recognition grants neither a remote session nor an action.
+No GUI, networking, persistent private data or root recovery is implemented.
+
+`ghostwire_composition` owns the lifecycle adapter above core and identity. It
+injects CryptoService and borrows its provider only while the dependency is
+running. Identity closes before crypto. The CLI session uses this composition;
+ordinary bootstrap never creates an identity or trust pin. Identity does not
+link core implementation, and ApplicationContext gains no domain-service lookup.
+
+`ghostwire_core`, `ghostwire_platform`, `ghostwire_crypto`, `ghostwire_identity`,
+`ghostwire_composition` and the pinned Botan
 subset are static libraries. “Shared core”
 means common code used by all executable roles, not a shared binary ABI. This
 avoids an unnecessary exported ABI/DLL deployment commitment at bootstrap.
@@ -59,7 +90,7 @@ separate accepted change; do not silently convert these contracts into a plugin 
    Process launch defaults to replacement; optional inheritance snapshots must
    not race POSIX environment mutation. No module changes the parent process
    environment during normal operation.
-5. CryptoService owns CryptoProvider. Future consumers receive explicit references
+5. CryptoService owns CryptoProvider. Identity and future consumers receive explicit references
    and declare lifecycle dependencies; they join before provider destruction.
    Move-only secret allocations can outlive the provider through bounded shared
    accounting. UI, networking and vault remain future service domains. Public
@@ -68,6 +99,15 @@ separate accepted change; do not silently convert these contracts into a plugin 
    must contain static diagnostic descriptions and bounded structural counters,
    not raw peer input, exception text or paths.
 7. No private object is serializable through generic logging/config APIs.
+8. IdentityService owns every volatile profile, authority/device key and trust
+   context. Handles bind service ownership, slot and generation; profile scope
+   is explicit. No process-global active profile or alias-based authority exists.
+   Immutable public snapshots may cross threads but confer no signing capability.
+   Service/provider/clock lifetimes are joined by the composition owner.
+9. Identity uses a trusted caller's UTC VerificationTime for validity and an
+   injected monotonic Clock for deadlines. Time revalidation, forgetting trust,
+   resolving conflicts and deleting local profiles require explicit owner calls.
+   Receiving a public record cannot erase local private keys or clear conflicts.
 
 ## Dependency and permission maps
 
@@ -108,7 +148,11 @@ A01 creates no production worker pool. A02 Process owns one joined monitor per
 explicitly launched child for bounded pipe I/O and reaping. The bootstrap creates
 no child/monitor. A03 crypto is synchronous with one nonblocking admission slot
 per provider and no queue/worker. Secret handles cannot be mutated concurrently
-with use. Restricted native stop callbacks latch state; only owner-thread
+with use. A04 identity likewise has one synchronous admitted operation, no queue
+and no workers. Its counts, record bytes, input limits and cooperative operation
+deadline are bounded; provider limits may reject earlier. All mutations stage
+their publication, and cleanup releases only the owned volatile state.
+Restricted native stop callbacks latch state; only owner-thread
 dispatch calls C++ cancellation callbacks. Test fixtures verify real cleanup. Future networking
 owns bounded event loops; each vault owns a serialized transaction executor;
 crypto/file jobs run on bounded workers and return immutable results. UI and

@@ -1,9 +1,48 @@
 # Completed implementation records
 
+## P03 scoped hardening
+
+P02 Windows Debug/Release 40/40 each and console launch are supplied evidence;
+see [host record](checkpoints/GW-A04-P02-HOST-ACCEPTANCE.md). P03 reviews the
+implementation and repairs membership deletion/self-trust invalidation. Actual
+validation: Debug/Release and ASan/UBSan with leaks disabled, 41/41 each;
+167 unit cases / 4,383 assertions per normal configuration. Details in [P03 report](checkpoints/GW-A04-P03.md); native P03
+acceptance remains pending. No A05 functionality is included.
+
+
+## Current addendum — 2026-10-16
+
+HF01 Windows owner acceptance and exact-source hosted Linux/Windows/macOS
+validation are now recorded in
+[GW-A03-HF01-ACCEPTANCE.md](checkpoints/GW-A03-HF01-ACCEPTANCE.md). This supersedes
+earlier pending native statements for the tested HF01 source and environments.
+All nine hosted jobs passed; local LSan/clang-tidy and independent review stay separate.
+
+A04-P01 completed a design deliverable and was subsequently accepted by the
+owner after independent architecture review and source-integrity verification.
+Its historical [report](checkpoints/GW-A04-P01.md) records documentation-only
+validation. P02 implements the approved bounded volatile model and advances the
+runtime to 0.4.0. Linux Debug/Release and ASan/UBSan (leak detection disabled)
+passed 41/41 CTest each. Full LSan remains host-blocked. Details are recorded in
+[GW-A04-P02.md](checkpoints/GW-A04-P02.md); independent implementation review and
+native Windows acceptance remain pending.
+
+| ID | P02 implemented work | Evidence and limits |
+|---|---|---|
+| A04-P02-IDENTITY | Explicit volatile profiles and independent profile/community authority-device keys; typed IDs and owner/generation handles | Identity service/record test mapping and executed results in P02 report; logical process isolation only |
+| A04-P02-RECORD | Bounded canonical signed DeviceSet, explicit authority/scope/time validation | Pure Ed25519 through accepted provider; no handshake, live possession or permission claim |
+| A04-P02-TRUST | Explicit pins, independent-verification state, block/conflict/revision handling and point-of-use recognition | No automatic trust or eviction; no durable revision state or network revocation distribution |
+| A04-P02-DEVICES | Scoped replacement/removal and complete renewed device sets | Independent membership devices survive profile-device revocation; root continuity/recovery deferred |
+| A04-P02-LIFECYCLE | Separate composition adapter; identity stops before its injected CryptoService | Owned synchronous operations, bounded counts/bytes, cooperative deadlines and cancellation |
+| A04-P02-CONSOLE | Opt-in CLI session driving real lifecycle-owned identity operations | No private persistence, key import/export, GUI or network; Windows interaction requires native acceptance |
+
+This table records implementation, not owner acceptance or a passing native
+test claim. P02 stops for review; no P03 or A05 work is authorized by this record.
+
 Updated: 2026-10-13. These records concern implemented work and the stated evidence,
 not user acceptance of the entire checkpoint. Earlier entries retain their historical scope; later addenda supersede their
 then-pending acceptance statements. Current gates are tracked in TODO. No
-identity, persistent store, network or UI feature is complete.
+persistent store, network or graphical UI feature is complete.
 
 | ID | Implemented work | Validation evidence |
 |---|---|---|

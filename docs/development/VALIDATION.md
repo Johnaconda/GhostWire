@@ -1,5 +1,53 @@
 # Validation policy and current recovery evidence
 
+## Current P03 validation
+
+Linux Debug/Release: 41/41 CTest each, 167 cases / 4,383 assertions each.
+ASan/UBSan with leaks disabled: 41/41. Full LSan remains ptrace-blocked.
+
+P02 supplied Windows evidence is in ../checkpoints/GW-A04-P02-HOST-ACCEPTANCE.md.
+Use ../checkpoints/GW-A04-P03.md for P03 actual runs and limitations. Never reuse
+P02's 40/40 Windows passes as P03 execution evidence. Historical sections below
+retain their original source scope.
+
+
+## Current update — A04-P02, 2026-10-16
+
+Linux Debug and Release: **41/41 CTest each**. ASan/UBSan with leak detection
+disabled: **41/41**. Full local LSan remains blocked by ptrace. Each normal
+configuration passed 166 unit cases / 4,325 assertions; native P02 acceptance
+remains pending.
+
+The P01 design is owner-accepted. The implementation candidate adds actual
+volatile identities, complete signed device sets, explicit trust and the opt-in
+CLI identity session. [P02 results](../checkpoints/GW-A04-P02.md) are authoritative
+for its executed Linux Debug/Release/sanitizer checks and coverage limitations.
+The new suite retains all earlier tests; the compiled checkpoint assertion is
+updated to 0.4.0 / GW-A04-P02-IDENTITY-DEVICE-TRUST. No warning flag is weakened.
+
+Native Windows acceptance uses the exact single-line commands in
+[P02 Windows instructions](../checkpoints/GW-A04-P02-WINDOWS-ACCEPTANCE.md).
+New native Windows/macOS and hosted CI results remain unverified. Previous HF01
+results below are historical and cannot validate this new implementation.
+The owner controls publication; no remote workflow was dispatched.
+
+## Historical P01/HF01 update — 2026-10-15
+
+[HF01 acceptance](../checkpoints/GW-A03-HF01-ACCEPTANCE.md) records the owner's
+Windows 37/37 per configuration and all nine successful hosted native job logs
+at 1f92c553, including macOS ARM64/Intel 37/37 each and Linux default sanitizers
+38/38. Personal Mac availability is not required to inspect native hosted tests.
+Older-OS coverage, owner-local vcpkg, local LSan and clang-tidy remain separate.
+
+A04-P01 changes only documentation and source-package metadata. Its validation
+checks source preservation, document links/structured evidence, proposed field
+lengths, module boundaries, Python syntax, ZIP reproducibility and manifest
+integrity. Existing runtime/build/test bytes are compared with the exact tested
+HF01 baseline. No new C++ build or identity test is claimed; the 26-case identity
+plan is future acceptance work. See [the P01 report](../checkpoints/GW-A04-P01.md).
+
+## Historical HF01 delivery status
+
 Current source: A03-HF01. [Recovery results](../checkpoints/GW-A03-HF01.md)
 record Linux Debug/Release 38/38 each and remaining candidate-native checks.
 [A03 owner/hosted acceptance](../checkpoints/GW-A03-HOST-ACCEPTANCE.md) records

@@ -1,14 +1,26 @@
 # Dependency graph
 
+## P03 scoped update
+
+P03 retains the P02 graph unchanged; membership deletion hardening is internal
+to identity. No new library, dependency or reverse edge is introduced.
+
+
 An arrow means “may depend on”. No reverse edges or implicit service lookup.
 
-A03-HF01 preserves every edge below. Its bounded Darwin process-group query
-stays inside process.cpp and uses the existing system library; no public native
-types, process registry, new package or identity target is added.
+A04-P02 adds identity and a separate composition adapter above core. The prior
+platform and crypto edges are preserved; no public native types or service
+registry is introduced. The CLI opts into the new adapter for its interactive
+session; the ordinary four-role bootstrap remains profile-free.
 
 ```mermaid
 flowchart TD
     Apps["Four composition roots"] --> Core["ghostwire_core"]
+    CLI["CLI identity session"] --> Composition["ghostwire_composition"]
+    Composition --> Core
+    Composition --> Identity["ghostwire_identity"]
+    Identity --> Crypto
+    Identity --> Contracts
     Core --> Platform["ghostwire_platform"]
     Core --> Crypto["ghostwire_crypto"]
     Crypto --> Botan["Pinned static Botan"]
@@ -23,15 +35,17 @@ paths. The platform implementation may include only core/error.hpp,
 core/result.hpp and core/resource_limits.hpp, alongside platform contracts.
 These are header-only values; platform never links the core implementation.
 `tools/check_boundaries.py` enforces these current include boundaries and rejects
-UI imports from core/platform/crypto. Crypto may include only core/result.hpp
+UI imports from core/platform/crypto/identity. Crypto may include only core/result.hpp
 among core headers; it links no core implementation or platform target. Botan's
-native RNG/memory code stays private. Public headers reject backend/native types.
+native RNG/memory code stays private. Identity uses only the allowed header-only
+core values/Clock contract; it links crypto and contracts, never core or
+permissions implementation. Composition links core plus identity. Public headers
+reject backend/native types.
 
 Future permitted edges (not existing CMake targets):
 
 | Module | Dependencies it may use | Excluded |
 |---|---|---|
-| identity | crypto, permissions, protected key store | hardware serials as identity, UI |
 | protocol | core values, schema codecs | UI, vault, sockets, crypto key storage |
 | permissions | core values and immutable identity references | transport internals, UI |
 | vault | crypto, platform secure storage, reviewed database | network callbacks, UI state |
@@ -52,6 +66,26 @@ Future permitted edges (not existing CMake targets):
 Future services communicate through explicit injected facades and bounded
 immutable messages. A01 ServiceManager owns lifecycle registrations and provides no service lookup.
 It must not become ambient authority available from arbitrary network handlers.
+
+## A04-P02 identity ownership
+
+Accepted ADR-008 fixes identity's edge: identity uses crypto and value contracts;
+permissions consumes immutable public identity values, never the reverse edge.
+The lifecycle adapter belongs at composition level and links core plus identity.
+Core does not link back to that adapter/identity, and identity does not include
+ApplicationContext or ServiceManager. CryptoService is explicitly injected into
+the adapter and retained until identity consumers stop. CMake and the boundary
+checker enforce these directions. See [IDENTITY_DESIGN.md](IDENTITY_DESIGN.md)
+for the implemented owner-thread, time, cancellation and resource contracts.
+
+| Owner | Owns or borrows | Constraint |
+|---|---|---|
+| ServiceManager | IdentityServiceAdapter, ID 3 | Explicit dependency on injected CryptoService, ID 2; reverse cleanup |
+| IdentityServiceAdapter | unique_ptr IdentityService and application WorkLease | One declared active reservation; not an RSS/CPU guarantee; no profile created at start |
+| IdentityService | Profile/membership keys, pins, current DeviceSets and revision/conflict state | Volatile owner-thread mutation, bounded counts/bytes, no generic signing/export |
+| LocalHandle | Empty service-owner token plus slot/generations | Cannot retain service/private keys; stale/cross-service/cross-profile use denied |
+| CLI Session | Explicit selected profile handle and bounded input | Owns no private key, file store, thread or network; public disclosure is opt-in |
+| Trusted composition caller | Borrowed monotonic Clock and explicit UTC VerificationTime | Both supplied independently; no steady-clock reinterpretation or automatic trusted time recovery |
 
 ## A01 runtime ownership and dependencies
 

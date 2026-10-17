@@ -1,4 +1,16 @@
-# Building GhostWire A03
+# Building GhostWire A04-P03
+
+Current runtime: **0.4.1 / GW-A04-P03-IDENTITY-HARDENING**. P03 preserves the
+volatile identity console and repairs local membership deletion/revocation
+semantics. The owner supplied P02 Windows Debug/Release 40/40 each and authorized
+continuation. Those results are not new P03 validation.
+
+Follow [P03 Windows acceptance](docs/checkpoints/GW-A04-P03-WINDOWS-ACCEPTANCE.md)
+and [actual P03 results](docs/checkpoints/GW-A04-P03.md). Keep original TEMP/TMP.
+The portable/vcpkg presets, warning policy and tool discovery remain unchanged.
+`python3 tools/packaging/package_source.py` produces the cumulative
+`dist/GHOSTWIRE-GW-A04-P03-IDENTITY-HARDENING-source.zip` plus SHA-256 sidecar,
+excluding build products, caches and private runtime state.
 
 ## Tool requirements
 
@@ -27,9 +39,9 @@ beside the selected CMake before PATH fallback, with a matching version check.
 Unicode and preserves the original process TEMP/TMP. No permanent environment
 or execution-policy change is made.
 
-A03 acceptance starts with the portable/vendored mode already accepted by the owner
-through A02 with original TEMP/TMP. Primary account: win10dev; project root
-`C:\Cumpiling-shit\GhostWire`; TEMP `C:\Users\win10dev\AppData\Local\Temp`.
+A04-P02 acceptance starts with the portable/vendored mode already accepted by
+the owner through A03-HF01 with original TEMP/TMP. Project root:
+`C:\Cumpiling-shit\GhostWire`. Keep the actual account's default temporary paths.
 Open a new ordinary PowerShell from Start (not a child
 of the old workaround shell), leave TEMP/TMP unchanged, then from the source root:
 
@@ -68,7 +80,7 @@ failure on the standard vcpkg route; no complete diagnostic log establishing its
 cause accompanies the acceptance report. The earlier x86 SDK/link mismatch was
 recovered separately. Do not assume the two have the same cause or call vcpkg
 fixed because the portable route passes or the owner created a new account.
-A03 preserves the pin and both modes; its crypto source is identical in both.
+A04-P02 preserves the pin and both modes; its crypto source is identical in both.
 
 Precedence: explicit `-VcpkgRoot`, process `VCPKG_ROOT`, then VS's `VC/vcpkg`.
 The root must contain `scripts/buildsystems/vcpkg.cmake` and `vcpkg.exe`.

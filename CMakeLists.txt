@@ -12,7 +12,7 @@ if(BUILD_TESTING AND GW_TEST_DEPENDENCY STREQUAL "vcpkg")
 endif()
 set(VCPKG_MANIFEST_NO_DEFAULT_FEATURES ON)
 
-project(GhostWire VERSION 0.3.1 LANGUAGES CXX)
+project(GhostWire VERSION 0.4.1 LANGUAGES CXX)
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
     message(FATAL_ERROR "Use an out-of-source build: cmake --preset portable-debug")
 endif()
@@ -76,11 +76,25 @@ target_link_libraries(ghostwire_core PUBLIC ghostwire_contracts ghostwire_platfo
 target_include_directories(ghostwire_core PRIVATE "${CMAKE_CURRENT_BINARY_DIR}/generated")
 add_library(GhostWire::core ALIAS ghostwire_core)
 
+# Identity uses only crypto and header-only value/clock contracts. Lifecycle
+# composition links both libraries; neither lower layer links back to it.
+set(GW_IDENTITY_SOURCES src/identity/identity_record.cpp src/identity/identity_service.cpp)
+add_library(ghostwire_identity STATIC ${GW_IDENTITY_SOURCES})
+target_link_libraries(ghostwire_identity PUBLIC GhostWire::crypto ghostwire_contracts
+    PRIVATE ghostwire_options Threads::Threads)
+add_library(GhostWire::identity ALIAS ghostwire_identity)
+add_library(ghostwire_composition STATIC src/composition/identity_service_adapter.cpp)
+target_link_libraries(ghostwire_composition PUBLIC GhostWire::core GhostWire::identity
+    PRIVATE ghostwire_options)
+add_library(GhostWire::composition ALIAS ghostwire_composition)
+
 foreach(role IN ITEMS desktop server relay cli)
     add_executable(ghostwire-${role} apps/${role}/main.cpp)
     target_link_libraries(ghostwire-${role} PRIVATE GhostWire::core ghostwire_options)
     install(TARGETS ghostwire-${role} RUNTIME DESTINATION bin)
 endforeach()
+target_sources(ghostwire-cli PRIVATE apps/cli/identity_session.cpp)
+target_link_libraries(ghostwire-cli PRIVATE GhostWire::composition)
 install(FILES LICENSE README.md BUILD.md THIRD_PARTY_NOTICES.md DESTINATION share/ghostwire)
 install(FILES third_party/botan/LICENSE.txt DESTINATION share/ghostwire/licenses RENAME Botan-LICENSE.txt)
 
@@ -124,6 +138,27 @@ if(BUILD_TESTING)
     target_link_libraries(ghostwire-crypto-fault-tests PRIVATE ghostwire_crypto_faults ghostwire_options doctest::doctest Threads::Threads)
     add_test(NAME crypto-faults COMMAND ghostwire-crypto-fault-tests --no-colors)
     set_tests_properties(crypto-faults PROPERTIES TIMEOUT 30 LABELS "unit;crypto;security")
+    add_executable(ghostwire-identity-tests tests/unit/identity_record_tests.cpp
+        tests/unit/identity_service_tests.cpp tests/unit/identity_lifecycle_tests.cpp)
+    target_link_libraries(ghostwire-identity-tests PRIVATE GhostWire::composition
+        ghostwire_options doctest::doctest Threads::Threads)
+    add_test(NAME identity-unit COMMAND ghostwire-identity-tests --no-colors)
+    set_tests_properties(identity-unit PROPERTIES TIMEOUT 60 LABELS "unit;identity;security")
+    # Compile the identical identity implementation against the isolated fault
+    # provider. Production libraries never link fault hooks or substituted RNG.
+    add_executable(ghostwire-identity-fault-tests tests/unit/identity_fault_tests.cpp
+        ${GW_IDENTITY_SOURCES})
+    target_compile_definitions(ghostwire-identity-fault-tests PRIVATE GW_CRYPTO_TESTING=1)
+    target_include_directories(ghostwire-identity-fault-tests PRIVATE "${CMAKE_SOURCE_DIR}/src/crypto")
+    target_link_libraries(ghostwire-identity-fault-tests PRIVATE ghostwire_crypto_faults
+        ghostwire_options doctest::doctest Threads::Threads)
+    add_test(NAME identity-faults COMMAND ghostwire-identity-fault-tests --no-colors)
+    set_tests_properties(identity-faults PROPERTIES TIMEOUT 30 LABELS "unit;identity;security")
+    add_test(NAME cli-identity-session
+        COMMAND "${CMAKE_COMMAND}" "-DEXE=$<TARGET_FILE:ghostwire-cli>"
+        "-DWORK=${CMAKE_BINARY_DIR}/test-runtime/identity-session"
+        -P "${CMAKE_SOURCE_DIR}/tests/integration/identity_session.cmake")
+    set_tests_properties(cli-identity-session PROPERTIES TIMEOUT 30 LABELS "integration;identity;unicode")
     if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND CMAKE_CXX_COMPILER_ID MATCHES "^(GNU|Clang)$")
         add_executable(ghostwire-crypto-entropy-tests tests/security/crypto_entropy_failure.cpp)
         target_link_libraries(ghostwire-crypto-entropy-tests PRIVATE GhostWire::core ghostwire_options doctest::doctest)

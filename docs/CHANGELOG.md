@@ -1,5 +1,64 @@
 # Changelog
 
+## 0.4.1 — GW-A04-P03-IDENTITY-HARDENING — 2026-10-16
+
+- Record owner-supplied P02 Windows Debug/Release 40/40 each and console launch;
+  distinguish the older A03 screenshot and uncaptured manual command workflow.
+- Repair local membership deletion so stale self-trust cannot revive a revoked
+  device; preserve unrelated authority contexts and independent profiles.
+- Add focused deletion/handle/resource regressions and retain the complete suite.
+- Refresh runtime/banner/package metadata, native acceptance and gated A05
+  design handover. No dependency, wire representation or persistence changes.
+- Actual P03 results and remaining gates are in checkpoints/GW-A04-P03.md.
+
+
+## 0.4.0 — GW-A04-P02-IDENTITY-DEVICE-TRUST — 2026-10-16 (acceptance candidate)
+
+- Continue the verified cumulative P01 source after owner design acceptance;
+  preserve earlier implementation, dependency pins, Unicode behavior and reports.
+- Implement typed public identities and explicit owner/generation handles,
+  isolated volatile profiles, independently generated community membership/device
+  keys and collision-safe labels. No implicit profile or global selection.
+- Implement canonical bounded Ed25519 DeviceSets, independently selected
+  authority/scope/time validation, explicit trust pins, revision/conflict handling,
+  point-of-use recognition, scoped rotation/revocation and renewed records.
+- Bound counts, retained record bytes and operation input; stage mutations across
+  crypto/cancellation/deadline failures. Keep UTC validity separate from monotonic
+  work deadlines and preserve explicit local time revalidation.
+- Add a separate lifecycle composition adapter with an injected CryptoService,
+  declared admission reservation and identity-before-crypto cleanup.
+- Add opt-in `ghostwire-cli --identity-session` for real profile/membership/device
+  interaction, explicit local trust/block/recognition commands and public display.
+  Preserve ordinary four-role help/version/config/bootstrap behavior.
+- Add identity, isolated fault, lifecycle and interactive CLI regressions. Actual
+  executed results and limitations are recorded in GW-A04-P02.md; new native
+  Windows/macOS execution and independent implementation acceptance remain gates.
+- Update contracts, status/security records and Windows handover. No persistent
+  private keys, profile/trust files, root recovery, networking, GUI or future
+  checkpoint implementation. A11-PRE/AUTH-PRE remain mandatory. Stop after P02;
+  the owner retains all GitHub publication control.
+
+Historical headings below retain their status at delivery. The owner later
+accepted P01's design; that acceptance is not P02 implementation validation.
+
+## GW-A04-P01-IDENTITY-DESIGN — 2026-10-15 (design review; runtime stays 0.3.1)
+
+- Record HF01 owner Windows Debug/Release 37/37 and exact 166-file reconciliation
+  with main 1f92c553. Inspect all nine successful hosted jobs, including native
+  macOS Intel/ARM64 Debug/Release 37/37 and Linux default sanitizers 38/38.
+- Prepare proposed ADR-008, identity/module contracts and 26 implementation
+  acceptance scenarios: isolated profiles, independent per-community credentials,
+  collision-safe aliases, explicit trust, bounded device sets, revocation and
+  honest recovery limits. Design approval remains pending.
+- Refine future dependency direction to prevent core/identity and
+  identity/permissions cycles. Update status, threats, invariants and next prompt.
+- Update source-package metadata only; preserve all runtime sources, CMake,
+  dependencies, CLI versions, tests, historical reports and original A04 prompt.
+  No executable identity feature, new wire protocol or private persistence.
+
+Historical headings below retain their acceptance status at delivery. Later
+acceptance is recorded in GW-A03-HF01-ACCEPTANCE.md.
+
 ## 0.3.1 — GW-A03-HF01-MACOS-RECOVERY — 2026-10-14 (native acceptance pending)
 
 - Record owner A03 Windows Debug/Release 37/37 each with original TEMP/TMP and
