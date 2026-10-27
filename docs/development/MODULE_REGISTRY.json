@@ -1,0 +1,439 @@
+{
+  "schema_version": 1,
+  "checkpoint": "GW-A05-P04-HF09-MSVC-EXCEPTION-CONTRACT",
+  "project_completion_percent": null,
+  "completion_rule": "No percentage until all agreed modules, dependencies and functional weights are defined; do not use checklist count or implementation confidence as percentage",
+  "acceptance_rule": "Windows owner acceptance near true 10% milestones, except security-critical exceptions",
+  "runtime_version": "0.4.1",
+  "modules": [
+    {
+      "id": "GW-A00",
+      "name": "Foundation",
+      "depends_on": [],
+      "state": "verified",
+      "owner_accepted": true,
+      "evidence": [
+        "docs/checkpoints/GW-A00.md"
+      ]
+    },
+    {
+      "id": "GW-A01",
+      "name": "Core lifecycle",
+      "depends_on": [
+        "GW-A00"
+      ],
+      "state": "verified",
+      "owner_accepted": true,
+      "evidence": [
+        "docs/checkpoints/GW-A01.md"
+      ]
+    },
+    {
+      "id": "GW-A02",
+      "name": "Platform abstractions",
+      "depends_on": [
+        "GW-A01"
+      ],
+      "state": "verified",
+      "owner_accepted": true,
+      "evidence": [
+        "docs/checkpoints/GW-A02.md"
+      ]
+    },
+    {
+      "id": "GW-A03",
+      "name": "Cryptographic provider",
+      "depends_on": [
+        "GW-A01",
+        "GW-A02"
+      ],
+      "state": "verified",
+      "owner_accepted": true,
+      "evidence": [
+        "docs/checkpoints/GW-A03.md"
+      ]
+    },
+    {
+      "id": "GW-A04",
+      "name": "Identity and device trust",
+      "depends_on": [
+        "GW-A03"
+      ],
+      "state": "verified",
+      "owner_accepted": true,
+      "evidence": [
+        "docs/checkpoints/GW-A04-P03.md"
+      ]
+    },
+    {
+      "id": "GW-A05",
+      "name": "Protocol schema and codec",
+      "depends_on": [
+        "GW-A04"
+      ],
+      "state": "partial",
+      "owner_accepted": false,
+      "evidence": []
+    },
+    {
+      "id": "GW-A06",
+      "name": "Transport and privacy policies",
+      "depends_on": [
+        "GW-A05"
+      ],
+      "state": "deferred",
+      "owner_accepted": false,
+      "evidence": []
+    },
+    {
+      "id": "GW-A07",
+      "name": "Autonomous discovery",
+      "depends_on": [
+        "GW-A04",
+        "GW-A05",
+        "GW-A06"
+      ],
+      "state": "planned",
+      "owner_accepted": false,
+      "evidence": []
+    },
+    {
+      "id": "GW-A08",
+      "name": "Encrypted direct messaging",
+      "depends_on": [
+        "GW-A04",
+        "GW-A05",
+        "GW-A06",
+        "GW-A11"
+      ],
+      "state": "planned",
+      "owner_accepted": false,
+      "evidence": []
+    },
+    {
+      "id": "GW-A09",
+      "name": "Offline delivery and mailboxes",
+      "depends_on": [
+        "GW-A06",
+        "GW-A08"
+      ],
+      "state": "planned",
+      "owner_accepted": false,
+      "evidence": []
+    },
+    {
+      "id": "GW-A10",
+      "name": "Friends and contact verification",
+      "depends_on": [
+        "GW-A04",
+        "GW-A06",
+        "GW-A11"
+      ],
+      "state": "planned",
+      "owner_accepted": false,
+      "evidence": []
+    },
+    {
+      "id": "GW-A11",
+      "name": "Local encrypted vault",
+      "depends_on": [
+        "GW-A02",
+        "GW-A03",
+        "GW-A04"
+      ],
+      "state": "planned",
+      "owner_accepted": false,
+      "evidence": []
+    },
+    {
+      "id": "GW-A12",
+      "name": "Vault protection and device privacy",
+      "depends_on": [
+        "GW-A11"
+      ],
+      "state": "planned",
+      "owner_accepted": false,
+      "evidence": []
+    },
+    {
+      "id": "GW-A13",
+      "name": "Community server runtime",
+      "depends_on": [
+        "GW-A06",
+        "GW-A09"
+      ],
+      "state": "planned",
+      "owner_accepted": false,
+      "evidence": []
+    },
+    {
+      "id": "GW-A14",
+      "name": "Group and membership encryption",
+      "depends_on": [
+        "GW-A08",
+        "GW-A13"
+      ],
+      "state": "planned",
+      "owner_accepted": false,
+      "evidence": []
+    },
+    {
+      "id": "GW-A15",
+      "name": "Encrypted file distribution",
+      "depends_on": [
+        "GW-A06",
+        "GW-A11",
+        "GW-A14"
+      ],
+      "state": "planned",
+      "owner_accepted": false,
+      "evidence": []
+    },
+    {
+      "id": "GW-A16",
+      "name": "Federation and portability",
+      "depends_on": [
+        "GW-A07",
+        "GW-A13",
+        "GW-A14"
+      ],
+      "state": "planned",
+      "owner_accepted": false,
+      "evidence": []
+    },
+    {
+      "id": "GW-A17",
+      "name": "Desktop platform shell",
+      "depends_on": [
+        "GW-A01",
+        "GW-A02"
+      ],
+      "state": "planned",
+      "owner_accepted": false,
+      "evidence": []
+    },
+    {
+      "id": "GW-A18",
+      "name": "Messaging and community UI",
+      "depends_on": [
+        "GW-A13",
+        "GW-A17"
+      ],
+      "state": "planned",
+      "owner_accepted": false,
+      "evidence": []
+    },
+    {
+      "id": "GW-A19",
+      "name": "Voice video and media",
+      "depends_on": [
+        "GW-A06",
+        "GW-A14",
+        "GW-A18"
+      ],
+      "state": "planned",
+      "owner_accepted": false,
+      "evidence": []
+    },
+    {
+      "id": "GW-A20",
+      "name": "AI agent framework",
+      "depends_on": [
+        "GW-A04",
+        "GW-A06"
+      ],
+      "state": "planned",
+      "owner_accepted": false,
+      "evidence": []
+    },
+    {
+      "id": "GW-A21",
+      "name": "Permissions and moderation",
+      "depends_on": [
+        "GW-A13",
+        "GW-A14"
+      ],
+      "state": "planned",
+      "owner_accepted": false,
+      "evidence": []
+    },
+    {
+      "id": "GW-A22",
+      "name": "Plugins and extensions",
+      "depends_on": [
+        "GW-A17",
+        "GW-A21"
+      ],
+      "state": "planned",
+      "owner_accepted": false,
+      "evidence": []
+    },
+    {
+      "id": "GW-A23",
+      "name": "Resilience and recovery",
+      "depends_on": [
+        "GW-A09",
+        "GW-A11",
+        "GW-A13"
+      ],
+      "state": "planned",
+      "owner_accepted": false,
+      "evidence": []
+    },
+    {
+      "id": "GW-A24",
+      "name": "Cross-platform security audit",
+      "depends_on": [
+        "GW-A05",
+        "GW-A06",
+        "GW-A08",
+        "GW-A11",
+        "GW-A14"
+      ],
+      "state": "planned",
+      "owner_accepted": false,
+      "evidence": []
+    },
+    {
+      "id": "GW-A25",
+      "name": "Performance and release baseline",
+      "depends_on": [
+        "GW-A17",
+        "GW-A18",
+        "GW-A23",
+        "GW-A24"
+      ],
+      "state": "planned",
+      "owner_accepted": false,
+      "evidence": []
+    }
+  ],
+  "tasks": [
+    {
+      "id": "GW-DEV-STRUCTURE-HF05",
+      "module": "GW-A05",
+      "state": "completed",
+      "depends_on": [],
+      "owner": "development-registry",
+      "confidence": 0.92,
+      "evidence": [
+        "tools/development/test_module_registry.py",
+        "docs/development/STRUCTURE_RULES.md"
+      ],
+      "description": "Enforce module DAG, readiness, evidence and confidence separation"
+    },
+    {
+      "id": "GW-DEV-DOCS-HF05",
+      "module": "GW-A05",
+      "state": "completed",
+      "depends_on": [],
+      "owner": "security-documentation",
+      "confidence": 0.9,
+      "evidence": [
+        "docs/development/WINDOWS-SCRIPT-REVIEW.md",
+        "BUILD.md"
+      ],
+      "description": "Remove execution-policy bypass examples from documentation; preserve build scripts"
+    },
+    {
+      "id": "GW-A05-UPSTREAM-INTEROP",
+      "module": "GW-A05",
+      "state": "blocked",
+      "depends_on": [],
+      "owner": "protocol-review",
+      "blocker": "Pinned TinyCBOR source cannot be fetched in this environment; must compile and compare real upstream parser",
+      "description": "Import pinned upstream and run actual CBOR interoperability"
+    },
+    {
+      "id": "GW-A05-RESOURCE-REVIEW",
+      "module": "GW-A05",
+      "state": "completed",
+      "depends_on": [],
+      "owner": "protocol-security",
+      "description": "Completed bounded parser/encoder budget, cancellation, deadline and admission recovery test review on Linux; external parser review remains blocked",
+      "confidence": 0.91,
+      "evidence": [
+        "tests/unit/protocol_tests.cpp",
+        "tests/fixtures/protocol/allocation_fault.cpp",
+        "docs/checkpoints/GW-A05-P04-HF06.md"
+      ]
+    },
+    {
+      "id": "GW-A05-PARSER-DECISION",
+      "module": "GW-A05",
+      "state": "blocked",
+      "depends_on": [
+        "GW-A05-UPSTREAM-INTEROP"
+      ],
+      "owner": "security-review",
+      "blocker": "Real upstream interop and independent review are missing",
+      "description": "Record maintain/replace decision and independent audit before network exposure"
+    },
+    {
+      "id": "GW-A06-TRANSPORT",
+      "module": "GW-A06",
+      "state": "deferred",
+      "depends_on": [
+        "GW-A05-PARSER-DECISION"
+      ],
+      "owner": null,
+      "description": "Transport remains gated behind A05 and explicit authorization"
+    },
+    {
+      "id": "GW-DEV-EFFORT-HF06",
+      "module": "GW-A05",
+      "state": "completed",
+      "depends_on": [],
+      "owner": "development-forecast",
+      "confidence": 0.91,
+      "evidence": [
+        "tools/development/test_effort_forecast.py",
+        "docs/development/PROJECT_EFFORT_FORECAST.json"
+      ],
+      "description": "Provisional 110-point effort forecast with explicit 10 percent Windows acceptance gates and zero credit for partial modules"
+    },
+    {
+      "id": "GW-A05-FAULT-HARNESS-PORTABLE-HF08",
+      "module": "GW-A05",
+      "state": "completed",
+      "depends_on": [],
+      "owner": "protocol-fixture",
+      "confidence": 0.87,
+      "evidence": [
+        "tests/fixtures/protocol/allocation_fault_global_linux.cpp",
+        "tests/fixtures/protocol/allocation_fault.cpp",
+        "src/protocol/wire_codec.cpp",
+        "docs/checkpoints/GW-A05-P04-HF08.md"
+      ],
+      "description": "Eliminate process-wide operator new override, test both actual codec allocation boundaries in isolated test binary; Linux verified; MSVC Windows timeout requires native confirmation"
+    },
+    {
+      "id": "GW-A05-FAULT-HOOK-LINKAGE-HF09",
+      "module": "GW-A05",
+      "state": "completed",
+      "depends_on": [
+        "GW-A05-FAULT-HARNESS-PORTABLE-HF08"
+      ],
+      "owner": "protocol-fixture",
+      "confidence": 0.92,
+      "evidence": [
+        "src/protocol/wire_codec.cpp",
+        "tests/fixtures/protocol/allocation_fault.cpp",
+        "docs/checkpoints/GW-A05-P04-HF09.md",
+        "docs/checkpoints/GW-A05-P04-HF09-VALIDATION.json"
+      ],
+      "description": "Resolve MSVC /EHc C4297 error on intentionally throwing test hook via C++ linkage and noexcept(false); Linux regression verified; MSVC awaits native acceptance"
+    },
+    {
+      "id": "GW-A05-WINDOWS-10PCT-HF09",
+      "module": "GW-A05",
+      "state": "blocked",
+      "depends_on": [
+        "GW-A05-FAULT-HOOK-LINKAGE-HF09"
+      ],
+      "owner": "windows-acceptance",
+      "blocker": "Owner VS2026 x64 HF08 configured but failed MSVC C4297 at allocation test hook; HF09 correction awaits native Debug/Release build and full CTest",
+      "description": "Native Windows acceptance gate only; A05 parser security and transport remain gated separately"
+    }
+  ]
+}

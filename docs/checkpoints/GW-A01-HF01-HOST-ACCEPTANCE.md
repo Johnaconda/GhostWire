@@ -16,8 +16,8 @@ dedicated tests separately exercise paths containing `ö` and spaces.
 Commands (from project root):
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\dev-windows.ps1 -Action all -Configuration Debug -OfflineTests -Fresh
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\dev-windows.ps1 -Action all -Configuration Release -OfflineTests -Fresh
+.\tools\windows\dev-windows.ps1 -Action all -Configuration Debug -OfflineTests -Fresh
+.\tools\windows\dev-windows.ps1 -Action all -Configuration Release -OfflineTests -Fresh
 ```
 
 | Configuration | CMake/MSVC | CTest | Time |

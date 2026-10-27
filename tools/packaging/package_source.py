@@ -11,18 +11,28 @@ ROOT_FILES = {'CMakeLists.txt', 'CMakePresets.json', 'vcpkg.json', 'vcpkg-config
               'README.md', 'BUILD.md', 'ARCHITECTURE.md', 'ROADMAP.md', 'TODO.md', 'AGENTS.md',
               'CONTRIBUTING.md', 'SECURITY.md', 'LICENSE', 'THIRD_PARTY_NOTICES.md'}
 DIRECTORIES = {'.github', 'apps', 'include', 'src', 'cmake', 'tests', 'tools', 'docs',
-               'examples', 'third_party'}
+               'examples', 'third_party', 'schemas'}
 SUFFIXES = {'.cpp', '.hpp', '.h', '.md', '.txt', '.cmake', '.in', '.json', '.yml', '.yaml',
-            '.ps1', '.sh', '.py', '.conf'}
+            '.ps1', '.sh', '.py', '.conf', '.cddl'}
 # Exact signed source-distribution exceptions, never a blanket binary/cache rule.
 SOURCE_DISTRIBUTIONS = {'third_party/botan/Botan-3.13.0.tar.xz',
-                        'third_party/botan/Botan-3.13.0.tar.xz.asc'}
+                        'third_party/botan/Botan-3.13.0.tar.xz.asc',
+                        'third_party/tinycbor/verified/LICENSE'}
 parser = argparse.ArgumentParser()
 parser.add_argument('--output', type=Path)
 args = parser.parse_args()
 root = Path(__file__).resolve().parents[2]
-destination = args.output or root / 'dist/GHOSTWIRE-GW-A04-P03-IDENTITY-HARDENING-source.zip'
+destination = args.output or root / 'dist/GHOSTWIRE-GW-A05-P04-HF09-MSVC-EXCEPTION-CONTRACT-source.zip'
 destination = destination.resolve()
+# Imported upstream code may only be shipped when all pinned bytes revalidate.
+upstream = root / 'third_party' / 'tinycbor' / 'verified'
+if upstream.exists():
+    import sys
+    sys.path.insert(0, str(root / 'tools' / 'protocol'))
+    import import_tinycbor
+    pins = json.loads((root / 'tools' / 'protocol' / 'tinycbor_pins.json').read_text())
+    import_tinycbor.load_input(upstream, pins)
+
 files = []
 for name in sorted(ROOT_FILES):
     path = root / name
@@ -43,14 +53,14 @@ files.sort(key=lambda p: p.relative_to(root).as_posix())
 if destination == root or destination.is_relative_to(root / 'docs') or destination in files:
     parser.error('Output must not overwrite source')
 inventory = {path.relative_to(root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest() for path in files}
-manifest = json.dumps({'checkpoint': 'GW-A04-P03-IDENTITY-HARDENING',
-                       'implementation_checkpoint': 'GW-A04-P03-IDENTITY-HARDENING',
+manifest = json.dumps({'checkpoint': 'GW-A05-P04-HF09-MSVC-EXCEPTION-CONTRACT',
+                       'implementation_checkpoint': 'GW-A05-P04-HF09-MSVC-EXCEPTION-CONTRACT',
                        'algorithm': 'SHA-256',
                        'files': inventory}, indent=2, sort_keys=True).encode() + b'\n'
 destination.parent.mkdir(parents=True, exist_ok=True)
 with zipfile.ZipFile(destination, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
     def add(name, data, executable=False):
-        info = zipfile.ZipInfo('GhostWire/' + name, (2026, 10, 16, 0, 0, 0))
+        info = zipfile.ZipInfo('GhostWire/' + name, (2026, 10, 27, 0, 0, 0))
         info.compress_type = zipfile.ZIP_DEFLATED
         info.create_system = 3
         info.external_attr = (0o100755 if executable else 0o100644) << 16

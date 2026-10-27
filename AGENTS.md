@@ -1,4 +1,92 @@
+## Current authority — A05-P04-HF09 MSVC test-hook exception-contract fix, 2026-10-27
+
+Owner verified x64 MSVC and HF08 CMake configuration. MSVC then reported
+C4297 / C2220 for the HF08 `extern "C"` allocation hook under `/EHsc`.
+HF09 corrects only its test-only declaration and definition to C++ linkage
+with explicit `noexcept(false)`, preserving all fault assertions and production
+protocol code. See `docs/checkpoints/GW-A05-P04-HF09.md`. Linux regression
+is not Windows acceptance; VS2026 Debug/Release 10% gate remains owner pending.
+No A06, network parser approval, dependency changes, key persistence or GitHub
+write. Historical authority below is preserved.
+
+## Current authority — A05-P04-HF08 allocation fixture Windows recovery, 2026-10-27
+
+HF07's user-run Windows Debug result was 49/50, with an allocation-fault
+fixture timeout. This bounded candidate removes the process-wide `operator
+new` override only in the test executable and exercises the same two real
+codec byte-buffer allocation boundaries via a private test compilation.
+The original process-global override regression is preserved Linux-only.
+Runtime 0.4.1 unchanged. Linux evidence does NOT establish Windows hang
+resolution; the VS2026 Debug/Release 10% gate needs owner rerun. A05 upstream
+TinyCBOR and independent parser review remain open. No A06/network exposure,
+private-key persistence, auth, GUI or GitHub write. See
+`docs/checkpoints/GW-A05-P04-HF08.md`; historical authority below remains.
+
+## Current authority — A05-P04-HF03 limited parser interoperability tooling, 2026-10-19
+
+Owner authorized continuing A05 security work without waiting for Windows tests;
+subjective confidence for admitted changes must exceed 0.80. This pass corrects
+an upstream-verdict verification gap and a dangling-symlink importer publication
+edge case. Actual pinned TinyCBOR C compilation is still unavailable here;
+**do not claim upstream interoperability or network-parser approval**. No
+A04 signing, volatile identity, remote authorization, networking, GUI or private
+persistence changes. Runtime 0.4.1 and no GitHub writes. See
+`docs/checkpoints/GW-A05-P04-HF03.md`. Prior authority is historical.
+
+## Current authority — A05-P04-HF02 bounded security review continuation, 2026-10-19
+
+Owner requested continued scoped development, with per-change engineering
+confidence above 0.80 and without blocking on local Windows acceptance. This
+batch adds an opt-in (never automatic) immutable-commit TinyCBOR source fetch,
+bounded test-only stdin probes and expanded frozen interop vectors. These are
+**not** upstream-maintained parser execution, an independent audit, network
+authorization or evidence of native Windows/macOS validation. Preserve all A04
+identity/security invariants and A05 v1 wire bytes; do not implement A06 or
+bypass A11-PRE/AUTH-PRE. See docs/checkpoints/GW-A05-P04-HF02.md. Runtime
+0.4.1; no GitHub writes. Historical authority sections below are preserved.
+
+## Current authority — A05-P04-HF01 source-worker batch, 2026-10-19
+
+Owner requests continued bounded TODO-driven development without requiring new personal Windows acceptance for every candidate. Engineering confidence of each admitted task must exceed 0.80, but qualitative confidence is not security certification or platform test evidence. This batch hardens offline importer, in-memory A05 public codec and a non-executing worker-delivery merger; no autonomous coding-agent launch was available. Do not broaden into A06, network parsing, persistence, AUTH-PRE or E2EE. Pinned TinyCBOR actual parser execution and independent review remain required. See docs/checkpoints/GW-A05-P04-HF01.md and WORKER_QUEUE.json. Runtime 0.4.1; no GitHub writes. Older authority sections below remain historical.
+
+## Current authority — A05-P03 codec hardening candidate, 2026-10-18
+
+The owner requested further development and parallel work after P02 delivery but
+has not supplied P02 Windows 41/41 evidence. P03 is therefore a bounded review
+candidate, not a retroactive claim of P02 acceptance. See GW-A05-P03.md.
+No independent AI worker spawning capability was available; isolated Linux
+build/test/differential jobs were executed concurrently and merged. Preserve
+A04 signing and all volatile trust invariants. Runtime 0.4.1, no network exposure,
+A06, AUTH-PRE bypass, vault, GUI or AI features. No GitHub writes. Stop after
+P03 for owner review. Older sections below document prior authority.
+
+## Current authority — A05-P02 implementation candidate, 2026-10-18
+
+The owner supplied A05-P01 Windows Debug/Release 40/40 evidence and instructed
+continuation to A05-P02. The exact accepted P01 package SHA-256 is
+`a1fcbe5839be69ce897ae2ba41d370b633c50ecf01a4db24aad48eb8186e060a`.
+P02 implements only a strict in-memory public CBOR codec (1/2/10) without
+sockets, new identity behavior, key persistence, authentication, E2EE, GUI or
+AI features. Read ADR-010 and GW-A05-P02; the restricted decoder is a security
+review candidate, not authorization for network exposure. Runtime is 0.4.1.
+Do not implement P03/A06 without new acceptance; no GitHub changes allowed.
+Older sections below are historical.
+
 # GhostWire coding-agent contract
+
+## Current authority — A05-P01 design review candidate, 2026-10-17
+
+The owner accepted GW-A04-P03 and expressly authorized only
+GW-A05-P01-PROTOCOL-SCHEMA-VERSIONING-DESIGN. Verified accepted P03 input
+SHA-256 `aa52cb195c16a765b2118d62c7cb4b2a1e0a97a89831c9cd229390ea674e0ff4`;
+its tracked git tree exactly equals published `main` commit
+`01e70b317ff33527be991b0674dc6f93cccd4d1f`. Hosted Linux, Windows
+and macOS jobs for that commit completed successfully (2026-10-17).
+A05-P01 is documentation/schema/test-plan design only, not an activated codec.
+Keep runtime 0.4.1 / A04-P03, preserve A04 public signing bytes and every
+A11-PRE/AUTH-PRE boundary, and do not implement networking or private storage.
+See ADR-009, PROTOCOL_SCHEMA.md, PROTOCOL_TEST_PLAN.md and the P01 report.
+Stop after P01 for owner design review. Old authority sections are historical.
 
 ## Current authority — A04-P03, 2026-10-16
 

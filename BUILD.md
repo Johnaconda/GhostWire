@@ -47,9 +47,9 @@ of the old workaround shell), leave TEMP/TMP unchanged, then from the source roo
 
 ```powershell
 Set-Location 'C:\Cumpiling-shit\GhostWire'
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\dev-windows.ps1 -Action diagnostics -OfflineTests
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\dev-windows.ps1 -Action all -Configuration Debug -OfflineTests -Fresh
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\dev-windows.ps1 -Action all -Configuration Release -OfflineTests -Fresh
+.\tools\windows\dev-windows.ps1 -Action diagnostics -OfflineTests
+.\tools\windows\dev-windows.ps1 -Action all -Configuration Debug -OfflineTests -Fresh
+.\tools\windows\dev-windows.ps1 -Action all -Configuration Release -OfflineTests -Fresh
 .\out\build\portable-release\bin\ghostwire-cli.exe --version
 .\out\build\portable-release\bin\ghostwire-server.exe --help
 .\out\build\portable-release\bin\ghostwire-cli.exe --check-config --config .\examples\config\ghostwire.conf
@@ -91,7 +91,7 @@ git clone https://github.com/microsoft/vcpkg.git .\out\tools\vcpkg
 git -C .\out\tools\vcpkg checkout --detach 9e593bb18ea69cc5095e012465dcd675a822ed0d
 .\out\tools\vcpkg\bootstrap-vcpkg.bat -disableMetrics
 $env:VCPKG_ROOT = (Resolve-Path .\out\tools\vcpkg).Path
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\dev-windows.ps1 -Action all -Configuration Debug -VcpkgRoot $env:VCPKG_ROOT
+.\tools\windows\dev-windows.ps1 -Action all -Configuration Debug -VcpkgRoot $env:VCPKG_ROOT
 ```
 
 Do not update somebody else's vcpkg checkout automatically. The manifest pins
@@ -101,8 +101,8 @@ vcpkg tool and compiler versions. Workflows use the pinned checkout above.
 ### Offline test dependency
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\dev-windows.ps1 -Action all -Configuration Debug -OfflineTests
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\dev-windows.ps1 -Action all -Configuration Release -OfflineTests
+.\tools\windows\dev-windows.ps1 -Action all -Configuration Debug -OfflineTests
+.\tools\windows\dev-windows.ps1 -Action all -Configuration Release -OfflineTests
 .\out\build\portable-release\bin\ghostwire-cli.exe --version
 ```
 
@@ -137,8 +137,8 @@ Ordinary PowerShell need not recognize `ctest` globally. Re-run registered tests
 through the discovery script:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\dev-windows.ps1 -Action test -Configuration Debug -OfflineTests
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\dev-windows.ps1 -Action test -Configuration Release -OfflineTests
+.\tools\windows\dev-windows.ps1 -Action test -Configuration Debug -OfflineTests
+.\tools\windows\dev-windows.ps1 -Action test -Configuration Release -OfflineTests
 ```
 
 HF01 checks host/target x64, compiler/linker directories, foreign linker shadowing,

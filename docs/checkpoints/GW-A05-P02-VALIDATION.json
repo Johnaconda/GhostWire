@@ -1,0 +1,59 @@
+{
+  "checkpoint": "GW-A05-P02-STRICT-VERSIONED-WIRE-CODEC",
+  "implementation": "candidate_in_memory_codec_no_network",
+  "input": "GHOSTWIRE-GW-A05-P01-PROTOCOL-SCHEMA-VERSIONING-DESIGN-source.zip",
+  "input_sha256": "a1fcbe5839be69ce897ae2ba41d370b633c50ecf01a4db24aad48eb8186e060a",
+  "input_zip_crc": "pass",
+  "input_manifest": "verified_prior_checkpoint",
+  "published_main_at_start": "01e70b317ff33527be991b0674dc6f93cccd4d1f",
+  "published_main_relation": "prior A04-P03, no push performed",
+  "owner_p01_windows": {
+    "msvc": "19.51.36260",
+    "debug_ctest": "40/40 PASS",
+    "release_ctest": "40/40 PASS",
+    "p02_windows": "not_run"
+  },
+  "runtime_unchanged": "0.4.1 / A04-P03",
+  "host": "Linux x86_64, GCC 14.2, Clang 17.0.0, CMake/Ninja",
+  "local_debug": {
+    "configure": "PASS",
+    "build": "PASS",
+    "ctest": "42/42 PASS",
+    "cmd": "cmake -S . -B /mnt/data/gw_a05_build -G Ninja -DCMAKE_BUILD_TYPE=Debug -DGW_TEST_DEPENDENCY=vendored && cmake --build /mnt/data/gw_a05_build -j 4 && ctest --test-dir /mnt/data/gw_a05_build --output-on-failure -j 4"
+  },
+  "local_release": {
+    "configure": "PASS",
+    "build": "PASS",
+    "ctest": "42/42 PASS",
+    "cmd": "cmake -S . -B /mnt/data/gw_a05_release -G Ninja -DCMAKE_BUILD_TYPE=Release -DGW_TEST_DEPENDENCY=vendored && cmake --build /mnt/data/gw_a05_release -j 5 && ctest --test-dir /mnt/data/gw_a05_release --output-on-failure -j 4",
+    "note": "vendored Botan GCC optimization emitted upstream -Wstringop-overread warning; project build succeeded"
+  },
+  "protocol_test": "PASS (9 doctest cases; 2 independent frozen positive, 16 frozen negative, additional fault and signed A04 carrier tests, 15000 seeded mutations)",
+  "python_reference": "PASS (2 frozen positive / 16 negative cases)",
+  "boundary_checker": "PASS",
+  "fuzz": {
+    "tool": "Clang 17 libFuzzer + AddressSanitizer + UndefinedBehaviorSanitizer",
+    "runs": 20000,
+    "result": "PASS (no detected sanitizer failures, max_len=4096, seed=2690277414)",
+    "limit": "not comprehensive; no external security audit or sustained corpus run"
+  },
+  "github_ci_for_p02": "not_run_no_publish",
+  "owner_p02_acceptance": "pending",
+  "not_implemented": [
+    "network listeners",
+    "E2EE",
+    "remote authentication",
+    "persistent private keys",
+    "public discovery",
+    "GUI",
+    "AI integrations",
+    "future protocol kinds"
+  ],
+  "open_gates": [
+    "Windows Debug/Release on owner host",
+    "macOS/Windows P02 hosted CI",
+    "independent parser security audit",
+    "upstream library interoperability and sustained fuzzing",
+    "network exposure approval"
+  ]
+}

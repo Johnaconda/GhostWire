@@ -28,17 +28,25 @@ for folder in ['src/identity', 'include/ghostwire/identity']:
         for name in re.findall(r'#include\s*[<"]ghostwire/([^">]+)[">]', path.read_text()):
             if not name.startswith(('identity/', 'crypto/')) and name not in {'core/result.hpp', 'core/clock.hpp'}:
                 errors.append(f'{path.relative_to(root)} includes forbidden {name}')
+# Protocol has a value-only edge and must never import identity, crypto, or platform.
+for folder in ['src/protocol', 'include/ghostwire/protocol']:
+    for path in (root / folder).rglob('*'):
+        if path.suffix not in {'.cpp', '.hpp'}:
+            continue
+        for name in re.findall(r'#include\s*[<"]ghostwire/([^">]+)[">]', path.read_text()):
+            if not name.startswith('protocol/') and name != 'core/result.hpp':
+                errors.append(f'{path.relative_to(root)} includes forbidden {name}')
 for folder in ['src/core', 'include/ghostwire/core']:
     for path in (root / folder).rglob('*'):
         if path.suffix in {'.cpp', '.hpp'} and re.search(
-                r'#include\s*[<"]ghostwire/(?:identity|composition)/', path.read_text()):
+                r'#include\s*[<"]ghostwire/(?:identity|composition|protocol)/', path.read_text()):
             errors.append(f'{path.relative_to(root)} introduces a reverse identity/composition dependency')
 for path in (root / 'include/ghostwire').rglob('*.hpp'):
     if re.search(r'#include\s*[<"](?:botan|windows\.h|bcrypt\.h)|\bBotan::', path.read_text()):
         errors.append(f'{path.relative_to(root)} exposes a backend/native dependency')
-for folder in ['src/core', 'src/platform', 'src/crypto', 'src/identity', 'src/composition',
+for folder in ['src/core', 'src/platform', 'src/crypto', 'src/identity', 'src/composition', 'src/protocol',
                'include/ghostwire/core', 'include/ghostwire/platform', 'include/ghostwire/crypto',
-               'include/ghostwire/identity', 'include/ghostwire/composition']:
+               'include/ghostwire/identity', 'include/ghostwire/composition', 'include/ghostwire/protocol']:
     for path in (root / folder).rglob('*'):
         if path.suffix not in {'.cpp', '.hpp'}:
             continue

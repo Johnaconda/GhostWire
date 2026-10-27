@@ -1,0 +1,63 @@
+{
+  "checkpoint": "GW-A05-P04-PARTIAL-UPSTREAM-CBOR-GATE",
+  "date": "2026-10-19",
+  "status": "partial_implementation_candidate_upstream_gate_open",
+  "runtime": "0.4.1 unchanged",
+  "input": "GHOSTWIRE-GW-A05-P03-CODEC-SECURITY-AND-DIFFERENTIAL-source.zip",
+  "input_sha256": "3f83e94a0d2852eea2bd824e265e2854a3abcdbff5fe0d07336cf2be564086b6",
+  "input_zip_crc": "PASS",
+  "input_source_manifest": "PASS 230/230",
+  "source_repository_main": "01e70b317ff33527be991b0674dc6f93cccd4d1f (older A04-P03 main; no pushes)",
+  "platform": "Linux x86_64, GCC 14.2.0, Clang 17.0.0, Ninja/CMake",
+  "parallelism": "separate GNU Debug/Release and Clang ASan/UBSan OS build processes, no independent AI coding agents",
+  "linux_gcc_debug": {
+    "configure": "PASS",
+    "build": "PASS",
+    "ctest": "44/44 PASS",
+    "reference_cpp_differential": "4005/4005 PASS (916 accepted, 3089 rejected)"
+  },
+  "linux_gcc_release": {
+    "configure": "PASS",
+    "build": "PASS",
+    "ctest": "44/44 PASS",
+    "reference_cpp_differential": "4005/4005 PASS (916 accepted, 3089 rejected)",
+    "compiler_note": "GCC libstdc++ emits one optimizer -Wstringop-overread warning; no new protocol compiler error"
+  },
+  "clang_asan_ubsan": {
+    "configure": "PASS",
+    "test_targets_compile": "PASS",
+    "protocol_doctest": "10/10 cases, 268/268 assertions PASS",
+    "allocation_fault_executable": "PASS",
+    "reference_cpp_differential": "4005/4005 PASS"
+  },
+  "clang_fuzzer": {
+    "result": "PASS (no detected crash)",
+    "runs": 20000,
+    "seed": 2690580484,
+    "max_len": 2048
+  },
+  "source_checks": {
+    "boundary_checker": "PASS",
+    "frozen_binary_vector_shape": "PASS 2 positive and 16 negative",
+    "python_reference": "PASS 2 positive and 16 negative",
+    "tinycbor_importer_regressions": "PASS 5 negative/positive categories",
+    "missing_tinycbor_fail_closed_cmake": "PASS: configure refused optional dependency missing source",
+    "clang_format": "BLOCKED: clang-format executable absent from container"
+  },
+  "upstream": {
+    "library": "Intel TinyCBOR",
+    "tag": "v7.0",
+    "commit": "6442e749ca811e24afad1551338a45c75e09808f",
+    "license": "MIT",
+    "source_sha256_pins": "12 files checked against read-only GitHub source records and recorded in tools/protocol/tinycbor_pins.json",
+    "source_included": false,
+    "source_compiled": false,
+    "real_upstream_interoperability": "BLOCKED: upstream release source could not be imported into sandbox"
+  },
+  "native_owner_windows_tests": "NOT SUPPLIED for P02/P03/P04",
+  "macos_clang": "NOT RUN",
+  "native_32_bit": "NOT RUN",
+  "external_security_review": "NOT PERFORMED",
+  "network_parsing_authorized": false,
+  "github_writes": false
+}

@@ -1,0 +1,54 @@
+{
+  "checkpoint": "GW-A05-P04-HF08-ALLOCATION-FAULT-RECOVERY",
+  "authoritative_input": {
+    "archive": "GHOSTWIRE-GW-A05-P04-HF07-WINDOWS-ACCEPTANCE-RECOVERY-source(1).zip",
+    "sha256": "e770ab342de5f23f60f41cb3ad9233f78fad623c1a8ec1fb3f1034e3d14f9f71",
+    "source_manifest": "PASS 282/282"
+  },
+  "owner_native_baseline_evidence": {
+    "os": "Windows 10 x64",
+    "toolchain": "VS2026 MSVC 19.51.36260; CMake 4.3.1-msvc1",
+    "hf07_debug_ctest": "49/50 PASS; protocol-allocation-fault 15s timeout",
+    "hf07_release": "not run after Debug stop",
+    "hf08_debug": "not run; pending owner native acceptance",
+    "hf08_release": "not run; pending owner native acceptance"
+  },
+  "linux": {
+    "os": "Debian GNU/Linux 13",
+    "toolchain": "GCC 14.2.0; CMake 3.31.6; Ninja 1.12.1; Python 3.13.5",
+    "hf07_baseline_target_fault": "PASS 1/1 in 0.02s; no native MSVC reproduction",
+    "hf08_debug_configure": "PASS (vendored, GW_WARNINGS_AS_ERRORS ON)",
+    "hf08_debug_build": "PASS all targets",
+    "hf08_debug_full_ctest": "PASS 52/52",
+    "hf08_debug_fault": "PASS 2/2 (scoped and original global Linux-only)",
+    "hf08_debug_log": "docs/checkpoints/GW-A05-P04-HF08-LINUX-DEBUG-CTEST.txt",
+    "hf08_release_configure": "PASS (vendored, GW_WARNINGS_AS_ERRORS ON)",
+    "hf08_release_build": "PASS all targets",
+    "hf08_release_full_ctest": "PASS 52/52",
+    "hf08_release_fault": "PASS 2/2 (scoped and original global Linux-only)",
+    "hf08_release_log": "docs/checkpoints/GW-A05-P04-HF08-LINUX-RELEASE-CTEST.txt",
+    "differential_reference_debug": "PASS 4023 (918 accepted, 3105 rejected)",
+    "differential_reference_release": "PASS 4023 (918 accepted, 3105 rejected)",
+    "production_library_fault_symbol": "ABSENT (nm -u libghostwire_protocol.a)",
+    "boundary_check": "PASS",
+    "clang_17_asan_ubsan_fault_standalone": "PASS exit 0; ASAN_OPTIONS=detect_leaks=0; UBSAN_OPTIONS=halt_on_error=1",
+    "clang_format_check": "NOT RUN - clang-format unavailable in local PATH",
+    "third_party_release_warning": "GCC 14.2 existing -Wstringop-overread in unchanged vendored Botan amalgamation; non-fatal"
+  },
+  "tinycbor": {
+    "offline_import_guard": "PASS 18 scenarios (and included in full CTest)",
+    "real_upstream_native_interop": "NOT RUN - verified pinned upstream library not imported/compiled",
+    "independent_security_review": "NOT DONE",
+    "network_parser_approval": "NOT GRANTED"
+  },
+  "change_limit": {
+    "production_protocol_bytes": "Unchanged source behavior; test-only private macro and differential checks",
+    "runtime_version": "0.4.1 unchanged",
+    "a06_transport": "NOT IMPLEMENTED",
+    "private_key_persistence": "NOT IMPLEMENTED",
+    "github_publication": "NOT PERFORMED",
+    "owner_windows_10pct_gate": "BLOCKED pending native x64 Debug/Release tests"
+  },
+  "engineering_confidence": 0.87,
+  "project_completion_percent": null
+}

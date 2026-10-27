@@ -54,3 +54,12 @@ Runner images and system compilers still evolve; CI must record their versions.
 These pins establish a reproducible starting point, not a claim that every tool
 is the latest release or free of vulnerabilities. Reassess advisories before
 publishing a release. Other future candidate libraries are not shipped here.
+
+### TinyCBOR (optional, not included)
+
+An opt-in test-only source importer pins Intel TinyCBOR v7.0 / commit
+`6442e749ca811e24afad1551338a45c75e09808f` under the MIT license.
+**No TinyCBOR code is distributed or linked in this checkpoint.** If the owner
+separately imports the verified upstream sources, their original `LICENSE` and
+file copyright notices must be retained in subsequent source/binary deliveries.
+See `third_party/tinycbor/README.md` and `tools/protocol/tinycbor_pins.json`.

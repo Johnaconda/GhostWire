@@ -1,0 +1,226 @@
+{
+  "checkpoint": "GW-A05-P04-HF09-MSVC-EXCEPTION-CONTRACT",
+  "basis": "Verified cumulative GW-A05-P04-HF02 ZIP SHA-256 ea0a758a93393c836d548ebd3e61216ef48365591c6fd401ad83baedae291f22",
+  "scope": "Offline A05 protocol and development tooling only",
+  "worker_model": "Independent source worktrees and task ownership, coordinator-authored code, parallel build/test processes; NOT independently spawned AI models",
+  "confidence_rule": {
+    "minimum_integration_score_exclusive": 0.8,
+    "interpretation": "Engineering judgment supported by deterministic tests and inspection; not a calibrated probability or proof of security",
+    "production_network_gate": "Separate. A confidence score cannot authorize network exposure."
+  },
+  "completed_workstreams": [
+    {
+      "id": "GW-DEV-01",
+      "owner": "worker-codec",
+      "files": [
+        "src/protocol/wire_codec.cpp",
+        "tests/fixtures/protocol/allocation_fault.cpp",
+        "tests/unit/protocol_tests.cpp"
+      ],
+      "change": "Exact-length output preflight before allocation, byte/work budget admission, allocation-free rejection test, size-boundary roundtrips",
+      "confidence": 0.91,
+      "basis": "Deterministic protocol-unit and allocation-fault checks; Linux full regression pending final evidence"
+    },
+    {
+      "id": "GW-DEV-02",
+      "owner": "worker-importer",
+      "files": [
+        "tools/protocol/import_tinycbor.py",
+        "tools/protocol/test_tinycbor_import.py"
+      ],
+      "change": "Reject symlinked source ancestors and nonregular sources; reject mixed-root, case-colliding and non-normalized upstream ZIP inputs",
+      "confidence": 0.9,
+      "basis": "Offline positive/negative synthetic importer suite; cannot replace actual pinned TinyCBOR compilation"
+    },
+    {
+      "id": "GW-DEV-03",
+      "owner": "worker-coordinator",
+      "files": [
+        "CMakeLists.txt",
+        "tools/development/merge_worker_deliveries.py",
+        "tools/development/test_worker_merge.py"
+      ],
+      "change": "Offline checksum-pinned worker delivery merging with non-overlapping source ownership and rollback-on-reject",
+      "confidence": 0.88,
+      "basis": "Integration applied to the real 240-file baseline; synthetic conflicting/malicious delivery tests"
+    }
+  ],
+  "next_queue": [
+    {
+      "id": "GW-UPSTREAM-ACTUAL",
+      "status": "awaiting_verified_remote_source_execution",
+      "dependency": "Explicit fetch utility added; actual pinned C build and interop still blocked in this sandbox",
+      "files_owner": "third_party/tinycbor/verified, tests/interop",
+      "acceptance": "Pinned 12 SHA-256 digests; opt-in native build; full frozen and generated corpus agreement; compare strict schema rejects separately"
+    },
+    {
+      "id": "GW-SEC-RESOURCE",
+      "status": "completed_hf06_verified_linux",
+      "dependency": "Integrated A05-HF01 tree",
+      "files_owner": "tests/fuzz, tests/unit",
+      "acceptance": "51/51 GCC Debug/Release full CTest, focused ASan/UBSan 2/2, budget/cancel/deadline/lease and allocation fault regression; source-runtime behavior unchanged"
+    },
+    {
+      "id": "GW-PARSER-DECISION",
+      "status": "blocked",
+      "dependency": "GW-UPSTREAM-ACTUAL and independent parser/security review",
+      "files_owner": "docs/decisions, docs/security",
+      "acceptance": "Written maintain/replace decision for restricted reader; no silent networking approval"
+    },
+    {
+      "id": "GW-A06-TRANSPORT",
+      "status": "deferred",
+      "dependency": "A05 security gates and separate bounded authorization",
+      "files_owner": "not assigned",
+      "acceptance": "No sockets, discovery, authentication, remote authorization or GUI via current batch"
+    }
+  ],
+  "hf02_delivery_model": "Three scoped coordinator-authored work areas and independent OS validation jobs, NOT autonomous agent delegates",
+  "hf02_completed_workstreams": [
+    {
+      "id": "GW-HF02-PROBE",
+      "owner": "test-probe-workstream",
+      "files": [
+        "tests/interop/bounded_hex_line.hpp",
+        "tests/interop/tinycbor_probe.cpp",
+        "tests/fixtures/protocol/probe.cpp",
+        "tools/protocol/test_probe_bounds.py"
+      ],
+      "change": "Bound raw stdin line memory; reject and recover after oversized test records",
+      "confidence": 0.93,
+      "basis": "47/47 GCC Debug/Release CTest, Clang ASan/UBSan standalone bound-reader test"
+    },
+    {
+      "id": "GW-HF02-FETCH",
+      "owner": "source-integrity-workstream",
+      "files": [
+        "tools/protocol/fetch_tinycbor.py",
+        "tools/protocol/test_tinycbor_fetch.py"
+      ],
+      "change": "Explicit immutable-commit HTTPS fetch, 12 pinned-file SHA-256 gate, bounded download and exclusive output publication",
+      "confidence": 0.89,
+      "basis": "6 offline synthetic network/failure tests; actual HTTPS downloading UNRUN here"
+    },
+    {
+      "id": "GW-HF02-INTEROP",
+      "owner": "differential-evidence-workstream",
+      "files": [
+        "tools/protocol/differential_check.py"
+      ],
+      "change": "Include original 18 frozen vectors in every C++/Python and optional upstream comparison",
+      "confidence": 0.92,
+      "basis": "4023 reference/C++ agreement on GCC Debug and Release; real TinyCBOR still UNRUN"
+    }
+  ],
+  "hf03_completed_workstreams": [
+    {
+      "id": "GW-HF03-INTEROP",
+      "owner": "interop-review",
+      "files": [
+        "tools/protocol/differential_check.py",
+        "tools/protocol/test_interop_gate.py",
+        "CMakeLists.txt"
+      ],
+      "change": "Validate five upstream CBOR-canonical rejects AND five generic-CBOR-accepted / GhostWire-rejected controls; offline fault injection",
+      "confidence": 0.92,
+      "basis": "16 synthetic comparator fault checks; real TinyCBOR source execution UNRUN"
+    },
+    {
+      "id": "GW-HF03-IMPORT",
+      "owner": "source-integrity-review",
+      "files": [
+        "tools/protocol/import_tinycbor.py",
+        "tools/protocol/test_tinycbor_import.py"
+      ],
+      "change": "Refuse broken symlink target and preserve existing vendor source on import publication",
+      "confidence": 0.9,
+      "basis": "18 offline importer scenarios, including symlink and first-publish behavior"
+    }
+  ],
+  "hf05_structuring": {
+    "rule_source": "docs/development/STRUCTURE_RULES.md",
+    "module_registry": "docs/development/MODULE_REGISTRY.json",
+    "validated_modules": 26,
+    "project_completion_percent": null,
+    "completed_scoped_tasks": [
+      "GW-DEV-STRUCTURE-HF05",
+      "GW-DEV-DOCS-HF05"
+    ],
+    "next_ready_task": null,
+    "open_external_dependency": "GW-A05-UPSTREAM-INTEROP",
+    "windows_acceptance": "deferred per owner preference",
+    "parallel_agents": "not available in this environment; run independent OS tests/isolated worktrees without claiming distinct agents"
+  },
+  "hf06_completed_workstreams": [
+    {
+      "id": "GW-A05-RESOURCE-REVIEW",
+      "owner": "protocol-security",
+      "files": [
+        "tests/unit/protocol_tests.cpp",
+        "tests/fixtures/protocol/allocation_fault.cpp"
+      ],
+      "confidence": 0.91,
+      "basis": "51/51 Linux GCC Debug full CTest (Release in separate evidence); edge-case workload budgets, cancellation, deadlines, lease recovery; still no independent upstream security certification"
+    },
+    {
+      "id": "GW-DEV-EFFORT-HF06",
+      "owner": "project-structure",
+      "files": [
+        "tools/development/effort_forecast.py",
+        "tools/development/test_effort_forecast.py",
+        "docs/development/PROJECT_EFFORT_FORECAST.json"
+      ],
+      "confidence": 0.91,
+      "basis": "7 deterministic unittest cases; validated 110-point provisional weight set over all 26 existing modules; does not certify official progress"
+    }
+  ],
+  "hf06_windows_gates": {
+    "approximate_current_fully_verified_floor": "10.0 percent of 110 provisional effort points",
+    "owner_acceptance": "Windows 10 percent gate offered with this cumulative package; owner still must test and accept",
+    "official_percent": null,
+    "future_gates": [
+      20,
+      30,
+      40,
+      50,
+      60,
+      70,
+      80,
+      90,
+      100
+    ],
+    "note": "Security-critical prerequisites can force additional gates; no automatic Windows acceptance asserted"
+  },
+  "hf06_next_ready_task": null,
+  "hf06_next_blocker": "GW-A05-UPSTREAM-INTEROP - must compile verified TinyCBOR and obtain independent parser review before network exposure",
+  "hf08_fault_recovery": {
+    "workstream": "Single scoped coordinator change; no independent coding agents invoked",
+    "files_owned": [
+      "src/protocol/wire_codec.cpp",
+      "tests/fixtures/protocol/allocation_fault.cpp",
+      "CMakeLists.txt"
+    ],
+    "implementation": "Compile test-only copy of the restricted codec, deterministic std::bad_alloc injection at encode reserve and decode DeviceSet assignment; remove process-wide new replacement; production target unchanged",
+    "confidence": 0.87,
+    "linux_strong_global_allocator_regression": "Original HF07 override preserved in dedicated Linux-only executable, excluded from MSVC and sanitizers",
+    "confidence_limit": "Linux verification does not establish Windows hang root cause or Windows acceptance",
+    "windows_owner_10pct_gate": "HF08 native MSVC C4297/C2220 compile error; resolved in HF09 source candidate; x64 Debug/Release acceptance still pending",
+    "next_dependencies": [
+      "GW-A05-WINDOWS-10PCT-HF09 owner native acceptance",
+      "GW-A05-UPSTREAM-INTEROP pinned library compilation",
+      "GW-A05-PARSER-DECISION independent security review"
+    ],
+    "forbidden": "No A06 transport, unreviewed networking, persistent private keys, or GitHub push"
+  },
+  "hf09_msvc_exception_contract": {
+    "workstream": "Single scoped coordinator correction; no independent agents invoked",
+    "source_files": [
+      "src/protocol/wire_codec.cpp",
+      "tests/fixtures/protocol/allocation_fault.cpp"
+    ],
+    "correction": "Use C++-linked test-only function explicitly noexcept(false), since /EHc assumes extern C does not throw",
+    "confidence": 0.92,
+    "native_windows": "owner x64 HF08 failed C4297 at build; HF09 not yet tested",
+    "security_invariants": "Production target unchanged, no /WX weakening, no A06 transport, no GitHub push"
+  }
+}

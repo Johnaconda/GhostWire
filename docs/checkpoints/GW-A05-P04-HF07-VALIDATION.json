@@ -1,0 +1,18 @@
+{
+  "checkpoint": "GW-A05-P04-HF07-WINDOWS-ACCEPTANCE-RECOVERY",
+  "baseline_source_archive": "GHOSTWIRE-GW-A05-P04-HF06-RESOURCE-REVIEW-AND-10PCT-GATE-source.zip",
+  "baseline_sha256": "39dfc8a7d4388ce5cafd6aee78f46e49841e746636849455279004a89d4420cc",
+  "baseline_source_manifest": "PASS 278/278",
+  "linux_importer_test": "PASS 18 scenarios",
+  "emulated_windows_zip_normalization": "PASS 18 scenarios",
+  "linux_gcc_debug_full_ctest": "PASS 51/51",
+  "linux_gcc_release_full_ctest": "PASS 51/51",
+  "windows_ctest": "OWNER RERUN REQUIRED; previous HF06: missing test executables and importer backslash test failure",
+  "network_parser_security": "BLOCKED actual pinned upstream library execution and independent review",
+  "runtime_version": "0.4.1 (unchanged)",
+  "executable_cpp_code_changed": false,
+  "project_percentage_official": null,
+  "github_publication": "NOT PERFORMED",
+  "engineering_confidence": 0.9,
+  "release_compiler_note": "GCC 14.2 optimization warning in unchanged pinned Botan amalgamation; no compilation error"
+}

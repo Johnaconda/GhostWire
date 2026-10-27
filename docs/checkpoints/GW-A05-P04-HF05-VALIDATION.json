@@ -1,0 +1,26 @@
+{
+  "checkpoint": "GW-A05-P04-HF05-STRUCTURE-AND-SAFE-DOCS",
+  "baseline_archive": "GHOSTWIRE-GW-A05-P04-HF04-PROBE-VERDICT-INTEGRITY-source.zip",
+  "baseline_sha256": "f6a3caf643c19cf373a2f269dc98e7ef529019cfe2314366e25bf7183f4e39bd",
+  "baseline_source_manifest": "PASS 261/261",
+  "baseline_zip_integrity": "PASS CRC, path safety, unique member names",
+  "runtime_version": "0.4.1",
+  "source_runtime_changes": false,
+  "linux_gcc_debug_ctest": "PASS 50/50",
+  "linux_gcc_release_ctest": "PASS 50/50",
+  "module_registry": "PASS 26 modules and 6 tasks; 13 negative/positive unittest scenarios",
+  "windows_docs": "PASS 3 unittest scenarios covering 14 updated documents and command hygiene",
+  "architecture_boundary": "PASS",
+  "subjective_engineering_confidence": {
+    "module_registry": 0.92,
+    "windows_documentation": 0.9
+  },
+  "actual_upstream_tinycbor_execution": "UNRUN remote source retrieval blocked by DNS; no claim of interop",
+  "owner_windows_acceptance": "UNRUN deferred by owner",
+  "macos_validation": "UNRUN",
+  "windows_defender_rescan": "UNRUN; original HF01 severe detection remains unresolved as AV finding",
+  "github_publication": "NOT_PERFORMED",
+  "claimed_project_percent": null,
+  "next_dependency_ready_task": "GW-A05-RESOURCE-REVIEW",
+  "next_external_blocker": "GW-A05-UPSTREAM-INTEROP"
+}

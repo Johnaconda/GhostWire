@@ -1,5 +1,14 @@
 # Module map and source ownership
 
+## P01 protocol design only (no module yet)
+
+`schemas/ghostwire-wire-v1.cddl` is a proposed schema artifact, not a linked
+protocol implementation. ADR-009, PROTOCOL_SCHEMA.md and PROTOCOL_TEST_PLAN.md
+describe a future strict `ghostwire_protocol` codec and explicit application
+composition. P01 introduces no `include/ghostwire/protocol` or `src/protocol`,
+no library target, service, socket, encryption or persistence.
+
+
 ## P03 scoped update
 
 P03 refines IdentityService::delete_membership: invalidate matching self-trust

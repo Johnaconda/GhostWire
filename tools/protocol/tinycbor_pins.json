@@ -1,0 +1,21 @@
+{
+  "upstream": "https://github.com/intel/tinycbor",
+  "tag": "v7.0",
+  "commit": "6442e749ca811e24afad1551338a45c75e09808f",
+  "license": "MIT",
+  "mode": "audited-test-only-optional-import",
+  "files": {
+    "LICENSE": [1074, "3c6ba0b5bfa7830505301ffb336a17b0748e0d61c4d34216e9dc98f10e40395e"],
+    "src/cbor.h": [27945, "4de3076ed4c09c81388a9e70387cc551c16b8312b2a4cae3014fcafb2cb37cff"],
+    "src/cborparser.c": [56964, "28f5f23480108ddf4a4c6666a3e7f036ca7f13b001f2f748c428b7d17c858893"],
+    "src/cborvalidation.c": [21838, "e14f20a04f268d3379e8681ffeb3b8b9a0eb61e65583c4e2699c23b808760b3b"],
+    "src/cborinternal_p.h": [10965, "aedf9a9b0dd24e50a45cbfac8949c0226e674bcc8d6d3e877ac1599e87aa6660"],
+    "src/cborinternalmacros_p.h": [1548, "10deb0959b71262595396564e9083e2e888885918404efee5a3fc26dfa2fb7d2"],
+    "src/compilersupport_p.h": [8719, "08a613f3e67a3a159ff9d7a9d8394579def058ce1f18fe9f88041803f389aaaf"],
+    "src/memory.h": [1481, "e2c454d07bc2c3a0a5f5bea8c6cbe40567c566f228cb80d3d7989dd020a09220"],
+    "src/utf8_p.h": [2996, "110af1a73417d83b8096a356d271f5f21b773a1179b063c568d74d99e215bbde"],
+    "src/cborerrorstrings.c": [7898, "c5b8931317863f936011dfe0c1e437a434e9d4501cd91bedc06596fabc9e1a52"],
+    "src/cborparser_dup_string.c": [5404, "9aefece550836da12b9f465786213ebe436cff11feb56fe4184243610ff06944"],
+    "src/cborparser_float.c": [2172, "78c4222c48f38ae2ecf713803041047c255b84507801cc5f3c5b2e6b6b6b68a1"]
+  }
+}

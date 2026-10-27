@@ -1,0 +1,31 @@
+{
+  "checkpoint": "GW-A05-P04-HF06-RESOURCE-REVIEW-AND-10PCT-GATE",
+  "baseline_archive": "GHOSTWIRE-GW-A05-P04-HF05-STRUCTURE-AND-SAFE-DOCS-source.zip",
+  "baseline_sha256": "d6fbc81c7a6346bdc3f6a4a89869a3de14569de153588ceda6db53e6218f703b",
+  "baseline_source_manifest": "PASS 270/270",
+  "linux_gcc_debug_full_ctest": "PASS 51/51",
+  "linux_gcc_release_full_ctest": "PASS 51/51",
+  "clang_address_undefined_sanitizer": "PASS 2/2 focused protocol tests; ASAN_OPTIONS=detect_leaks=0; this is not full leak validation",
+  "design_vectors": "PASS 2 positive and 16 negative (shape only)",
+  "registry_tests": "PASS 13/13",
+  "forecast_tests": "PASS 7/7",
+  "module_registry": "PASS 26 modules, 7 tasks; no ready task after resource review, upstream interop remains blocked",
+  "architecture_boundaries": "PASS",
+  "format_check": "UNRUN: clang-format executable absent (separate from compiler warnings as errors)",
+  "new_production_runtime_code_changes": false,
+  "runtime_version": "0.4.1",
+  "project_percentage_official": null,
+  "weighted_effort_forecast": "PROVISIONAL 11/110 accepted/verified module points = 10.0% weighted floor, not approved official project completion",
+  "user_windows_acceptance": "UNRUN; provisional 10% milestone checklist attached",
+  "macos_validation": "UNRUN",
+  "windows_defender_rescan": "UNRUN; previous serious HF01 detection not adjudicated here",
+  "real_tinycbor_interop": "BLOCKED: codeload.github.com DNS fails in current container; actual upstream parser never compiled here",
+  "external_security_review": "UNRUN; no network exposure authorization",
+  "github_publication": "NOT_PERFORMED",
+  "engineering_confidence": {
+    "protocol_resource_tests": 0.91,
+    "provisional_effort_tool": 0.91
+  },
+  "next_authoritative_task": "GW-A05-UPSTREAM-INTEROP blocked; independent parser review after real comparison",
+  "parallelism": "Separate validation builds used; no independent autonomous AI coding agents were launched"
+}

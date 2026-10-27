@@ -1,4 +1,21 @@
+## A05-P03 validated subset (candidate, not owner accepted)
+
+Codec advisory helper now verifies the exact registered local offer and selection.
+Added test-only C++ probe and deterministic Python-vs-C++ differential harness,
+without linking an external CBOR library to production. Actual test results,
+platform limitations and required follow-up are documented in
+[GW-A05-P03](checkpoints/GW-A05-P03.md).
+
 # Completed implementation records
+
+## A05-P01 documentation-only proposal (no implemented protocol)
+
+The owner accepted A04-P03 and authorized A05-P01 **design**. ADR-009,
+PROTOCOL_SCHEMA.md, CDDL and prospective test vectors/plan are prepared for
+review, not yet owner-accepted. No wire codec, runtime version update, network
+feature or persistence was implemented. Existing implementation remains P03
+0.4.1; do not count this entry as completed protocol functionality.
+
 
 ## P03 scoped hardening
 

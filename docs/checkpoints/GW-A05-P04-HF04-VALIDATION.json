@@ -1,0 +1,18 @@
+{
+  "checkpoint": "GW-A05-P04-HF04-PROBE-VERDICT-INTEGRITY",
+  "baseline": "GW-A05-P04-HF03-INTEROP-VERDICT-GUARD",
+  "runtime_version": "0.4.1",
+  "linux_gcc_debug_ctest": "PASS 48/48",
+  "python_cpp_differential": "PASS 4023/4023, 918 accepted, 3105 rejected",
+  "offline_interop_verdict_faults": "PASS 22/22",
+  "pinned_downloader_mock": "PASS 6",
+  "pinned_importer": "PASS 18",
+  "worker_merger": "PASS",
+  "real_tinycbor": "UNRUN: DNS resolution failed at fixed upstream download endpoint",
+  "windows": "UNRUN per owner request",
+  "macos": "UNRUN",
+  "release": "UNRUN",
+  "new_network_capabilities": false,
+  "confidence": 0.91,
+  "confidence_type": "subjective test-supported engineering estimate"
+}

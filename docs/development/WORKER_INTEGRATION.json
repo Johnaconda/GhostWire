@@ -1,0 +1,59 @@
+{
+  "baseline_manifest_sha256": "1138bc347465442fc9ca097a03a24b7f4e387428e1ed3a80824db1f4bea9225d",
+  "format": 1,
+  "merged_files": [
+    {
+      "operation": "replace",
+      "path": "CMakeLists.txt",
+      "sha256": "dccdafac31d0b26691a036a59535434a79f4cb103518ddf02b783b441aae7c5b",
+      "worker_id": "worker-coordinator"
+    },
+    {
+      "operation": "replace",
+      "path": "src/protocol/wire_codec.cpp",
+      "sha256": "4b640926cf202103e12b3328ea8358cf82b83f56ab6efc929cc49188629eebcf",
+      "worker_id": "worker-codec"
+    },
+    {
+      "operation": "replace",
+      "path": "tests/fixtures/protocol/allocation_fault.cpp",
+      "sha256": "ec55954f3f3bc0182e48cb2174f23024a982d00795f7ace7e52e8ac83670f81e",
+      "worker_id": "worker-codec"
+    },
+    {
+      "operation": "replace",
+      "path": "tests/unit/protocol_tests.cpp",
+      "sha256": "f1e3e531ee01b277b39f68be9513b96085c3406252fb9e932a2030481d7f32ea",
+      "worker_id": "worker-codec"
+    },
+    {
+      "operation": "add",
+      "path": "tools/development/merge_worker_deliveries.py",
+      "sha256": "8edfe87ed6a8138b2bba3883c7e3feb6cc4828bf4afe5d8dfd7ceba6cd183c34",
+      "worker_id": "worker-coordinator"
+    },
+    {
+      "operation": "add",
+      "path": "tools/development/test_worker_merge.py",
+      "sha256": "991dd5e346d9a9cd4603feb9bbfe797f4110f94c35d678530888f06089208395",
+      "worker_id": "worker-coordinator"
+    },
+    {
+      "operation": "replace",
+      "path": "tools/protocol/import_tinycbor.py",
+      "sha256": "d2296817c8e1a8ffe4c69b5514194a797ef353ec821953522c19ed3852e59817",
+      "worker_id": "worker-importer"
+    },
+    {
+      "operation": "replace",
+      "path": "tools/protocol/test_tinycbor_import.py",
+      "sha256": "15eab83c91c949420a871df6b0679ba4ba78bb4f2cdc748b34ef2117ed215c94",
+      "worker_id": "worker-importer"
+    }
+  ],
+  "workers": [
+    "worker-codec",
+    "worker-coordinator",
+    "worker-importer"
+  ]
+}

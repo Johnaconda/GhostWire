@@ -1,0 +1,67 @@
+{
+  "checkpoint": "GW-A05-P03-CODEC-SECURITY-AND-DIFFERENTIAL",
+  "date": "2026-10-18",
+  "status": "implementation_candidate_not_owner_accepted",
+  "input": "GHOSTWIRE-GW-A05-P02-STRICT-VERSIONED-WIRE-CODEC-source.zip",
+  "input_sha256": "858fc8d30db424622f72f652e1093dbb8b6e3c4b72a4546322dc321d585e9221",
+  "input_crc": "PASS",
+  "input_manifest": "PASS 222/222",
+  "main_at_inspection": "01e70b317ff33527be991b0674dc6f93cccd4d1f",
+  "published_main_relation": "main still A04-P03; no GitHub writes",
+  "owner_windows_a05_p02": "not_supplied",
+  "runtime": "0.4.1 unchanged",
+  "toolchain": "Linux x86_64 GCC 14.2.0 / Clang 17.0.0, CMake Ninja",
+  "workstreams": {
+    "parallel_model": "three separate OS processes with isolated build directories; not independently thinking AI coding agents",
+    "gcc_debug": {
+      "configure": "PASS", "build": "PASS", "ctest": "42/42 PASS",
+      "differential": "4005/4005 PASS",
+      "command": "cmake -S . -B builds/debug -G Ninja -DCMAKE_BUILD_TYPE=Debug -DGW_TEST_DEPENDENCY=vendored && cmake --build builds/debug -j 3 && ctest --test-dir builds/debug --output-on-failure -j 3 && python3 tools/protocol/differential_check.py builds/debug/bin/ghostwire-protocol-probe"
+    },
+    "gcc_release": {
+      "configure": "PASS", "build": "PASS", "ctest": "42/42 PASS",
+      "differential": "4005/4005 PASS",
+      "command": "cmake -S . -B builds/release -G Ninja -DCMAKE_BUILD_TYPE=Release -DGW_TEST_DEPENDENCY=vendored && cmake --build builds/release -j 3 && ctest --test-dir builds/release --output-on-failure -j 3 && python3 tools/protocol/differential_check.py builds/release/bin/ghostwire-protocol-probe"
+    },
+    "clang_asan_ubsan": {
+      "configure": "PASS", "protocol_test_targets_build": "PASS",
+      "doctest": "10/10 cases, 268/268 assertions PASS",
+      "differential": "4005/4005 PASS",
+      "command": "CC=clang CXX=clang++ cmake -S . -B builds/asan -G Ninja -DCMAKE_BUILD_TYPE=Debug -DGW_TEST_DEPENDENCY=vendored -DGW_ENABLE_SANITIZERS=ON && cmake --build builds/asan --target ghostwire-protocol-tests ghostwire-protocol-probe -j 2 && builds/asan/bin/ghostwire-protocol-tests --no-colors && python3 tools/protocol/differential_check.py builds/asan/bin/ghostwire-protocol-probe"
+    },
+    "libfuzzer": {
+      "result": "PASS no detected ASan/UBSan crashes", "executions": 30000,
+      "max_len": 2048, "seed": 2690580483,
+      "command": "clang++ -std=c++20 -g -O1 -fsanitize=fuzzer,address,undefined -fno-omit-frame-pointer -I include tests/fuzz/protocol_decode_fuzz.cpp src/protocol/wire_codec.cpp -o protocol-fuzz && ./protocol-fuzz -runs=30000 -max_len=2048 -seed=2690580483"
+    }
+  },
+  "other_checks": {
+    "boundary_checker": "PASS",
+    "frozen_design_vectors": "PASS 2 valid/16 invalid shape and prefix",
+    "python_reference": "PASS 2 valid/16 invalid",
+    "differential_breakdown_each_platform": {
+      "total": 4005, "accepted": 916, "rejected": 3089,
+      "property": "Python AST schema checker acceptance/rejection matches C++ and canonical re-encoding"
+    }
+  },
+  "upstream_library_audit": {
+    "QCBOR": "v1.6.1 930708bb86481e88879eb1d87fd4d664f1d69503 ref and license verified, not compiled/linked",
+    "TinyCBOR": "v7.0 6442e749ca811e24afad1551338a45c75e09808f ref and license verified, not compiled/linked",
+    "interop_execution": "BLOCKED; upstream sources unavailable for local build; current Python reference is test-only and not upstream maintained library"
+  },
+  "not_run": [
+    "Windows/MSVC A05-P02 and P03 Debug/Release",
+    "macOS/Clang A05-P03",
+    "actual maintained QCBOR/TinyCBOR interoperability",
+    "allocation fault injection",
+    "full local LeakSanitizer",
+    "independent external security audit",
+    "native 32-bit and end-to-end network/messaging tests"
+  ],
+  "no_implementation": [
+    "sockets", "authentication protocol", "E2EE", "remote permissions",
+    "private-key persistence", "discovery", "GUI", "AI runtime"
+  ],
+  "network_exposure": "BLOCKED; controlled finite-CBOR parser exception remains unresolved",
+  "owner_acceptance": "pending"
+}

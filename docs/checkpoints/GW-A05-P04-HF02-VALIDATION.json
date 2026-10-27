@@ -1,0 +1,64 @@
+{
+  "checkpoint": "GW-A05-P04-HF02-PINNED-FETCH-BOUNDED-INTEROP",
+  "date": "2026-10-19",
+  "source_baseline": "GW-A05-P04-HF01-SCOPED-PARALLEL-INTEGRATION",
+  "baseline_zip_sha256": "856562b80244c7545eac6718c9385cb958caddfed5e335e67ab7696ccf415e24",
+  "source_manifest_baseline": "PASS 247/247 SHA-256, ZIP CRC PASS",
+  "build_environment": "Linux x86_64; GCC 14, Clang 17, CMake + Ninja; no macOS or Windows execution",
+  "gcc_debug": {
+    "command": "cmake -S GhostWire -B out-debug -G Ninja -DCMAKE_BUILD_TYPE=Debug -DGW_DEPENDENCY_MODE=portable; cmake --build out-debug -j 2; ctest --test-dir out-debug --output-on-failure -j 2",
+    "configure": "PASS",
+    "build": "PASS",
+    "ctest": "PASS 47/47",
+    "notes": "Full native suite including newly registered upstream-fetch and probe-input regressions"
+  },
+  "gcc_release": {
+    "command": "cmake -S GhostWire -B out-release -G Ninja -DCMAKE_BUILD_TYPE=Release -DGW_DEPENDENCY_MODE=portable; cmake --build out-release -j 1; ctest --test-dir out-release --output-on-failure -j 2",
+    "configure": "PASS",
+    "build": "PASS",
+    "ctest": "PASS 47/47"
+  },
+  "differential_reference": {
+    "command": "python tools/protocol/differential_check.py BUILD/bin/ghostwire-protocol-probe",
+    "debug": "PASS 4023/4023",
+    "release": "PASS 4023/4023",
+    "accepted": 918,
+    "rejected": 3105,
+    "includes_frozen_design_vectors": 18,
+    "comment": "This is Python reference vs in-tree C++, not an actual maintained TinyCBOR test"
+  },
+  "probe_boundaries": {
+    "ctest": "PASS protocol-probe-stdin-bounds (Debug and Release)",
+    "clang_asan_ubsan": "PASS one focused C++ bounded-reader harness with 4MiB oversized input; detect_leaks=0",
+    "upstream_probe_execution": "UNRUN, no installed pinned upstream source"
+  },
+  "explicit_source_fetch": {
+    "networkless_mock_test": "PASS six scenarios: valid ZIP, existing output, tampering, truncation, redirect, size budget, invalid ZIP",
+    "real_https_fetch": "UNRUN: sandbox DNS and download access unavailable",
+    "pinned_source_compile": "UNRUN: actual TinyCBOR C sources unavailable",
+    "automatic_download_in_normal_build": false
+  },
+  "offline_tools": {
+    "importer_security_regression": "PASS 15 scenarios",
+    "worker_merger_security_regression": "PASS",
+    "architecture_boundary": "PASS",
+    "frozen_vector_shape": "PASS 2 positive / 16 negative"
+  },
+  "subjective_change_confidences": {
+    "bounded_probe": 0.93,
+    "pinned_acquisition": 0.89,
+    "frozen_corpus_integration": 0.92,
+    "definition": "Uncalibrated engineering confidence, not probability or external security approval"
+  },
+  "no_new_runtime_features": true,
+  "runtime_version": "0.4.1",
+  "remaining_gates": [
+    "Actual pinned TinyCBOR v7.0 C source execution and maintained-library interoperability UNRUN",
+    "Independent external parser/security review UNRUN",
+    "Windows 10 Visual Studio native HF02 tests UNRUN (waived as development prerequisite)",
+    "macOS/Clang native HF02 tests UNRUN",
+    "Public-network parser exposure NOT AUTHORIZED"
+  ],
+  "github_writes": false,
+  "autonomous_coding_agents": false
+}

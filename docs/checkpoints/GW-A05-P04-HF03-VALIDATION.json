@@ -1,0 +1,70 @@
+{
+  "checkpoint": "GW-A05-P04-HF03-INTEROP-VERDICT-GUARD",
+  "date": "2026-10-19",
+  "baseline": "GW-A05-P04-HF02-PINNED-FETCH-BOUNDED-INTEROP",
+  "baseline_sha256": "ea0a758a93393c836d548ebd3e61216ef48365591c6fd401ad83baedae291f22",
+  "runtime_version": "0.4.1",
+  "build_host": "Linux x86_64 GCC 14 with CMake and Ninja; no native Windows or macOS validation",
+  "gcc_debug": {
+    "command": "cmake -S GhostWire -B build-debug -G Ninja -DCMAKE_BUILD_TYPE=Debug; cmake --build build-debug -j 2; ctest --test-dir build-debug --output-on-failure -j 2",
+    "build": "PASS 67/67",
+    "ctest": "PASS 48/48",
+    "final_exact_source_rerun": "PASS 48/48"
+  },
+  "gcc_release": {
+    "command": "cmake -S GhostWire -B build-release -G Ninja -DCMAKE_BUILD_TYPE=Release; cmake --build build-release -j 2; ctest --test-dir build-release --output-on-failure -j 2",
+    "build": "PASS 67/67",
+    "ctest": "PASS 48/48",
+    "final_exact_source_rerun": "PASS 48/48",
+    "compiler_warning": "Existing pinned Botan amalgamation generated GCC -Wstringop-overread; outside this scoped patch, not suppressed"
+  },
+  "independent_reference_probe": {
+    "command": "python tools/protocol/differential_check.py BUILD/bin/ghostwire-protocol-probe",
+    "debug": "PASS",
+    "release": "PASS",
+    "corpus": 4023,
+    "accepted": 918,
+    "rejected": 3105,
+    "frozen_vectors": 18,
+    "seed": 2690580483,
+    "description": "Independent Python schema checker versus in-tree C++ finite codec; NOT actual TinyCBOR"
+  },
+  "offline_interop_verdict_guard": {
+    "command": "python tools/protocol/test_interop_gate.py",
+    "result": "PASS 16/16 fault checks",
+    "controls": "Five generic CBOR noncanonical inputs MUST reject; five generic canonical/GhostWire-invalid inputs MUST accept",
+    "upstream_execution": "NOT RUN"
+  },
+  "importer": {
+    "command": "python tools/protocol/test_tinycbor_import.py",
+    "result": "PASS 18 scenarios; symlink creation checks conditional on OS privileges",
+    "publisher_race_limit": "Cooperative same-owner filesystem only; not resilient to hostile concurrent filesystem mutation"
+  },
+  "other_checks": {
+    "boundary_check": "PASS",
+    "frozen_design_vector_shape": "PASS 2 valid / 16 negative",
+    "explicit_downloader_networkless_tests": "PASS 6 scenarios",
+    "worker_merger_regression": "PASS"
+  },
+  "real_upstream_fetch": {
+    "command": "python tools/protocol/fetch_tinycbor.py --acknowledge-network --output /mnt/data/gw_next_work/tinycbor-v7.0.zip",
+    "result": "BLOCKED; DNS resolution failed with [Errno -3] Temporary failure in name resolution",
+    "vendored_upstream_source": false,
+    "compiled_upstream_parser": false,
+    "upstream_interoperability": "UNRUN"
+  },
+  "native_windows": "UNRUN as instructed (not an integration prerequisite)",
+  "native_macos": "UNRUN",
+  "clang_sanitizers_hf03": "UNRUN; previously run checks validate older revisions only",
+  "network_exposure": "NOT AUTHORIZED",
+  "identity_and_cryptographic_runtime_changed": false,
+  "user_requested_minimum_subjective_confidence": 0.8,
+  "estimated_change_confidence": {
+    "upstream_interoperability_gate": 0.92,
+    "source_publication_refusal": 0.90,
+    "meaning": "Uncalibrated estimates for bounded code/test changes, not security guarantees"
+  },
+  "autonomous_ai_coding_workers": false,
+  "parallel_os_build_jobs": true,
+  "github_writes": false
+}

@@ -1,5 +1,17 @@
 # Architecture authority
 
+## GW-A05-P01 — proposed protocol design (no runtime change)
+
+After owner acceptance of A04-P03, P01 specifies a proposed RFC 8949
+deterministic CBOR wire envelope and bounded v1.0 negotiation/public-record
+carrier; see [PROTOCOL_SCHEMA](docs/architecture/PROTOCOL_SCHEMA.md),
+[ADR-009](docs/decisions/ADR-009-CANONICAL-PROTOCOL-SERIALIZATION.md)
+and [the negative test plan](docs/security/PROTOCOL_TEST_PLAN.md).
+This is design-only: no protocol target, network implementation, authentication,
+vault, listener or CLI behavior change. Existing A04 DeviceSet bytes/signature
+remain untouched. Runtime stays A04-P03 0.4.1. Older checkpoint status
+paragraphs below describe their historical delivery state.
+
 ## P03 hardening addendum
 
 P03 retains the P02 dependency graph, provider, ownership and volatile model.

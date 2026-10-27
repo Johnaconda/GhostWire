@@ -1,3 +1,14 @@
+## A05-P02 compiled dependency addition
+
+`ghostwire_protocol` is a new independent leaf library (public aliases
+`GhostWire::protocol`). It depends only on `ghostwire_contracts` (value-only
+headers), and `ghostwire_options` for private warnings/sanitizer configuration.
+It does not link `identity`, `crypto`, `core` implementation, `platform`,
+`composition`, any UI, or any socket. Test-only `ghostwire-protocol-tests` links
+`GhostWire::identity` to demonstrate that A04 signature/trust validation is
+separate; this does **not** add a production dependency. The boundary checker
+rejects prohibited protocol imports and reverse `core -> protocol` imports.
+
 # Dependency graph
 
 ## P03 scoped update
@@ -119,6 +130,15 @@ No new third-party runtime dependency is added.
 
 See [PLATFORM_ABSTRACTIONS.md](PLATFORM_ABSTRACTIONS.md). A platform adapter does
 not perform service lookup and service dependency IDs are not permissions.
+
+## Future A05 dependency proposal (not compiled in P01)
+
+`apps/composition -> protocol` and independently `apps/composition -> identity -> crypto`;
+`protocol` may use only public header-level core result/resource contracts.
+No `identity -> protocol`, `protocol -> crypto` for signature verification,
+`core -> protocol` service graph dependency, or transport/UI reference is added.
+The A04 signature validator stays in identity and receives complete bytes only
+under an explicit caller-selected trust scope. See PROTOCOL_SCHEMA.md.
 
 ## A03 runtime ownership
 

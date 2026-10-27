@@ -1,0 +1,51 @@
+{
+  "checkpoint": "GW-A05-P04-HF01-SCOPED-PARALLEL-INTEGRATION",
+  "date": "2026-10-19",
+  "baseline_source_sha256": "838a4496819a4121270eb29bb53e7456ac13ee186a692d376fa4d3106dca9cd1",
+  "environment": "Linux x86_64, GCC and Clang 17; Windows10 VS2026 not executed",
+  "worker_integration": {
+    "isolated_worktrees": 3,
+    "delivery_files": 8,
+    "merged": "PASS",
+    "no_source_conflicts": true,
+    "autonomous_ai_coding_workers": false,
+    "tool": "tools/development/merge_worker_deliveries.py"
+  },
+  "gcc_debug": {
+    "configure": "PASS",
+    "build": "PASS 67/67",
+    "ctest": "PASS 45/45",
+    "command": "cmake -S . -B BUILD -G Ninja -DCMAKE_BUILD_TYPE=Debug -DGW_DEPENDENCY_MODE=portable && cmake --build BUILD -j 2 && ctest --test-dir BUILD --output-on-failure -j 2"
+  },
+  "gcc_release": {
+    "configure": "PASS",
+    "build": "PASS 67/67",
+    "ctest": "PASS 45/45",
+    "command": "cmake -S . -B BUILD -G Ninja -DCMAKE_BUILD_TYPE=Release -DGW_DEPENDENCY_MODE=portable && cmake --build BUILD -j 2 && ctest --test-dir BUILD --output-on-failure -j 2"
+  },
+  "clang_asan_ubsan": {
+    "focused_build": "PASS protocol-tests, probe, allocation-fault",
+    "ctest": "PASS 2/2 protocol-unit + protocol-allocation-fault",
+    "differential": "PASS 4005/4005 (916 accepted, 3089 rejected)",
+    "leak_detector": "disabled on sandbox host",
+    "fuzz": "PASS 20000 runs; no detected crash or undefined-behavior sanitizer failure",
+    "limitations": "Sanitizers/fuzzer do not prove absence of vulnerabilities; default leak validation unrun"
+  },
+  "local_tools": {
+    "boundary_check": "PASS",
+    "design_fixture_shape": "PASS 2 valid + 16 negative",
+    "importer_matrix": "PASS 15 positive/negative synthetic scenarios on Linux",
+    "worker_merger_matrix": "PASS integration and malicious/conflict/atomicity scenarios",
+    "upstream_dependency_guard": "PASS as part of CTest with opt-in library unset"
+  },
+  "remaining_gates": [
+    "Actual TinyCBOR v7.0 pinned upstream C code was not available: library compile and real interop UNRUN",
+    "Independent external codec/security audit UNRUN",
+    "Native Windows MSVC Debug/Release on this integrated source UNRUN (not required to keep development moving)",
+    "macOS native integrated-source build UNRUN",
+    "32-bit build and default leak sanitizer UNRUN"
+  ],
+  "runtime_version_unchanged": "0.4.1",
+  "network_parsing_authorized": false,
+  "github_writes": false
+}

@@ -1,0 +1,38 @@
+; GW-A05-P01 proposed wire model, version 1.0. Design documentation ONLY.
+; RFC 8610 CDDL with extra restrictions in docs/architecture/PROTOCOL_SCHEMA.md.
+; This syntax describes structure. It does not enforce deterministic CBOR bytes,
+; sorted/unique arrays, semantic version gates, A04 verification or quotas.
+;
+; Frame = 4-byte big-endian unsigned CBOR length (1..65536) + envelope bytes.
+; The frame prefix is OUTSIDE CBOR/CDDL.
+
+envelope = {
+  0: 1,                  ; major version
+  1: 0,                  ; minor version
+  2: 1 / 2 / 10,         ; permitted message kinds (20/30 are reserved)
+  3: offer-body / select-body / device-set-body,
+  ? 4: routing-hint
+}
+
+version-pair = [1, 0]     ; v1.0 is the only implemented version candidate
+capability = uint        ; v1.0 semantic rule: capability list MUST be empty
+
+offer-body = {
+  0: [+ version-pair],   ; 1..8 sorted unique pairs (v1.0 emits one)
+  1: [* capability]     ; 0..32 sorted unique, empty for 1.0
+}
+select-body = {
+  0: version-pair,
+  1: [* capability]     ; empty for 1.0
+}
+device-set-body = {
+  0: bstr                ; exact A04 canonical DeviceSet 182..1718 bytes
+}
+routing-hint = {
+  0: bstr .size 16,      ; transient hint, not identity/authority
+  ? 1: 0..16            ; optional hop limit
+}
+
+; CDDL alone cannot express discriminated body types by key 2 here;
+; each message MUST match its kind's body and exact key set. See normative
+; prose, restricted CBOR types, recursion/item limits and unknown-field rules.

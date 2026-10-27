@@ -1,5 +1,24 @@
 # Security invariants and test mapping
 
+## A05-P01 design-only prospective boundaries (not runtime guarantees)
+
+SI-A05-01: untrusted length and CBOR must be strictly bounded, deterministic,
+non-ambiguous and failure-atomic; v1.0 unknown/malformed input fails closed.
+SI-A05-02: routing, version/capability offers and signature-carrying envelopes
+confer **no** possession proof, trust pin, membership admission or permission.
+SI-A05-03: unsupported suites and future auth/E2EE containers are reserved and
+rejected; no downgrade-resistance claim without a reviewed authenticated transcript.
+SI-A05-04: canonical A04 DeviceSet bytes and independent expected authorities
+are unchanged, as are separate profile/community identities and revocation
+high-water rules. No remote message may erase local keys.
+SI-A05-05: no unbounded input-triggered allocation, recursion, work or logs
+containing received bytes; cancellation before publication remains atomic.
+
+These are future **P02** test requirements, not proven properties. See
+[PROTOCOL_SCHEMA](../architecture/PROTOCOL_SCHEMA.md) and
+[PROTOCOL_TEST_PLAN](PROTOCOL_TEST_PLAN.md). A11-PRE and AUTH-PRE remain blocked.
+
+
 ## P03 revocation/deletion refinement
 
 SI-038/SI-040: removing an owned membership must not let an existing self-trust

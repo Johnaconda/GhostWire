@@ -1,0 +1,44 @@
+{
+  "checkpoint": "GW-A05-P01-PROTOCOL-SCHEMA-VERSIONING-DESIGN",
+  "runtime_unchanged": "0.4.1 / GW-A04-P03-IDENTITY-HARDENING",
+  "input_archive_sha256": "aa52cb195c16a765b2118d62c7cb4b2a1e0a97a89831c9cd229390ea674e0ff4",
+  "input_source_count": 200,
+  "input_manifest_hashes_checked": 200,
+  "input_manifest_hashes_failed": 0,
+  "input_tree_sha": "0062e94ad243fc1da79b1d69ed99d9091c3bce6c",
+  "published_main_head": "01e70b317ff33527be991b0674dc6f93cccd4d1f",
+  "published_head_actions": {
+    "linux": "success",
+    "windows": "success",
+    "macos": "success",
+    "scope": "published accepted A04-P03, not P01"
+  },
+  "local_host": "Linux x86_64 GCC 14.2, CMake/Ninja",
+  "debug": {
+    "configure": "pass",
+    "build": "pass",
+    "ctest": "pass",
+    "tests_passed": 41,
+    "tests_total": 41
+  },
+  "release": {
+    "configure": "pass",
+    "build": "pass",
+    "ctest": "pass",
+    "tests_passed": 41,
+    "tests_total": 41,
+    "compiler_note": "GCC 14 warning inside vendored Botan source; build succeeded"
+  },
+  "boundary_check": "pass",
+  "python_syntax": "pass",
+  "fixture_documentation_check": {
+    "status": "pass",
+    "valid_examples": 2,
+    "negative_examples": 16,
+    "not_a_codec_test": true
+  },
+  "p01_protocol_codec_tests": "not_run_not_implemented",
+  "owner_windows_for_this_package": "not_run",
+  "owner_design_acceptance": "pending",
+  "no_remote_repository_mutation": true
+}

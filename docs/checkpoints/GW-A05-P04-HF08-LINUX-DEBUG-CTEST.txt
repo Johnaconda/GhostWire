@@ -1,0 +1,121 @@
+Test project /mnt/data/gw-work/GhostWire/out/build/portable-debug
+      Start  1: core-unit
+ 1/52 Test  #1: core-unit ............................   Passed    0.06 sec
+      Start  2: platform-unit
+ 2/52 Test  #2: platform-unit ........................   Passed    0.54 sec
+      Start  3: crypto-unit
+ 3/52 Test  #3: crypto-unit ..........................   Passed    0.31 sec
+      Start  4: crypto-symlink-temp
+ 4/52 Test  #4: crypto-symlink-temp ..................   Passed    0.20 sec
+      Start  5: crypto-faults
+ 5/52 Test  #5: crypto-faults ........................   Passed    0.06 sec
+      Start  6: protocol-allocation-fault
+ 6/52 Test  #6: protocol-allocation-fault ............   Passed    0.02 sec
+      Start  7: protocol-global-allocation-linux
+ 7/52 Test  #7: protocol-global-allocation-linux .....   Passed    0.01 sec
+      Start  8: protocol-unit
+ 8/52 Test  #8: protocol-unit ........................   Passed    0.34 sec
+      Start  9: identity-unit
+ 9/52 Test  #9: identity-unit ........................   Passed    3.46 sec
+      Start 10: identity-faults
+10/52 Test #10: identity-faults ......................   Passed    0.26 sec
+      Start 11: cli-identity-session
+11/52 Test #11: cli-identity-session .................   Passed    0.43 sec
+      Start 12: crypto-system-entropy-failure
+12/52 Test #12: crypto-system-entropy-failure ........   Passed    0.06 sec
+      Start 13: desktop-help
+13/52 Test #13: desktop-help .........................   Passed    0.09 sec
+      Start 14: desktop-version
+14/52 Test #14: desktop-version ......................   Passed    0.11 sec
+      Start 15: desktop-check-config
+15/52 Test #15: desktop-check-config .................   Passed    0.09 sec
+      Start 16: desktop-unknown
+16/52 Test #16: desktop-unknown ......................   Passed    0.13 sec
+      Start 17: desktop-invalid-config
+17/52 Test #17: desktop-invalid-config ...............   Passed    0.10 sec
+      Start 18: desktop-missing-config
+18/52 Test #18: desktop-missing-config ...............   Passed    0.14 sec
+      Start 19: desktop-bootstrap
+19/52 Test #19: desktop-bootstrap ....................   Passed    0.09 sec
+      Start 20: desktop-unicode-paths
+20/52 Test #20: desktop-unicode-paths ................   Passed    0.20 sec
+      Start 21: server-help
+21/52 Test #21: server-help ..........................   Passed    0.17 sec
+      Start 22: server-version
+22/52 Test #22: server-version .......................   Passed    0.13 sec
+      Start 23: server-check-config
+23/52 Test #23: server-check-config ..................   Passed    0.13 sec
+      Start 24: server-unknown
+24/52 Test #24: server-unknown .......................   Passed    0.10 sec
+      Start 25: server-invalid-config
+25/52 Test #25: server-invalid-config ................   Passed    0.14 sec
+      Start 26: server-missing-config
+26/52 Test #26: server-missing-config ................   Passed    0.11 sec
+      Start 27: server-bootstrap
+27/52 Test #27: server-bootstrap .....................   Passed    0.07 sec
+      Start 28: server-unicode-paths
+28/52 Test #28: server-unicode-paths .................   Passed    0.35 sec
+      Start 29: relay-help
+29/52 Test #29: relay-help ...........................   Passed    0.07 sec
+      Start 30: relay-version
+30/52 Test #30: relay-version ........................   Passed    0.05 sec
+      Start 31: relay-check-config
+31/52 Test #31: relay-check-config ...................   Passed    0.09 sec
+      Start 32: relay-unknown
+32/52 Test #32: relay-unknown ........................   Passed    0.09 sec
+      Start 33: relay-invalid-config
+33/52 Test #33: relay-invalid-config .................   Passed    0.11 sec
+      Start 34: relay-missing-config
+34/52 Test #34: relay-missing-config .................   Passed    0.14 sec
+      Start 35: relay-bootstrap
+35/52 Test #35: relay-bootstrap ......................   Passed    0.12 sec
+      Start 36: relay-unicode-paths
+36/52 Test #36: relay-unicode-paths ..................   Passed    0.24 sec
+      Start 37: cli-help
+37/52 Test #37: cli-help .............................   Passed    0.08 sec
+      Start 38: cli-version
+38/52 Test #38: cli-version ..........................   Passed    0.07 sec
+      Start 39: cli-check-config
+39/52 Test #39: cli-check-config .....................   Passed    0.10 sec
+      Start 40: cli-unknown
+40/52 Test #40: cli-unknown ..........................   Passed    0.12 sec
+      Start 41: cli-invalid-config
+41/52 Test #41: cli-invalid-config ...................   Passed    0.11 sec
+      Start 42: cli-missing-config
+42/52 Test #42: cli-missing-config ...................   Passed    0.12 sec
+      Start 43: cli-bootstrap
+43/52 Test #43: cli-bootstrap ........................   Passed    0.10 sec
+      Start 44: cli-unicode-paths
+44/52 Test #44: cli-unicode-paths ....................   Passed    0.37 sec
+      Start 45: protocol-upstream-import-guard
+45/52 Test #45: protocol-upstream-import-guard .......   Passed    0.57 sec
+      Start 46: protocol-upstream-fetch-guard
+46/52 Test #46: protocol-upstream-fetch-guard ........   Passed    0.82 sec
+      Start 47: protocol-upstream-comparison-guard
+47/52 Test #47: protocol-upstream-comparison-guard ...   Passed    0.37 sec
+      Start 48: protocol-probe-stdin-bounds
+48/52 Test #48: protocol-probe-stdin-bounds ..........   Passed    0.99 sec
+      Start 49: development-module-registry
+49/52 Test #49: development-module-registry ..........   Passed    0.50 sec
+      Start 50: development-effort-forecast
+50/52 Test #50: development-effort-forecast ..........   Passed    0.64 sec
+      Start 51: development-windows-docs
+51/52 Test #51: development-windows-docs .............   Passed    0.23 sec
+      Start 52: development-worker-merge
+52/52 Test #52: development-worker-merge .............   Passed    0.47 sec
+
+100% tests passed, 0 tests failed out of 52
+
+Label Time Summary:
+crypto         =   0.63 sec*proc (4 tests)
+development    =   0.64 sec*proc (1 test)
+identity       =   4.15 sec*proc (3 tests)
+integration    =   4.77 sec*proc (34 tests)
+platform       =   0.74 sec*proc (2 tests)
+protocol       =   3.11 sec*proc (7 tests)
+security       =   9.04 sec*proc (17 tests)
+tooling        =   4.57 sec*proc (8 tests)
+unicode        =   1.59 sec*proc (5 tests)
+unit           =   5.11 sec*proc (10 tests)
+
+Total Test time (real) =  14.53 sec

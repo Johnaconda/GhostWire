@@ -1,4 +1,39 @@
+## GW-A05-P04-HF09 (2026-10-27) — MSVC exception-contract correction
+
+- Owner Windows x64 HF08 configured but `/WX` rejected C4297 in the test-only
+  `extern "C"` allocation hook, so HF08 never reached its Windows tests.
+- Give the deliberately throwing hook matching C++ linkage and `noexcept(false)`
+  in both test-only declaration and definition. Preserve production codec,
+  warning policy, fault assertions and watchdog unchanged.
+- Native Windows Debug/Release acceptance and TinyCBOR/security gates remain open.
+  See `docs/checkpoints/GW-A05-P04-HF09.md`.
+
+## GW-A05-P04-HF08 (2026-10-27) — Windows fault-fixture recovery candidate
+
+Replaced the process-global allocation override in the A05 fault test with a private compile-time hook at the two actual byte-buffer allocation sites. Typed resource failure, preflight rejection before allocation, leased admission cleanup, unchanged input and successful byte roundtrip are still asserted. The original stronger whole-process allocator test also runs as a separate Linux-only regression. Runtime 0.4.1 remains unchanged and Windows Debug/Release acceptance remains owner pending. See `docs/checkpoints/GW-A05-P04-HF08.md`.
+
+## GW-A05-P03-CODEC-SECURITY-AND-DIFFERENTIAL — 2026-10-18 (candidate)
+
+- Harden advisory version selection to reject impossible local version offers.
+- Add test-only wire probe and independently authored seeded Python differential corpus; compare the real C++ decoder across structural valid/negative inputs.
+- Verify pinned external CBOR library versions and license texts **for review only**; no new library, production network protocol, authentication or persistence.
+- Preserve A04 signed DeviceSet semantics, runtime 0.4.1 and earlier role behavior. P02 Windows acceptance, upstream interoperability and external security audit remain open.
+
 # Changelog
+
+## GW-A05-P01-PROTOCOL-SCHEMA-VERSIONING-DESIGN — 2026-10-17 (proposal)
+
+- Verify accepted P03 archive, embedded 200-file source inventory and exact
+  published GitHub tree; record all three latest hosted platform jobs passed.
+- Propose ADR-009 canonical deterministic CBOR wire representation, fixed framing,
+  version/capability handling and explicit untrusted routing boundaries.
+- Add v1.0 CDDL, independent proposed golden/negative fixtures and security
+  acceptance matrix; reserve/reject auth proof and encrypted container kinds.
+- Publish P02 gate, design review/Windows instructions and cumulative packaging.
+- **Documentation/fixtures only.** No C++ sources, CMake, dependencies,
+  interfaces, cryptographic records or runtime 0.4.1/A04-P03 version changed.
+  Owner design acceptance pending.
+
 
 ## 0.4.1 — GW-A04-P03-IDENTITY-HARDENING — 2026-10-16
 

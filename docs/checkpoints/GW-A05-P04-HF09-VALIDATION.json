@@ -1,0 +1,42 @@
+{
+  "checkpoint": "GW-A05-P04-HF09-MSVC-EXCEPTION-CONTRACT",
+  "authoritative_input": {
+    "archive": "GHOSTWIRE-GW-A05-P04-HF08-ALLOCATION-FAULT-RECOVERY-source.zip",
+    "sha256": "7e23406bb30ed9576c32fd2053a98754e5ab67807a436d17de13ea92da12b8ab",
+    "verified_source_manifest": "289/289 PASS, zero untracked"
+  },
+  "owner_windows_hf08": {
+    "compiler": "MSVC 19.51.36260 Hostx64/x64",
+    "portable_debug_cmake": "PASS",
+    "portable_debug_build": "FAIL C4297/C2220 tests/fixtures/protocol/allocation_fault.cpp:24 under /EHsc /WX",
+    "ctest": "NOT RUN, build failed",
+    "release": "NOT RUN"
+  },
+  "linux": {
+    "gcc_debug_fault_target": "PASS",
+    "gcc_debug_full_ctest": "PASS 52/52 incremental rebuild from previously validated HF08 tree",
+    "gcc_release_full_ctest": "PASS 52/52 after incremental rebuild of both changed translation units in previously validated HF08 tree",
+    "hf09_full_clean_build": "NOT COMPLETED; fresh build exceeded environment execution limit",
+    "msvc_native_build": "NOT AVAILABLE",
+    "msvc_warning_C4297": "NOT DIRECTLY TESTED",
+    "differential_cpp_python": "HF08 4023/4023 both, not rerun HF09",
+    "gcc_release_fault": "PASS 2/2 (test-only fault and Linux-only stronger global allocator regression)",
+    "gcc_debug_fault": "PASS 2/2 (test-only fault and Linux-only stronger global allocator regression)",
+    "gcc_debug_full_ctest_log": "docs/checkpoints/GW-A05-P04-HF09-LINUX-DEBUG-CTEST.txt",
+    "gcc_release_full_ctest_log": "docs/checkpoints/GW-A05-P04-HF09-LINUX-RELEASE-CTEST.txt",
+    "clang_asan_ubsan_fault_standalone": "PASS exit 0, -Wall -Wextra -Werror, detect_leaks=0",
+    "production_link_symbol": "ABSENT in libghostwire_protocol.a for Debug and Release"
+  },
+  "security_invariants": {
+    "production_protocol_wire_bytes": "No production logic changes; only the guarded test-only linkage declaration and test fixture definition",
+    "warnings_as_errors": "UNCHANGED",
+    "fault_timeout": "15s UNCHANGED",
+    "a06": "BLOCKED",
+    "upstream_tinycbor": "NOT RUN",
+    "parser_independent_review": "NOT DONE",
+    "github": "NOT PUSHED"
+  },
+  "owner_windows_10pct_acceptance": "PENDING native HF09 x64 Debug/Release tests",
+  "engineering_confidence": 0.92,
+  "project_completion_percent": null
+}

@@ -1,0 +1,103 @@
+{
+  "checkpoint": "GW-A05-P01-PROTOCOL-SCHEMA-VERSIONING-DESIGN",
+  "purpose": "Independent proposed golden *design* examples, not executed codec tests",
+  "format": "hex, contiguous; first 4 bytes are uint32 big-endian CBOR length",
+  "valid": [
+    {
+      "id": "offer_1_0_no_capabilities",
+      "hex": "00000010a400010100020103a200818201000180",
+      "meaning": "envelope version 1.0 kind 1, body version pairs [[1,0]], capabilities []"
+    },
+    {
+      "id": "select_1_0_no_capabilities",
+      "hex": "0000000fa400010100020203a2008201000180",
+      "meaning": "envelope version 1.0 kind 2, selected [1,0], capabilities []"
+    }
+  ],
+  "invalid": [
+    {
+      "id": "zero_frame_length",
+      "hex": "00000000",
+      "category": "frame_limit"
+    },
+    {
+      "id": "truncated_header",
+      "hex": "000000",
+      "category": "incomplete_frame"
+    },
+    {
+      "id": "truncated_offer",
+      "hex": "00000010a400010100020103a2008182010001",
+      "category": "incomplete_frame"
+    },
+    {
+      "id": "wrong_major",
+      "hex": "00000010a400020100020103a200818201000180",
+      "category": "unsupported_version"
+    },
+    {
+      "id": "wrong_minor",
+      "hex": "00000010a400010101020103a200818201000180",
+      "category": "unsupported_version"
+    },
+    {
+      "id": "reserved_kind",
+      "hex": "00000010a400010100021403a200818201000180",
+      "category": "unsupported_kind"
+    },
+    {
+      "id": "duplicate_top_key",
+      "hex": "00000012a500010100020103a2008182010001800001",
+      "category": "noncanonical_encoding"
+    },
+    {
+      "id": "out_of_order_top_keys",
+      "hex": "00000010a401000001020103a200818201000180",
+      "category": "noncanonical_encoding"
+    },
+    {
+      "id": "nonpreferred_uint_encoding",
+      "hex": "00000011a40018010100020103a200818201000180",
+      "category": "noncanonical_encoding"
+    },
+    {
+      "id": "trailing_extra_byte",
+      "hex": "00000010a400010100020103a20081820100018000",
+      "category": "malformed_frame"
+    },
+    {
+      "id": "indefinite_map",
+      "hex": "00000011bf00010100020103a200818201000180ff",
+      "category": "noncanonical_encoding"
+    },
+    {
+      "id": "nonempty_unsupported_caps",
+      "hex": "00000011a400010100020103a20081820100018101",
+      "category": "unsupported_capability"
+    },
+    {
+      "id": "oversized_prefix_65537",
+      "hex": "00010001",
+      "category": "frame_limit"
+    },
+    {
+      "id": "empty_envelope",
+      "hex": "00000001a0",
+      "category": "malformed_frame"
+    },
+    {
+      "id": "unknown_top_level_key",
+      "hex": "00000012a500010100020103a2008182010001800500",
+      "category": "malformed_frame"
+    },
+    {
+      "id": "duplicate_nested_key",
+      "hex": "00000012a400010100020103a3008182010001800180",
+      "category": "noncanonical_encoding"
+    }
+  ],
+  "not_goldens": [
+    "full A04 DeviceSet records remain governed by the existing A04 record test vectors",
+    "randomized fuzz inputs and authenticated negotiation vectors are P02/later obligations"
+  ]
+}

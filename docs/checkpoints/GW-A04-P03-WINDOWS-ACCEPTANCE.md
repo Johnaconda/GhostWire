@@ -24,13 +24,13 @@ Set-Location 'C:\Cumpiling-shit\GhostWire'
 $originalTemp = $env:TEMP
 $originalTmp = $env:TMP
 
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\dev-windows.ps1 -Action diagnostics -OfflineTests
+.\tools\windows\dev-windows.ps1 -Action diagnostics -OfflineTests
 if ($LASTEXITCODE -ne 0) { throw 'Tool discovery failed' }
 
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\dev-windows.ps1 -Action all -Configuration Debug -OfflineTests -Fresh
+.\tools\windows\dev-windows.ps1 -Action all -Configuration Debug -OfflineTests -Fresh
 if ($LASTEXITCODE -ne 0) { throw 'Debug acceptance failed' }
 
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\dev-windows.ps1 -Action all -Configuration Release -OfflineTests -Fresh
+.\tools\windows\dev-windows.ps1 -Action all -Configuration Release -OfflineTests -Fresh
 if ($LASTEXITCODE -ne 0) { throw 'Release acceptance failed' }
 
 if ($env:TEMP -ne $originalTemp -or $env:TMP -ne $originalTmp) {

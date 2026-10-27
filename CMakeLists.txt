@@ -83,6 +83,11 @@ add_library(ghostwire_identity STATIC ${GW_IDENTITY_SOURCES})
 target_link_libraries(ghostwire_identity PUBLIC GhostWire::crypto ghostwire_contracts
     PRIVATE ghostwire_options Threads::Threads)
 add_library(GhostWire::identity ALIAS ghostwire_identity)
+# In-memory A05 v1.0 strict public wire codec; no crypto, sockets or identity trust dependencies.
+add_library(ghostwire_protocol STATIC src/protocol/wire_codec.cpp)
+target_link_libraries(ghostwire_protocol PUBLIC ghostwire_contracts PRIVATE ghostwire_options)
+add_library(GhostWire::protocol ALIAS ghostwire_protocol)
+
 add_library(ghostwire_composition STATIC src/composition/identity_service_adapter.cpp)
 target_link_libraries(ghostwire_composition PUBLIC GhostWire::core GhostWire::identity
     PRIVATE ghostwire_options)
@@ -138,6 +143,36 @@ if(BUILD_TESTING)
     target_link_libraries(ghostwire-crypto-fault-tests PRIVATE ghostwire_crypto_faults ghostwire_options doctest::doctest Threads::Threads)
     add_test(NAME crypto-faults COMMAND ghostwire-crypto-fault-tests --no-colors)
     set_tests_properties(crypto-faults PROPERTIES TIMEOUT 30 LABELS "unit;crypto;security")
+    add_executable(ghostwire-protocol-tests tests/unit/protocol_tests.cpp)
+    target_link_libraries(ghostwire-protocol-tests PRIVATE GhostWire::protocol GhostWire::identity
+        ghostwire_options doctest::doctest)
+    # Test-only cross-language probe: consumes stdin hex, never opens a socket.
+    add_executable(ghostwire-protocol-probe tests/fixtures/protocol/probe.cpp)
+    target_link_libraries(ghostwire-protocol-probe PRIVATE GhostWire::protocol ghostwire_options)
+    # Compile the identical codec in an isolated test executable with a
+    # two-site allocation fault hook. Never override process-wide operator new
+    # (MSVC CRT allocations can enter that override). Production protocol has
+    # no hook and never links the fault test.
+    add_executable(ghostwire-protocol-allocation-fault
+        tests/fixtures/protocol/allocation_fault.cpp src/protocol/wire_codec.cpp)
+    target_compile_definitions(ghostwire-protocol-allocation-fault PRIVATE GW_PROTOCOL_FAULT_TESTING=1)
+    target_link_libraries(ghostwire-protocol-allocation-fault PRIVATE ghostwire_contracts ghostwire_options)
+    add_test(NAME protocol-allocation-fault COMMAND ghostwire-protocol-allocation-fault)
+    set_tests_properties(protocol-allocation-fault PROPERTIES TIMEOUT 15 LABELS "unit;protocol;security")
+    # Preserve HF07's stronger *global* allocation count/preflight regression
+    # where its platform-wide allocator replacement is already known to work.
+    # Never run it with MSVC or sanitize builds: the portable fault fixture
+    # above is the native Windows safety regression.
+    if(CMAKE_SYSTEM_NAME STREQUAL "Linux" AND NOT GW_ENABLE_SANITIZERS)
+        add_executable(ghostwire-protocol-global-allocation-linux
+            tests/fixtures/protocol/allocation_fault_global_linux.cpp)
+        target_link_libraries(ghostwire-protocol-global-allocation-linux PRIVATE
+            GhostWire::protocol ghostwire_options)
+        add_test(NAME protocol-global-allocation-linux COMMAND ghostwire-protocol-global-allocation-linux)
+        set_tests_properties(protocol-global-allocation-linux PROPERTIES TIMEOUT 15 LABELS "unit;protocol;security")
+    endif()
+    add_test(NAME protocol-unit COMMAND ghostwire-protocol-tests --no-colors)
+    set_tests_properties(protocol-unit PROPERTIES TIMEOUT 30 LABELS "unit;protocol;security")
     add_executable(ghostwire-identity-tests tests/unit/identity_record_tests.cpp
         tests/unit/identity_service_tests.cpp tests/unit/identity_lifecycle_tests.cpp)
     target_link_libraries(ghostwire-identity-tests PRIVATE GhostWire::composition
@@ -189,7 +224,77 @@ if(BUILD_TESTING)
     endif()
 endif()
 
+
+# Optional upstream interoperability gate, NEVER a default/product dependency.
+# Only explicitly imported, SHA-256 verified TinyCBOR v7.0 can be used.
+option(GW_A05_ENABLE_TINYCBOR_INTEROP "Test-only pinned TinyCBOR comparison (requires separate verified import)" OFF)
+if(GW_A05_ENABLE_TINYCBOR_INTEROP)
+    if(NOT BUILD_TESTING)
+        message(FATAL_ERROR "TinyCBOR interop requires BUILD_TESTING=ON")
+    endif()
+    find_package(Python3 3.9 REQUIRED COMPONENTS Interpreter)
+    execute_process(COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tools/protocol/import_tinycbor.py"
+        --source "${CMAKE_SOURCE_DIR}/third_party/tinycbor/verified"
+        RESULT_VARIABLE GW_TINYCBOR_VERIFY_RESULT OUTPUT_QUIET ERROR_QUIET)
+    if(NOT GW_TINYCBOR_VERIFY_RESULT EQUAL 0)
+        message(FATAL_ERROR "TinyCBOR v7.0 verified sources unavailable or modified; run the explicit offline import verifier first")
+    endif()
+    enable_language(C)
+    set(GW_TINYCBOR_GEN "${CMAKE_BINARY_DIR}/gw-tinycbor-headers")
+    file(MAKE_DIRECTORY "${GW_TINYCBOR_GEN}")
+    file(WRITE "${GW_TINYCBOR_GEN}/tinycbor-export.h" "#pragma once\n#define CBOR_API\n")
+    file(WRITE "${GW_TINYCBOR_GEN}/tinycbor-version.h"
+        "#pragma once\n#define TINYCBOR_VERSION_MAJOR 7\n#define TINYCBOR_VERSION_MINOR 0\n#define TINYCBOR_VERSION_PATCH 0\n")
+    add_library(ghostwire_test_tinycbor STATIC
+        third_party/tinycbor/verified/src/cborparser.c
+        third_party/tinycbor/verified/src/cborvalidation.c
+        third_party/tinycbor/verified/src/cborparser_dup_string.c
+        third_party/tinycbor/verified/src/cborerrorstrings.c)
+    set_target_properties(ghostwire_test_tinycbor PROPERTIES C_STANDARD 99 C_STANDARD_REQUIRED ON)
+    target_compile_definitions(ghostwire_test_tinycbor PUBLIC CBOR_NO_FLOATING_POINT CBOR_PARSER_MAX_RECURSIONS=8)
+    target_include_directories(ghostwire_test_tinycbor PUBLIC
+        "${CMAKE_SOURCE_DIR}/third_party/tinycbor/verified/src" "${GW_TINYCBOR_GEN}")
+    add_executable(ghostwire-tinycbor-probe tests/interop/tinycbor_probe.cpp)
+    target_link_libraries(ghostwire-tinycbor-probe PRIVATE ghostwire_test_tinycbor ghostwire_options)
+    add_test(NAME protocol-tinycbor-interop
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tools/protocol/differential_check.py"
+        "$<TARGET_FILE:ghostwire-protocol-probe>"
+        --upstream-probe "$<TARGET_FILE:ghostwire-tinycbor-probe>")
+    set_tests_properties(protocol-tinycbor-interop PROPERTIES TIMEOUT 120 LABELS "security;protocol;interop")
+    add_test(NAME protocol-tinycbor-stdin-bounds
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tools/protocol/test_probe_bounds.py"
+        "$<TARGET_FILE:ghostwire-tinycbor-probe>" --upstream)
+    set_tests_properties(protocol-tinycbor-stdin-bounds PROPERTIES TIMEOUT 35 LABELS "security;protocol;interop")
+endif()
+
 find_package(Python3 3.9 QUIET COMPONENTS Interpreter)
+if(Python3_Interpreter_FOUND AND BUILD_TESTING)
+    add_test(NAME protocol-upstream-import-guard
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tools/protocol/test_tinycbor_import.py")
+    set_tests_properties(protocol-upstream-import-guard PROPERTIES TIMEOUT 15 LABELS "tooling;protocol;security")
+    add_test(NAME protocol-upstream-fetch-guard
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tools/protocol/test_tinycbor_fetch.py")
+    set_tests_properties(protocol-upstream-fetch-guard PROPERTIES TIMEOUT 15 LABELS "tooling;protocol;security")
+    add_test(NAME protocol-upstream-comparison-guard
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tools/protocol/test_interop_gate.py")
+    set_tests_properties(protocol-upstream-comparison-guard PROPERTIES TIMEOUT 15 LABELS "tooling;protocol;security")
+    add_test(NAME protocol-probe-stdin-bounds
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tools/protocol/test_probe_bounds.py"
+        "$<TARGET_FILE:ghostwire-protocol-probe>")
+    set_tests_properties(protocol-probe-stdin-bounds PROPERTIES TIMEOUT 35 LABELS "tooling;protocol;security")
+    add_test(NAME development-module-registry
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tools/development/test_module_registry.py")
+    set_tests_properties(development-module-registry PROPERTIES TIMEOUT 15 LABELS "tooling;security")
+    add_test(NAME development-effort-forecast
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tools/development/test_effort_forecast.py")
+    set_tests_properties(development-effort-forecast PROPERTIES TIMEOUT 15 LABELS "tooling;development")
+    add_test(NAME development-windows-docs
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tools/development/test_windows_docs.py")
+    set_tests_properties(development-windows-docs PROPERTIES TIMEOUT 15 LABELS "tooling;security")
+    add_test(NAME development-worker-merge
+        COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tools/development/test_worker_merge.py")
+    set_tests_properties(development-worker-merge PROPERTIES TIMEOUT 15 LABELS "tooling;security")
+endif()
 if(Python3_Interpreter_FOUND)
     add_custom_target(format-check COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tools/format.py" --check
                       WORKING_DIRECTORY "${CMAKE_SOURCE_DIR}")

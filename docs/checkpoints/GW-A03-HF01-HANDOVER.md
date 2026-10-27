@@ -16,9 +16,9 @@ Windows 10 / VS 2026 / ordinary PowerShell, with original TEMP/TMP:
 
 ```powershell
 Set-Location 'C:\Cumpiling-shit\GhostWire'
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\dev-windows.ps1 -Action all -Configuration Debug -OfflineTests -Fresh
+.\tools\windows\dev-windows.ps1 -Action all -Configuration Debug -OfflineTests -Fresh
 if ($LASTEXITCODE -ne 0) { throw 'Debug validation failed' }
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\dev-windows.ps1 -Action all -Configuration Release -OfflineTests -Fresh
+.\tools\windows\dev-windows.ps1 -Action all -Configuration Release -OfflineTests -Fresh
 if ($LASTEXITCODE -ne 0) { throw 'Release validation failed' }
 .\out\build\portable-release\bin\ghostwire-cli.exe --version
 if ($LASTEXITCODE -ne 0) { throw 'CLI launch failed' }

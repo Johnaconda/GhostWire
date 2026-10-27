@@ -1,5 +1,20 @@
 # Initial threat model
 
+## A05-P01 future parser, negotiation and relay threats (design only)
+
+A malicious or compromised peer/relay may supply oversized length claims,
+noncanonical CBOR, duplicate map keys, unsupported versions/kinds/suites,
+truncation, replayed DeviceSets, poisoned capability selections, reordered
+messages or routing tokens intended to select the wrong profile/community.
+Future P02 parser must fail closed under strict bounds without mutating trust;
+a future reviewed handshake must authenticate negotiation and prevent downgrade.
+Plain public DeviceSets are relationship-revealing and not remote logins.
+Routing tokens cannot be stable identity selectors or grant action authority.
+See [wire design](../architecture/PROTOCOL_SCHEMA.md) and
+[required tests](PROTOCOL_TEST_PLAN.md). None of these protections have been
+implemented as an A05 wire codec at P01.
+
+
 ## P03 scoped update
 
 P03 review reproduced a stale self-record resurrection after local membership

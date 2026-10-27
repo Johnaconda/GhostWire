@@ -138,8 +138,8 @@ Use the [full checklist](GW-A01-HF01-WINDOWS-ACCEPTANCE.md) and updated
 the original non-ASCII profile TEMP/TMP, run the portable acceptance route:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\dev-windows.ps1 -Action all -Configuration Debug -OfflineTests -Fresh
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\dev-windows.ps1 -Action all -Configuration Release -OfflineTests -Fresh
+.\tools\windows\dev-windows.ps1 -Action all -Configuration Debug -OfflineTests -Fresh
+.\tools\windows\dev-windows.ps1 -Action all -Configuration Release -OfflineTests -Fresh
 ```
 
 Record archive checksum, native tool versions, complete CTest/unit results and

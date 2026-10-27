@@ -17,8 +17,8 @@ HF01 owner acceptance and HF02 hosted CI evidence are preserved separately.
 
 ```powershell
 Set-Location 'C:\Cumpiling-shit\GhostWire'
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\dev-windows.ps1 -Action all -Configuration Debug -OfflineTests -Fresh
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\dev-windows.ps1 -Action all -Configuration Release -OfflineTests -Fresh
+.\tools\windows\dev-windows.ps1 -Action all -Configuration Debug -OfflineTests -Fresh
+.\tools\windows\dev-windows.ps1 -Action all -Configuration Release -OfflineTests -Fresh
 .\out\build\portable-debug\bin\ghostwire-cli.exe --version
 ```
 

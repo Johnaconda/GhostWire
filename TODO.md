@@ -1,3 +1,72 @@
+## Current A05-P04-HF06 — Resource review / estimated milestone gates (2026-10-26)
+
+- [x] Protocol resource/cancellation/deadline limits covered across the three supported wire kinds and routed max-size DeviceSet; allocation-free denied decode and lease recovery validated on Linux.
+- [x] Provisional 26-module/110-point workload forecast; ~10.0% verified and owner accepted weighted floor from A00–A04; authoritative project percent **remains unset**.
+- [x] Windows acceptance at each estimated 10% verified milestone documented; **10% gate due for owner testing with this package**, unless Windows Defender flags it.
+- [!] Real maintained TinyCBOR 7.0 comparison and independent parser audit remain blocked. Public network parsing and A06 are prohibited.
+- [ ] User Windows/MSVC Debug+Release and Defender rescan of this checkpoint; do not claim a Windows pass in advance.
+- [ ] Review estimated weights/functional acceptance gates with owner when available; do not confuse effort estimate with implementation progress.
+
+## Current A05-P04-HF05 module structure and safe documentation — 2026-10-26
+
+- [x] Verify actual HF04 cumulative source: 261 source manifest entries; ZIP CRC and safe member paths pass.
+- [x] Import Steel Oath V2-style module inventory / dependency-ordered task queue: 26 tracked modules, explicit owner acceptance and no invented project completion percentage.
+- [x] Add CLI validator, automated negative tests, and CTest integration for confidence >0.80, evidence safety, module/task DAGs and readiness.
+- [x] Revise 40 historical/current Windows script **invocation examples** across 14 Markdown documents to respect the configured PowerShell policy; unchanged runtime scripts, checkpoint test evidence and binary behavior.
+- [ ] Actual TinyCBOR v7.0 compile + independent interop **still BLOCKED** by remote source access. No A06 networking.
+- [ ] Owner Windows Defender rescan of new ZIP and Windows/macOS acceptance remain unrun; no claim of malware-free certification.
+- [ ] Next dependency-ready task: `GW-A05-RESOURCE-REVIEW` (protocol parse resource/cancellation independent test), while upstream interop remains blocked.
+
+## Current A05-P04-HF03 scoped hardening — 2026-10-19
+
+- [x] Refuse a maintained CBOR probe that accepts any of five frozen noncanonical CBOR inputs; preserve intentionally stricter GhostWire-only rejection distinction.
+- [x] Offline comparator fault matrix: 16 cases, including all-OK/all-ERR, missing mandatory vector, bad verdict, and missing output.
+- [x] Refuse existing and dangling-symlink destination on verified test-only source installation; add importer publication tests.
+- [ ] **ACTUAL** upstream TinyCBOR v7.0 compilation and canonical comparison still blocked by sandbox DNS/network policy.
+- [ ] External parser review and Windows/macOS validation not run; A06 and network exposure remain deferred.
+
+## Current A05-P04-HF02 source/review work — 2026-10-19
+
+- [x] Add bounded reader shared by both test-only protocol probes; 4 MiB stdin denial/resynchronization regression for available probe.
+- [x] Add explicit immutable-commit TinyCBOR acquisition utility (never auto-fetch in builds); test no-network successful and adversarial scenarios.
+- [x] Extend interop differential matrix with all 18 A05-P01 frozen wire-design vectors.
+- [ ] Download and compile **actual** pinned upstream TinyCBOR v7.0 source; perform direct maintained-parser comparison; still BLOCKED in this sandbox.
+- [ ] Independent security review of parser before admitting public-network inputs.
+- [ ] macOS/Windows native checks for HF02 not run (not required for development continuation).
+- [ ] A06 networking and persistence deferred behind security gates and separate authorization.
+
+## Current A05-P04-HF01 integration batch — 2026-10-19
+
+- [x] Three disjoint worker-delivery source worktrees merged after exact source-manifest and SHA-256 checks; see docs/development/WORKER_INTEGRATION.json.
+- [x] Public CBOR encoder preflights byte/work budgets before allocation; unit and fault tests added.
+- [x] Pinned offline TinyCBOR importer hardened for ZIP/path ambiguity and symlinked inputs.
+- [x] Offline work queue and no-execute worker-delivery merger implemented; test-only.
+- [ ] Maintained TinyCBOR v7.0 actual source import and interop still **BLOCKED**. Source pins are not upstream execution.
+- [ ] Independent parser/security review remains mandatory before network input.
+- [ ] Windows/macOS native A05-P04-HF01 tests not claimed; owner waived *development blocking*, not factual reporting.
+- [ ] A06 and later runtime expansion remain deferred behind reviewed security gates.
+
+## A05-P03 current candidate — 2026-10-18
+
+- [x] P02 ZIP CRC and 222-file embedded inventory verified; unchanged published A04 main separately checked.
+- [x] Hardened advisory offered-version validation against impossible local registry values.
+- [x] Added test-only hex probe and seeded independent Python-vs-C++ CBOR differential corpus.
+- [x] Parallel GCC Debug/Release + Clang sanitizers/fuzzer run in separate build directories (see actual P03 validation file).
+- [ ] Owner P02 and P03 Windows Debug/Release acceptance.
+- [ ] Actual QCBOR/TinyCBOR execution/interop, full allocation-fault review and external security audit.
+- [ ] A05-P04 and A06 prohibited until separate approval and relevant security gates.
+
+## A05-P02 current execution — 2026-10-18
+
+- [x] P01 validated on owner Windows host: Debug 40/40 and Release 40/40.
+- [x] Bounded strict CBOR v1.0 in-memory kinds 1/2/10, no reverse dependency.
+- [x] Frozen golden/negative and independent Python fixture tests plus mutation corpus.
+- [x] Genuine A04 signed-frame carrier integration; no trust acceptance on decode.
+- [ ] Owner Windows Debug/Release P02 checks and review of ADR-010 exception.
+- [ ] Independent external CBOR implementation interoperability, sustained
+  sanitizer fuzzing and security audit prior to exposing any network input.
+- [ ] A05-P03/A06: not authorized, do not begin.
+
 # Authoritative TODO
 Legend: `[ ]` planned, `[~]` partial/experimental, `[x]` implemented and validated in the stated environment, `[!]` blocked. Design/owner acceptance is tracked separately from implementation and runtime validation. Completed narrow work is recorded in docs/COMPLETED.md; pending platform acceptance stays here.
 ## Current P03 status — 2026-10-16
@@ -7,8 +76,9 @@ Legend: `[ ]` planned, `[~]` partial/experimental, `[x]` implemented and validat
 | GW-A04-P02-WINDOWS | Supplied native log; verified P02 ZIP | [x] Debug/Release 40/40 each; identity console launches | Manual command/quit transcript not supplied; no inferred native unit totals |
 | GW-A04-P03-DELETE | Identity service; SI-038/SI-040 | [x] Scoped self-trust invalidation; Debug/Release/ASan-UBSan 41/41 each; see P03 report | Full local validation and native P03 acceptance recorded separately |
 | GW-A04-P03-REVIEW | Parallel implementation review | [x] Parallel review completed; reproduced regression fixed and independently cross-reviewed | External security audit still open; assistant review is not certification |
-| GW-A04-P03-NATIVE | Windows10/VS2026; exact-source macOS/CI | [ ] New P03 native evidence pending | Keep original TEMP/TMP; owner publishes; no personal Mac required |
-| GW-A05-DESIGN | P03 acceptance; proposed A05 prompt | [ ] Not started | Explicit authorization required; no networking/persistence implied |
+| GW-A04-P03-NATIVE | Windows10/VS2026; exact-source macOS/CI | [x] Owner Windows Debug/Release 40/40 each; exact main hosted Linux/Windows/macOS complete PASS | Historical P03 local/host evidence distinguished from A05 design tests |
+| GW-A05-DESIGN | A04-P03 owner acceptance; GW-A05-PROMPT.md | [x] P01 design proposal prepared: ADR-009, strict wire schema, CDDL, golden fixture, threat/test mapping | Owner design approval pending; no activated codec, networking or persistence |
+| GW-A05-P02-GATE | Accepted P01 design + separate authorization | [ ] P02 authorized by owner continuation | Implement only reviewed strict in-memory codec with actual interop/negative tests; no automatic A06 |
 
 Earlier status sections are historical snapshots; this section supersedes their
 P02 Windows-pending wording. vcpkg, full local LSan, clang-tidy and external crypto
@@ -74,7 +144,7 @@ evidence for their exact source, not for this candidate.
 | GW-A03-EVIDENCE | Cryptographic Provider: tests and handover | tests; docs/checkpoints/GW-A03.md; ADR-006 | GW-A03-IMPL | [x] Recorded for executed environment | Actual sanitizer/dependency/source/package evidence in GW-A03.md | Full cumulative ZIP/SHA, inventory, native checklist and A04 proposal | Stop after A03; A04 unstarted |
 | GW-A04-IMPL | Identity & Device Trust | include/ghostwire/identity; src/identity; composition adapter; CLI | A03; accepted ADR-008; A11-PRE for persistence | [x] P02 volatile implementation; Linux validated, owner acceptance pending | Actual execution in GW-A04-P02.md | Isolated profiles/scoped credentials, explicit trust, canonical public records, scoped device mutation, cancellation and resource failure behavior | P01 design accepted; P02 review/native Windows acceptance pending |
 | GW-A04-EVIDENCE | Identity & Device Trust: tests and handover | tests; docs/checkpoints/GW-A04-P02.md; ADR-008 | GW-A04-IMPL | [x] P02 report and acceptance instructions; actual Linux evidence included | Actual commands/results and limits in P02 report | Preserve cumulative source, changed files, validation evidence, native checklist and ZIP/SHA; stop before P03/A05 | P02 not owner-accepted |
-| GW-A05-IMPL | Protocol Schemas & Versioning | schemas; include/ghostwire/protocol; src/protocol | A04 public identity contracts | [ ] Planned | Not run | Canonical versioned codecs with bounded fields and negotiation; reject malformed/unsupported input; corpus/fuzz/interop fixtures. | Proposed; not accepted |
+| GW-A05-IMPL | Protocol Schemas & Versioning | schemas; include/ghostwire/protocol; src/protocol | Accepted A04; owner must authorize P02 | [ ] In-memory codec implemented in P02 candidate; not yet network approved | Not run | Strict canonical CBOR v1.0, limits, unsupported handling, independent vectors and fuzzing | P01 proposal for review; P02 gated |
 | GW-A05-EVIDENCE | Protocol Schemas & Versioning: tests and handover | tests; docs/checkpoints/GW-A05.md; relevant ADRs | GW-A05-IMPL | [ ] Planned | Not run | Add relevant failure/security tests; run available host/build checks; update invariant map, TODO, changes, limits and cumulative ZIP/SHA. | Proposed; not accepted |
 | GW-A06-IMPL | Transport & Privacy Policies | include/ghostwire/transport; src/transport | A05; AUTH-PRE | [ ] Planned | Not run | Authenticated bounded connection API; fail-closed direct/protected/privacy-first capabilities; timeout/backpressure and DNS/ICE/address-leak harness. | Proposed; not accepted |
 | GW-A06-EVIDENCE | Transport & Privacy Policies: tests and handover | tests; docs/checkpoints/GW-A06.md; relevant ADRs | GW-A06-IMPL | [ ] Planned | Not run | Add relevant failure/security tests; run available host/build checks; update invariant map, TODO, changes, limits and cumulative ZIP/SHA. | Proposed; not accepted |
@@ -202,3 +272,15 @@ A03 scope excluded identity. P01 subsequently approved the profile/namespace
 design, and P02 implements only its bounded volatile portion; see the current
 status at the top of this file. Persistent storage and remote authentication
 remain future work.
+
+## A05-P04 upstream-parser security gate (partial candidate, 2026-10-19)
+
+- [x] Establish pinned TinyCBOR v7.0 SHA-256 import verification (no implicit downloads).
+- [x] Add isolated allocation-failure fixture and optional external CBOR verdict comparator.
+- [ ] Obtain and vendor exact upstream source; reproduce original license notices and build it on all hosts.
+- [ ] Run genuine upstream comparison, Windows/MSVC and macOS Clang and full sanitizer/fuzzer coverage.
+- [ ] Review allocation and recursive traversal ceilings for maintained parser with independent code review.
+- [ ] Obtain owner Windows P02/P03/P04 acceptance; never open network parser gate by inference.
+
+
+A05-P04-HF04 partial security checkpoint: the optional interoperability comparator now strictly verifies the GhostWire probe response format and echoed wire bytes (22 offline fault checks). Actual pinned TinyCBOR execution and independent security review remain mandatory before networking.

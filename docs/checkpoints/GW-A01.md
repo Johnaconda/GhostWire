@@ -168,8 +168,8 @@ after the owner's Windows acceptance. It does not start A02.
 Owner reproduction:
 
 ```powershell
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\dev-windows.ps1 -Action all -Configuration Debug
-powershell -NoProfile -ExecutionPolicy Bypass -File .\tools\windows\dev-windows.ps1 -Action all -Configuration Release
+.\tools\windows\dev-windows.ps1 -Action all -Configuration Debug
+.\tools\windows\dev-windows.ps1 -Action all -Configuration Release
 .\out\build\windows-msvc-release\bin\ghostwire-tests.exe --no-colors
 ```
 

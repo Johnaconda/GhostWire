@@ -1,4 +1,37 @@
+## Current — HF09 MSVC exception contract (2026-10-27)
+
+Owner Windows 10 x64 HF08: correctly selected `Hostx64/x64/cl.exe`, passed
+`portable-debug` configuration, but build failed at the throwing test-only
+`extern "C"` hook (C4297 promoted by `/WX`). No CTest was executed.
+HF09 changes that hook's C++ exception contract, not production wire bytes.
+Linux GCC Debug focused fault test passes, and full Debug regression 52/52
+passes against the HF08 verified build cache with HF09's two modified
+translation units recompiled. Release and other detailed results are in
+`../checkpoints/GW-A05-P04-HF09-VALIDATION.json`; owner Windows tests remain
+**pending**, as do TinyCBOR real upstream and security review. Do not infer
+MSVC success from Linux.
+
+## Current — HF08 allocation-fault portability recovery (2026-10-27)
+
+HF07 source archive SHA-256 `e770ab342de5f23f60f41cb3ad9233f78fad623c1a8ec1fb3f1034e3d14f9f71` and all **282** internal hashes verified. HF07 Linux baseline targeted allocation-fault CTest PASS 1/1, while owner Windows Debug HF07 yielded 49/50 and a 15-second allocation fixture timeout. HF08 uses separately compiled, test-only codec allocation fault injection to avoid global allocator override; production source behavior is unchanged and the same preflight, failures and recovery behavior are checked. A separate Linux-only `protocol-global-allocation-linux` regression retains the original process-wide allocation-count check. Full local GCC and Python results are in `../checkpoints/GW-A05-P04-HF08-VALIDATION.json`. Native Windows HF08 acceptance remains unrun. Real TinyCBOR upstream comparison and independent parser review remain uncompleted. No release of A06.
+
 # Validation policy and current recovery evidence
+
+## A05-P01 design-only execution evidence, 2026-10-17
+
+Accepted P03 archive: SHA-256 and all 200 per-file source-manifest hashes
+verified; extracted tracked files reproduce published Git tree
+`0062e94ad243fc1da79b1d69ed99d9091c3bce6c`. All GitHub Actions
+platform workflows for main `01e70b3` completed green, per live API query.
+Local GCC 14.2 Linux portable Debug **and Release**: configure/build PASS,
+CTest **41/41 PASS each**. Compilation interrupted by bounded executor windows
+was resumed and completed; Release showed a vendor Botan compiler warning.
+JSON fixture consistency checker: 2 positive + 12 negative descriptions PASS
+for prefix lengths/schema pointers only, **not protocol decoding**.
+P01 adds documentation/fixtures/packaging changes, no C++ or CMake diffs.
+Executed Python/boundary checks and ZIP source integrity are recorded in
+GW-A05-P01.md; owner Windows tests have not been run on this P01 package.
+
 
 ## Current P03 validation
 
