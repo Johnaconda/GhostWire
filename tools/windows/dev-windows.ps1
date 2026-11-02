@@ -10,6 +10,7 @@ param(
     [string]$CTestPath,
     [string]$NinjaPath,
     [switch]$OfflineTests,
+    [switch]$TinyCborInterop,
     [switch]$Fresh,
     [string[]]$AppArgs = @()
 )
@@ -83,6 +84,7 @@ function Initialize-VisualStudio {
 
 try {
     if ($Fresh -and $Action -notin @('configure','all')) { throw '-Fresh applies only to configure/all.' }
+    if ($TinyCborInterop -and $Action -notin @('configure','all')) { throw '-TinyCborInterop applies only to configure/all.' }
     Initialize-VisualStudio
     $cmakeCandidates = @()
     $ninjaCandidates = @()
@@ -150,10 +152,15 @@ try {
             $configureArgs = @('--preset', $preset, "-DCMAKE_MAKE_PROGRAM=$ninja",
                 "-DCMAKE_CXX_COMPILER=$compilerPath", "-DCMAKE_LINKER=$linkerPath")
             if ($Fresh) { $configureArgs += '--fresh' }
+            if ($TinyCborInterop) { $configureArgs += '-DGW_A05_ENABLE_TINYCBOR_INTEROP=ON' }
             Invoke-Checked $cmake $configureArgs
         }
         if ($Action -in @('build','all')) { Invoke-Checked $cmake @('--build', '--preset', $preset, '--parallel', '4') }
-        if ($Action -in @('test','all')) { Invoke-Checked $ctest @('--preset', $preset, '--output-on-failure') }
+        if ($Action -in @('test','all')) {
+            $testArgs = @('--preset', $preset, '--output-on-failure')
+            if ($TinyCborInterop) { $testArgs += '--verbose' }
+            Invoke-Checked $ctest $testArgs
+        }
         if ($Action -eq 'run') {
             $exe = Join-Path $buildDir ("bin/ghostwire-$Target.exe")
             if (-not (Test-Path -LiteralPath $exe)) { throw 'Executable missing. Run -Action all for this configuration first.' }

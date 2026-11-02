@@ -5,7 +5,8 @@
 #include <string_view>
 
 namespace ghostwire::cli {
-// Explicit opt-in, owner-thread console. Input/output must use UTF-8. No input
+// GW-APP-PROMPT-NAVIGATION, owner: coordinator. Owner-thread console, explicitly
+// requested or opened by argument-free terminal launch. Input/output use UTF-8. No input
 // history, key file, profile file, or persistent trust state is written.
 int run_identity_session(std::span<const std::string_view> args, std::istream &input, std::ostream &output,
                          std::ostream &errors);

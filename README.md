@@ -1,10 +1,16 @@
 # GhostWire
 
-**Accepted implementation baseline: `GW-A05-P04-HF09` · Docs refreshed 2026-10-27 · Runtime: 0.4.1 · C++20**
+**Agents: read [START-HERE.md](START-HERE.md) and [AGENTS.md](AGENTS.md) once, then
+run `python3 tools/development/task_context.py --task TASK_ID`.** The short packet
+routes you to relevant code/contracts and checks; do not read all reports at init.
+Current source: GW-DEV-CONTEXT-BOOTSTRAP r1, author tag **GPT-6.1-Sol-Max**.
+This tooling-only checkpoint preserves runtime 0.4.1 and the P02 r2 application.
 
-> **Windows 10% build/test acceptance — PASSED 2026-10-27.** Owner-operated Windows 10 / VS2026 MSVC x64 portable Debug: **66/66 build, 50/50 CTest**, and Release: **66/66 build, 50/50 CTest**. This accepts the foundation build/test milestone, **not** the outstanding A05 protocol security gate. The upstream TinyCBOR execution and independent parser/security review remain pending. No A06 networking or private persistence is authorized.
->
-> The HF09 archive is the accepted source baseline; its GitHub push/tag has **not been verified**. The human-readable coordination board is [current-development-map.md](current-development-map.md), alongside the [full implementation roadmap](ROADMAP.md) and machine-readable [module registry](docs/development/MODULE_REGISTRY.json).
+
+> **CURRENT (2026-11-01):** P02 revision 2 fixes prompt navigation: back/cancel returns to the main menu, help explains the field, and quit/exit closes from any prompt. Numeric alias and display name are clearly separated. Owner revision 1 Windows Debug/Release CLI builds and identity workflow passed; revision 2 passes Linux Debug/Release 9/9 scoped checks each, with native confirmation pending. Patch author tag: **GPT-6.1-Sol-Max** (owner-provided). Runtime 0.4.1; accepted floor about 10%, with 20% not reached. [Current map](current-development-map.md).
+
+
+**GW-APP-P02-MEMBERSHIP-LIFECYCLE · Runtime: 0.4.1 · C++20**
 
 **Your identity. Your server. Your network.**
 
@@ -30,43 +36,49 @@ local trust decisions. An interactive CLI session lets you use those services.
 It is not a messaging application yet. There is no network listener, remote
 account enrollment, vault, GUI, relay forwarding, private persistence or AI call.
 
-## What is implemented in HF09
+## A05-P01 proposal (runtime still 0.4.1)
 
-- **A00–A04 foundation:** Portable project/build, bounded core lifecycle, OS/platform APIs, pinned Botan 3.13.0 volatile cryptography, isolated local profiles and explicit community/device trust in an interactive CLI session. Identity keys are **volatile**, not securely persisted. Matching human-facing aliases never merge users or membership authority.
-- **A05 in-memory CBOR codec (partial):** Strict bounded, versioned public-only frames (kinds 1/2/10), protocol negotiation checks, deterministic encoding/decoding, resource ceilings, negative/fault/differential tests and offline upstream comparison tooling. HF08/HF09 repaired the Windows allocation-fault fixture; the native `protocol-allocation-fault` test now passes in both configurations.
-- **Not implemented:** Live listeners, remote authentication, end-to-end messaging, persistent private-key vault, functional desktop GUI, relay forwarding, media calls, discovery or AI agent runtime.
+The owner authorized the next **design-only** protocol-schema checkpoint.
+The proposed versioned CBOR schema, decision record, golden vectors and
+security test plan are in
+[GW-A05-P01](docs/checkpoints/GW-A05-P01.md). They do not add a wire codec,
+networking, login, secure messaging or private-key persistence; accepted A04
+identity functionality and the current binary identity remain unchanged.
 
-## Verified HF09 build/test checkpoint (2026-10-27)
+## A05-P02 strict in-memory codec candidate (runtime still 0.4.1)
 
-| Host/configuration | Build | CTest | Scope |
-|---|---|---|---|
-| Windows 10 x64 / MSVC Debug | **66/66 PASS** | **50/50 PASS** | User-operated portable build; Python checks included |
-| Windows 10 x64 / MSVC Release | **66/66 PASS** | **50/50 PASS** | User-operated portable build; Python checks included |
-| Linux GCC Debug | PASS (incremental) | **52/52 PASS** | HF09 recorded incremental full-suite regression |
-| Linux GCC Release | PASS (incremental) | **52/52 PASS** | HF09 recorded incremental full-suite regression |
+Following owner Windows Debug and Release A05-P01 40/40 acceptance, this
+checkpoint implements the isolated `GhostWire::protocol` strict deterministic
+CBOR v1.0 library: only public kinds 1/2/10, borrowed input with bounded decode,
+fixed diagnostics, optional transient routing hints, byte-identical A04
+DeviceSet carrier and explicit caller admission. See
+[implementation report](docs/checkpoints/GW-A05-P02.md),
+[ADR-010 controlled exception](docs/decisions/ADR-010-RESTRICTED-WIRE-CODEC-P02.md)
+and [Windows P02 acceptance](docs/checkpoints/GW-A05-P02-WINDOWS-ACCEPTANCE.md).
+This library is not remote authentication, E2EE, a connection/listener or a
+securely audited network interface. There is no new CLI protocol command.
 
-The Linux HF09 full-suite runs reused a validated earlier build cache; do **not** interpret them as fresh-clean HF09 build evidence. The Windows acceptance results were supplied by the owner after the HF09 source archive was generated, so some frozen registry/checkpoint JSON fields still say `pending` until a follow-up documentation/evidence synchronization commit.
+## Latest A05 source checkpoint
 
-See [HF09 checkpoint](docs/checkpoints/GW-A05-P04-HF09.md), [Windows acceptance procedure](docs/checkpoints/GW-A05-P04-HF09-WINDOWS-10PCT-GATE.md) and [development map](current-development-map.md). No claim is made here that the new GitHub baseline was pushed or hosted CI ran against HF09.
+[A05-P04-HF03](docs/checkpoints/GW-A05-P04-HF03.md) strengthens the optional
+TinyCBOR upstream comparison: five frozen noncanonical CBOR examples AND five canonical CBOR examples rejected only by GhostWire schema now MUST
+be rejected by the upstream parser. An offline fault-injection test verifies
+that the comparison fails on broken probe outputs. Source import publication
+also refuses dangling-symlink destinations. This is **not** actual TinyCBOR
+execution, a production dependency, network authorization or external audit.
 
-## Next priorities — 10% to 20%
+[A05-P04-HF02](docs/checkpoints/GW-A05-P04-HF02.md) adds bounded
+interoperability-probe input, a manually opted-in pinned upstream-source fetch
+and expanded frozen vectors. Native TinyCBOR execution and independent parser
+audit remain unrun; **no network parsing or remote authorization is approved**.
+The default runtime and offline build remain unchanged.
 
-1. **A05 upstream interoperability:** Execute a verified, pinned *actual* TinyCBOR build and compare genuine upstream results against frozen and generated positive/negative cases; distinguish CBOR parser acceptance from GhostWire-specific schema rejection.
-2. **A05 independent parser security decision:** Review memory/resource/length arithmetic, malformed frames, exception handling, canonical encoding, and write an explicit retain/replace decision. **A06 remains blocked.**
-3. **Windows development tooling:** Fail early on x86 MSVC and on missing Python security-check registration; provide discoverable x64 Visual Studio/CMake/CTest without hardcoding a user profile.
-4. **Safety prerequisites (design only until approved):** Prepare AUTH-PRE authorization and A11-PRE protected-key-store proposals. No listeners or persistent keys just because documentation lists a task.
-5. **Development coordination:** Track real versus proposed worker assignments in [current-development-map.md](current-development-map.md), [WORKER_QUEUE.json](docs/development/WORKER_QUEUE.json) and [MODULE_REGISTRY.json](docs/development/MODULE_REGISTRY.json). Proposed agent aliases are **not** claims of currently running agents.
+## Preserved checkpoint references (read only when relevant)
 
-The first Windows 10% *build/test* milestone is accepted, but project completion is still a provisional effort estimate rather than a measured feature-complete percentage. Owner-operated Windows acceptance is normally reserved for meaningful 10% milestones; targeted earlier security checks may be necessary. Historical A05-P01/P02/P04 documentation remains linked below.
-
-## Start here — reference and historical checkpoints
-
-- [Current development map](current-development-map.md): stage/function/TODO/worker ownership overview.
-- [HF09 source checkpoint](docs/checkpoints/GW-A05-P04-HF09.md) and [HF09 Windows gate procedure](docs/checkpoints/GW-A05-P04-HF09-WINDOWS-10PCT-GATE.md): accepted foundation baseline, follow-up evidence synchronization outstanding.
-- [Machine-readable module registry](docs/development/MODULE_REGISTRY.json) and [worker queue](docs/development/WORKER_QUEUE.json): existing structured tracking (owner acceptance record needs syncing).
-
+- [Membership lifecycle delivery](docs/checkpoints/GW-APP-P02-MEMBERSHIP-LIFECYCLE.md): complete local workflow, confirmed cleanup, actual checks and Windows reproduction.
+- [Local console delivery](docs/checkpoints/GW-APP-P01-LOCAL-CONSOLE.md): launch behavior, guided menu, actual checks and Windows reproduction.
 - [P03 hardening report](docs/checkpoints/GW-A04-P03.md) and [Windows acceptance](docs/checkpoints/GW-A04-P03-WINDOWS-ACCEPTANCE.md): scoped revocation/deletion repair and actual validation.
-- [P02 Windows evidence](docs/checkpoints/GW-A04-P02-HOST-ACCEPTANCE.md): historical Debug/Release 40/40 evidence; later A04 and HF09 results are recorded separately.
+- [P02 Windows evidence](docs/checkpoints/GW-A04-P02-HOST-ACCEPTANCE.md): supplied Debug/Release 40/40 each; P03 needs a new native run.
 
 - [A04-P02 report](docs/checkpoints/GW-A04-P02.md): implemented functionality, actual validation, security limits and cumulative source delivery.
 - [P02 Windows acceptance](docs/checkpoints/GW-A04-P02-WINDOWS-ACCEPTANCE.md): exact Windows 10 / VS2026 Debug/Release and interactive session instructions.
@@ -99,29 +111,29 @@ The first Windows 10% *build/test* milestone is accepted, but project completion
 - [Original A04 prompt](docs/checkpoints/GW-A04-PROMPT.md): preserved specification; design accepted, bounded P02 implementation authorized.
 - [Future features](docs/architecture/FUTURE_FEATURES.md): proposals, not implemented capabilities.
 
-## Build quickly on Windows (verified HF09 portable route)
+## Build quickly on Windows
 
-Use Visual Studio 2026's **x64** developer environment, or initialize it explicitly from a PowerShell window. In the GhostWire source root, verify `(Get-Command cl.exe).Source` contains `Hostx64\x64\cl.exe`; `Hostx86\x86` **must not** be used. Prefer `portable-debug` and `portable-release`, not the optional `windows-msvc-*` vcpkg presets (a separate vcpkg/doctest issue has existed on the host).
-
-Python 3.9+ is needed to register the **full 50-test Windows security/development suite**; the production application binaries do not require Python to run. A missing Python interpreter may silently leave only **42 registered tests** in this HF09 source, so confirm the count. The working Windows test account uses Python 3.13.13; pass its actual executable path (not the Microsoft Store execution alias) explicitly:
+Open the extracted `GhostWire` project folder in Visual Studio, then use
+Explorer → **Open in Terminal**. The terminal is already at the source root.
+Keep original TEMP/TMP and the configured PowerShell policy. The compiler path
+must contain `Hostx64\x64`. Use the supported vendored route:
 
 ```powershell
-$ErrorActionPreference = 'Stop'
-$python = (Get-Command python.exe).Source
-if ($python -match 'WindowsApps' -or -not (Test-Path $python)) { throw 'Set $python to a real Python 3.9+ executable' }
-if ((Get-Command cl.exe).Source -notlike '*Hostx64\x64\cl.exe') { throw 'Open an x64 MSVC developer terminal' }
-
-foreach ($cfg in @('portable-debug', 'portable-release')) {
-    cmake --preset $cfg --fresh "-DPython3_EXECUTABLE=$python"
-    if ($LASTEXITCODE -ne 0) { throw "$cfg configure failed" }
-    cmake --build --preset $cfg --parallel 4
-    if ($LASTEXITCODE -ne 0) { throw "$cfg build failed" }
-    ctest --preset $cfg --output-on-failure
-    if ($LASTEXITCODE -ne 0) { throw "$cfg CTest failed" }
-}
+(Get-Command cl.exe).Source
+.\tools\windows\dev-windows.ps1 -Action all -Configuration Debug -OfflineTests -Fresh
+.\tools\windows\dev-windows.ps1 -Action all -Configuration Release -OfflineTests -Fresh
+.\out\build\portable-release\bin\ghostwire-cli.exe --version
+.\out\build\portable-release\bin\ghostwire-cli.exe
 ```
 
-When opening a *normal* PowerShell, first initialize the Visual Studio x64 developer shell (using your installed VS path); otherwise `cl`, `cmake` and `ctest` may be missing. See [BUILD.md](BUILD.md) for the supported scripted and alternative vcpkg routes. This documentation-only update does not change CMake detection behavior.
+Tool discovery supports Visual Studio without hardcoded edition, year or installation paths.
+Pass `-VcpkgRoot`, `-VisualStudioRoot`, `-CMakePath`, `-CTestPath` or `-NinjaPath`
+when needed. The script pairs CTest with CMake and diagnoses mixed MSVC tools
+and x86/x64 libraries. `-Fresh` resets only the selected CMake configuration
+cache. No permanent PATH/execution-policy change or temp-directory workaround.
+Omit `-OfflineTests` for the preserved vcpkg route. A03 passed that route on
+GitHub's Windows runner; the owner's earlier local doctest configuration issue
+remains unresolved. See BUILD.md before retrying it.
 
 On Linux/macOS with CMake, Ninja and a C++20 compiler:
 
@@ -129,7 +141,7 @@ On Linux/macOS with CMake, Ninja and a C++20 compiler:
 bash tools/dev.sh all portable-debug
 bash tools/dev.sh all portable-release
 ./out/build/portable-release/bin/ghostwire-cli --version
-./out/build/portable-release/bin/ghostwire-cli --identity-session
+./out/build/portable-release/bin/ghostwire-cli
 ```
 
 ## Executables
@@ -139,17 +151,48 @@ bash tools/dev.sh all portable-release
 | ghostwire-desktop | Desktop client composition | Console bootstrap only |
 | ghostwire-server | Headless community host | Console bootstrap only |
 | ghostwire-relay | Independent forwarding node | Console bootstrap only |
-| ghostwire-cli | Local diagnostics and administration | Existing bootstrap/config checking plus explicit interactive volatile identity session |
+| ghostwire-cli | Local diagnostics and administration | Local identity menu on argument-free terminal launch; explicit session and one-shot diagnostics remain available |
 
-All support `--help`, `--version`, `--check-config`, `--config PATH`,
+All support `--help`, `--version`, `--bootstrap`, `--check-config`, `--config PATH`,
 `--data-root ABS_PATH`, and `--print-paths`. No command starts a network service.
-A default invocation creates the role's empty directories, initializes the actual
-crypto provider, reports its limited capability, and exits after orderly shutdown.
+A default desktop/server/relay invocation creates the role's empty directories,
+initializes the actual crypto provider and exits after orderly shutdown. The CLI
+with no arguments opens the local console when both input and output are terminals.
+With either stream redirected, or with explicit configuration options alone, it
+keeps one-shot startup behavior. `--bootstrap` always selects one-shot startup.
 `--check-config` does not write or initialize crypto.
 There is deliberately no implicit config search: pass `--config`.
 
 `ghostwire-cli --identity-session [--data-root ABS_PATH]` opens an owner-controlled
-console. Enter `help` for its commands and `quit` to leave. Creation, pinning,
+console, including when input/output are redirected or the IDE exposes pipes.
+The menu accepts `1` to create a profile, `2` to list, `3` to select, `4` for
+selected-profile status, `5` for prepared memberships, `6` for all commands and
+`0` to quit. `create` and `select` also open the guided prompts; `cancel` leaves
+a pending prompt. Existing complete commands such as `create 123 Johna` and
+`select 1` remain available. Type `menu` to redisplay navigation and `quit` to leave.
+At every guided prompt, `back`, `cancel`, `menu` or `..` discards pending input
+and shows the main menu; `quit` or `exit` closes the console cleanly. `help` explains
+the current field and keeps its pending context. Navigation words are reserved in
+guided fields; use a complete command such as `create 123 back` for a literal word
+display name. Numeric alias `0` remains valid data. Guided creation asks first for
+a numeric alias such as `123`, then a visible display name such as `Alex`.
+Menu `7` guides membership preparation using a full independently verified community
+public key. Menu `8` opens a prepared membership's actions: status, rename, add/rotate/
+revoke device, explicit public-record/device display, and confirmed local deletion.
+Use `0` inside that panel to return to commands. Menu `9` renames the selected profile;
+`10` requests its deletion. Type exactly `delete` to confirm deletion or `cancel` to
+keep the identity. Deleting a profile clears its selection and owned memberships,
+while other profiles and their trust decisions remain independent.
+
+`rename-membership NUMBER [ALIAS DISPLAY_NAME]` supports guided or complete commands;
+`delete profile` and `delete membership NUMBER` open the same confirmation flow.
+`trusts` lists the selected profile's console-managed profile trust pins, including
+pins whose local subject was deleted. `forget-trust NUMBER` requires typed `forget`
+confirmation and discards that pin's revision history. It changes no private keys.
+Community pins are separate: a submitted preparation failure or membership deletion
+can retain its explicit community pin, as reported by the console.
+
+Creation, pinning,
 record acceptance and device changes are explicit operations on selected local
 handles; matching aliases never select or merge identities. Public identity data
 is displayed only through explicit commands. Preparing community credentials
@@ -184,10 +227,11 @@ byte-conversion fixes; its Linux, Windows and macOS hosted jobs passed. Those
 runs predate A02. The owner subsequently accepted A02 on Windows Debug/Release
 35/35 each, original TEMP/TMP, on the win10dev account. A03-HF01 subsequently
 passed owner Windows 37/37 each and all nine hosted Windows/Linux/macOS jobs;
-see its acceptance addendum. These are historical checkpoints. HF09 has separate Windows Debug and Release
-50/50 native acceptance, recorded above; do not infer hosted CI from those local results.
+see its acceptance addendum. Those results do not validate P02's new code.
+P02's measured results and outstanding native checks are in its report.
 Windows owner's standard vcpkg/doctest configure failure remains a separate
 local-environment issue; passing hosted CI does not prove that route on that host.
-No runtime networking, persistent identity or public user directory exists at HF09.
+No runtime networking, persistent identity or public user directory exists at this checkpoint.
 
-Historical A05-P04-HF04 partial security checkpoint: the optional interoperability comparator now strictly verifies the GhostWire probe response format and echoed wire bytes (22 offline fault checks). Actual pinned TinyCBOR execution and independent security review remain mandatory before networking.
+
+A05-P04-HF04 partial security checkpoint: the optional interoperability comparator now strictly verifies the GhostWire probe response format and echoed wire bytes (22 offline fault checks). Actual pinned TinyCBOR execution and independent security review remain mandatory before networking.

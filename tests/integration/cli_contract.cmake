@@ -39,4 +39,10 @@ elseif(CASE STREQUAL "bootstrap")
     if(NOT output MATCHES "crypto provider ready; no live networking or messaging implemented")
         message(FATAL_ERROR "Bootstrap must disclose its limited capability")
     endif()
+    execute_process(COMMAND "${EXE}" --bootstrap --data-root "${WORK}/explicit application"
+        RESULT_VARIABLE status OUTPUT_VARIABLE output ERROR_VARIABLE errors TIMEOUT 10)
+    if(NOT "${status}" STREQUAL "0" OR NOT errors MATCHES "shutdown" OR
+        NOT output MATCHES "bootstrap complete" OR output MATCHES "Local identity menu")
+        message(FATAL_ERROR "Explicit bootstrap must complete without entering the console")
+    endif()
 endif()

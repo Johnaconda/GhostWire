@@ -32,7 +32,10 @@ def test():
     pins = {'files': {'LICENSE': [len(payload), hashlib.sha256(payload).hexdigest()]}}
     count = 0
     with tempfile.TemporaryDirectory() as directory:
-        root = Path(directory)
+        # macOS may spell the temporary base /var/... even when /var is a
+        # symlink to /private/var. Canonicalize the trusted test fixture, not
+        # the importer input: the security boundary must still reject aliases.
+        root = Path(directory).resolve()
         src = root / 'src'; src.mkdir()
         (src / 'LICENSE').write_bytes(payload)
         assert imp.load_input(src, pins) == {'LICENSE': payload}; count += 1
@@ -43,6 +46,11 @@ def test():
             try:
                 (root / 'linked').symlink_to(src, target_is_directory=True)
                 must_reject(root / 'linked', pins, 'symlinked root'); count += 1
+                # A valid directory beneath a symlinked parent is still an
+                # unsafe importer input, even when its contents are pinned.
+                (root / 'linked-parent').symlink_to(root, target_is_directory=True)
+                must_reject(root / 'linked-parent' / 'src', pins, 'symlinked ancestor'); count += 1
+                assert imp.load_input(src, pins) == {'LICENSE': payload}; count += 1
                 (root / 'linked').unlink()
                 (src / 'LICENSE').unlink()
                 (src / 'LICENSE').symlink_to(root / 'real-license')

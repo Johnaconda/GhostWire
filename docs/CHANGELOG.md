@@ -1,3 +1,108 @@
+## GW-DEV-CONTEXT-BOOTSTRAP revision 1 — 2026-11-02
+
+Patch author tag: **GPT-6.1-Sol-Max**, owner-provided. Add START-HERE.md, concise
+active AGENTS.md and read-only task_context.py with bounded packets, exact section/
+declaration locators, readiness/gates, intended writes and check suggestions.
+Archive older startup history and retain all substantive contracts. Add focused
+routing/source-verification tests and cumulative package metadata. No runtime,
+CMake/CI, dependency or application-test change; no progress/security/native gate
+is closed. [Evidence](checkpoints/GW-DEV-CONTEXT-BOOTSTRAP.md).
+
+## GW-APP-P02-MEMBERSHIP-LIFECYCLE revision 2 — 2026-11-01
+
+Patch author tag: **GPT-6.1-Sol-Max**, owner-provided. Fix guided prompts consuming
+back/quit as aliases or names. Standalone back/cancel/menu/.. discards pending work;
+quit/exit closes normally; help explains the current field. Clarify numeric alias
+and display name. Zero aliases and literal names through complete commands remain.
+Record owner revision 1 Windows x64 Debug/Release 31/31 CLI builds, 1/1 workflow
+each and menu launch; these are not revision 2 or full-suite results. New Linux
+Debug/Release builds and 9/9 scoped CLI checks each pass. Default archive and source
+metadata include the author tag, with matching checksum filename/content. No shell
+profile, terminal mode, canonical service, dependency or security-gate change.
+[Evidence](checkpoints/GW-APP-P02-MEMBERSHIP-LIFECYCLE.md).
+
+## GW-APP-P02-MEMBERSHIP-LIFECYCLE revision 1 — 2026-11-01
+
+Add guided membership preparation, a membership label/device/public-record panel,
+guided profile rename and confirmed local profile/membership deletion. Add explicit
+console-managed trust listing/forgetting, retaining other profiles' independent pins
+when a local subject is deleted. Pending actions bind handles; cancellation or EOF
+before completion/confirmation applies no pending mutation. Existing service APIs,
+core/crypto/codec, terminal routing, dependencies and CMake/CI are unchanged.
+Linux Debug/Release each pass 11 scoped CTests and two new terminal workflows;
+native execution remains pending. See [evidence](checkpoints/GW-APP-P02-MEMBERSHIP-LIFECYCLE.md).
+
+## GW-APP-P01-LOCAL-CONSOLE revision 1 — 2026-11-01
+
+Launch the CLI without arguments in a terminal to open the real volatile identity
+console. Add a short numbered menu, guided create/select with cancellation,
+selected-profile status and selected-list marker. Redirected startup remains
+one-shot; explicit --identity-session still accepts scripts. Add --bootstrap for
+explicit one-shot startup in all roles. Extend existing checks without new test
+targets or dependencies. Linux Debug/Release each pass 34 scoped CTests and 14
+terminal/redirection scenarios; native confirmation remains pending. All A05,
+AUTH-PRE and protected-storage gates remain open. See
+[delivery evidence](checkpoints/GW-APP-P01-LOCAL-CONSOLE.md).
+
+## Upstream interoperability revision 6 — 2026-10-31
+
+Strengthen the existing optional fuzz entrypoint with exact canonical round-trip,
+decoded-value stability and admission-release checks active under NDEBUG. Two
+bounded Clang ASan/UBSan campaigns execute 37,513,997 inputs without a finding;
+retained inputs pass independent reference/TinyCBOR replay. Both temporary fault
+controls fail as expected. Production code, CI, dependency pins and normal builds
+are unchanged. Leak-enabled and native platform validation remain open. See
+[checkpoint evidence](checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md).
+
+## Upstream interoperability revision 5 — 2026-10-31
+
+Enable pinned TinyCBOR in existing Linux Debug/Release/sanitizer, Windows
+Debug/Release and macOS Intel/ARM Debug/Release jobs. Add an explicit Windows
+`-TinyCborInterop` configure/all switch and verbose CI test output. Preserve
+jobs, matrices, pins, permissions, production code and test cases. Fresh portable
+Linux Debug builds all targets and passes 54/54 tests, including the unchanged
+4,023-case comparison. Hosted/native execution remains pending; no remote write
+or immediate owner rerun. See [checkpoint evidence](checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md).
+
+## Upstream interoperability revision 4 — 2026-10-30
+
+Focused codec review reproduced a null dereference when an exception leaves a
+caller-created envelope body valueless. Reject it with `malformed_frame` before
+size preflight or allocation, preserving admission recovery. Add one regression
+to the existing protocol unit suite; valid wire bytes and trust rules are unchanged.
+Linux Release CTest 54/54, targeted Debug 5/5 and scoped ASan/UBSan 3/3 pass;
+the existing 4,023-case comparison is unchanged. Native confirmation of the guard
+is deferred to the next agreed checkpoint. This coordinator review does not close
+the independent external review or macOS gates. See
+[checkpoint evidence](checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md).
+
+## Upstream interoperability revision 3 — 2026-10-29
+
+Record owner revision 2 VS2026/MSVC 19.51.36260.0 x64 Debug/Release success:
+both targeted tests pass 2/2 in each configuration, with the same 4,023-case
+counts as GCC. C4245/C2220 is resolved; upstream C5287 remains nonfatal.
+Evidence and package metadata only; code, dependencies, build settings and
+tests are unchanged. No repeat Windows run is requested. Native macOS evidence
+and independent parser review/owner decision remain open.
+See [checkpoint evidence](checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md).
+Earlier pending statements below describe their original deliveries.
+
+## Upstream interoperability revision 2 — 2026-10-29
+
+Correct the owner-reported MSVC C4245/C2220 in the test-only TinyCBOR probe:
+convert validation enums to uint32_t before OR-ing, preserving all mask bits.
+Original failure reproduced with GCC sign-conversion errors; corrected Debug,
+Release and scoped ASan/UBSan interop pass. Native Windows rerun is pending.
+See [checkpoint evidence](checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md).
+
+## GW-A05-P04-UPSTREAM-INTEROP (2026-10-29)
+
+Bundled the exact 12 pinned TinyCBOR v7.0 sources and ran the existing native
+GCC Debug/Release 4,023-case comparison and stdin-bounds checks. Fixed source
+packaging and optional build language/sanitizer/vendor-header integration.
+Production behavior remains unchanged; Windows/macOS and independent security
+approval remain open. See [evidence](checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md).
+
 ## GW-A05-P04-HF09 (2026-10-27) — MSVC exception-contract correction
 
 - Owner Windows x64 HF08 configured but `/WX` rejected C4297 in the test-only

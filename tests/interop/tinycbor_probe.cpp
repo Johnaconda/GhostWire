@@ -32,9 +32,15 @@ bool upstream_accepts(const std::vector<std::uint8_t> &frame) {
     CborParser parser{};
     CborValue item{};
     if (cbor_parser_init(frame.data() + 4, len, 0, &parser, &item) != CborNoError) return false;
-    constexpr std::uint32_t flags = CborValidateShortestIntegrals |
-        CborValidateNoIndeterminateLength | CborValidateMapIsSorted |
-        CborValidateMapKeysAreUnique | CborValidateNoTags | CborValidateCompleteData;
+    // Owner: coordinator, GW-A05-INTEROP-MSVC. Keep the mask unsigned:
+    // upstream defines CompleteData as (int)0x80000000, which sets bit 31.
+    constexpr std::uint32_t flags =
+        static_cast<std::uint32_t>(CborValidateShortestIntegrals) |
+        static_cast<std::uint32_t>(CborValidateNoIndeterminateLength) |
+        static_cast<std::uint32_t>(CborValidateMapIsSorted) |
+        static_cast<std::uint32_t>(CborValidateMapKeysAreUnique) |
+        static_cast<std::uint32_t>(CborValidateNoTags) |
+        static_cast<std::uint32_t>(CborValidateCompleteData);
     return cbor_value_validate(&item, flags) == CborNoError;
 }
 } // namespace

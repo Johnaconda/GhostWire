@@ -1,0 +1,487 @@
+{
+  "schema_version": 1,
+  "rules": [
+    "Read START-HERE.md and AGENTS.md once; their invariants always apply. Read only the selected code/contract sections, direct callers and relevant tests.",
+    "This is a read-only index, not proof of completeness or authorization. Expand for shared APIs, ownership, wire semantics or security boundaries; record why and update the route.",
+    "Checks below are suggestions to choose after changes, never automatic execution. Update task/report/source metadata at delivery; omit unchanged history/vendor/build outputs."
+  ],
+  "gates": [
+    "A05 native macOS/guard confirmation, independent parser review and owner disposition remain open; no A06 networking.",
+    "AUTH-PRE possession/channel binding/commit-time authorization and A11-PRE protected private storage remain unimplemented; current CLI keys/trust are volatile.",
+    "Official completion is null; accepted effort floor 11/110 (~10%); next agreed Windows gate 20%, not each small patch. No remote publication without owner authorization."
+  ],
+  "areas": {
+    "cli": {
+      "read": [
+        {
+          "path": "apps/cli/identity_session.cpp",
+          "find": "class Session"
+        },
+        {
+          "path": "apps/cli/identity_session.hpp"
+        },
+        {
+          "path": "apps/cli/main.cpp"
+        },
+        {
+          "path": "apps/cli/terminal.cpp"
+        },
+        {
+          "path": "tests/integration/identity_session.cmake"
+        },
+        {
+          "path": "tests/integration/cli_contract.cmake"
+        },
+        {
+          "path": "docs/architecture/IDENTITY_DESIGN.md",
+          "find": "## Service and console surfaces"
+        },
+        {
+          "path": "docs/development/MASTER_CONTRACT.md",
+          "find": "# 07 — CRYPTOGRAPHIC IDENTITY"
+        }
+      ],
+      "write": [
+        "apps/cli",
+        "tests/integration/identity_session.cmake",
+        "tests/integration/cli_contract.cmake"
+      ],
+      "checks": [
+        "Configure/build only after code changes: see BUILD.md portable-debug/release commands; use the configured Python executable on Windows.",
+        "cmake --build out/build/portable-debug --target ghostwire-cli --parallel 4",
+        "ctest --test-dir out/build/portable-debug -R \"^(cli-|identity-)\" --output-on-failure",
+        "Repeat affected workflows in Release for behavior changes; identity API changes require identity/fault coverage, not just CLI."
+      ],
+      "expand": [
+        "Changed service semantics: add identity declarations, implementation, callers and identity/fault tests.",
+        "Changed terminal/bootstrap behavior: inspect terminal, core bootstrap, all role contracts and unicode/redirected workflows."
+      ]
+    },
+    "identity": {
+      "read": [
+        {
+          "path": "include/ghostwire/identity/identity_service.hpp"
+        },
+        {
+          "path": "include/ghostwire/identity/identity_record.hpp"
+        },
+        {
+          "path": "src/identity/identity_service.cpp"
+        },
+        {
+          "path": "src/identity/identity_record.cpp"
+        },
+        {
+          "path": "tests/unit/identity_service_tests.cpp"
+        },
+        {
+          "path": "docs/architecture/IDENTITY_DESIGN.md",
+          "find": "## Profile isolation, key use and trust operations"
+        },
+        {
+          "path": "docs/architecture/IDENTITY_DESIGN.md",
+          "find": "## Verification and authorization order"
+        },
+        {
+          "path": "docs/development/MASTER_CONTRACT.md",
+          "find": "# 07 — CRYPTOGRAPHIC IDENTITY"
+        },
+        {
+          "path": "tests/unit/identity_record_tests.cpp"
+        },
+        {
+          "path": "tests/unit/identity_lifecycle_tests.cpp"
+        }
+      ],
+      "write": [
+        "include/ghostwire/identity",
+        "src/identity",
+        "tests/unit/identity_service_tests.cpp",
+        "tests/unit/identity_fault_tests.cpp",
+        "tests/unit/identity_record_tests.cpp",
+        "tests/unit/identity_lifecycle_tests.cpp"
+      ],
+      "checks": [
+        "Build existing identity, fault and CLI targets; run identity-* and cli-* CTests in Debug/Release.",
+        "python3 tools/check_boundaries.py"
+      ],
+      "expand": [
+        "Changed frame/authority/key lifetime: inspect crypto contract, signing-frame design, composition and every affected caller."
+      ]
+    },
+    "protocol": {
+      "read": [
+        {
+          "path": "include/ghostwire/protocol/wire_codec.hpp"
+        },
+        {
+          "path": "src/protocol/wire_codec.cpp"
+        },
+        {
+          "path": "tests/unit/protocol_tests.cpp"
+        },
+        {
+          "path": "docs/architecture/PROTOCOL_SCHEMA.md"
+        },
+        {
+          "path": "docs/decisions/ADR-010-RESTRICTED-WIRE-CODEC-P02.md",
+          "find": "## Current maintain/replace recommendation"
+        },
+        {
+          "path": "docs/security/SECURITY_INVARIANTS.md",
+          "find": "## A05-P01 design-only prospective boundaries"
+        },
+        {
+          "path": "docs/development/MASTER_CONTRACT.md",
+          "find": "# 19 — SECURITY ENGINEERING REQUIREMENTS"
+        }
+      ],
+      "write": [
+        "include/ghostwire/protocol",
+        "src/protocol",
+        "tests/unit/protocol_tests.cpp",
+        "tests/fixtures/protocol"
+      ],
+      "checks": [
+        "Use existing protocol unit/fault/bounds/interop suites; sanitizer/fuzz replay as affected. Keep native/external gates separate.",
+        "python3 tools/check_boundaries.py"
+      ],
+      "expand": [
+        "Changed allocation/schema/canonical encoding: include allocation fixtures, fuzz entrypoint and pinned interop comparison.",
+        "Read pinned third_party only for a dependency/interop change; never use this route to authorize networking."
+      ]
+    },
+    "core": {
+      "read": [
+        {
+          "path": "include/ghostwire/core/service_manager.hpp"
+        },
+        {
+          "path": "src/core/service_manager.cpp"
+        },
+        {
+          "path": "src/core/bootstrap.cpp"
+        },
+        {
+          "path": "tests/unit/core_tests.cpp"
+        },
+        {
+          "path": "docs/architecture/CORE_LIFECYCLE.md"
+        },
+        {
+          "path": "docs/architecture/DEPENDENCY_GRAPH.md"
+        },
+        {
+          "path": "docs/development/MASTER_CONTRACT.md",
+          "find": "# 04 — SYSTEM ARCHITECTURE"
+        }
+      ],
+      "write": [
+        "include/ghostwire/core",
+        "src/core",
+        "tests/unit/core_tests.cpp"
+      ],
+      "checks": [
+        "Build core and affected consumers; run existing core-unit and affected role/CLI lifecycle workflows.",
+        "python3 tools/check_boundaries.py"
+      ],
+      "expand": [
+        "Changed ownership/startup/shutdown/admission: include all direct consumers and fault/retry/cancellation coverage."
+      ]
+    },
+    "platform": {
+      "read": [
+        {
+          "path": "include/ghostwire/platform/process.hpp"
+        },
+        {
+          "path": "src/platform/process.cpp"
+        },
+        {
+          "path": "src/platform/secure_storage.cpp"
+        },
+        {
+          "path": "tests/unit/platform_tests.cpp"
+        },
+        {
+          "path": "docs/architecture/PLATFORM_ABSTRACTIONS.md"
+        },
+        {
+          "path": "docs/development/MASTER_CONTRACT.md",
+          "find": "# 10 — LOCAL ENCRYPTED VAULT"
+        }
+      ],
+      "write": [
+        "include/ghostwire/platform",
+        "src/platform",
+        "tests/unit/platform_tests.cpp"
+      ],
+      "checks": [
+        "Run existing platform/stop/role tests for touched adapters; record each actual native platform separately.",
+        "python3 tools/check_boundaries.py"
+      ],
+      "expand": [
+        "Changed native adapter or cancellation: inspect platform fixtures and every consumer; unavailable native execution remains unrun.",
+        "Storage capability detection is not protected persistence: A11-PRE remains required."
+      ]
+    },
+    "crypto": {
+      "read": [
+        {
+          "path": "include/ghostwire/crypto/crypto_provider.hpp"
+        },
+        {
+          "path": "src/crypto/crypto_provider.cpp"
+        },
+        {
+          "path": "tests/unit/crypto_tests.cpp"
+        },
+        {
+          "path": "docs/architecture/CRYPTO_PROVIDER.md"
+        },
+        {
+          "path": "docs/decisions/ADR-006-CRYPTO-PROVIDER.md"
+        },
+        {
+          "path": "docs/development/MASTER_CONTRACT.md",
+          "find": "# 07 — CRYPTOGRAPHIC IDENTITY"
+        },
+        {
+          "path": "docs/development/MASTER_CONTRACT.md",
+          "find": "# 19 — SECURITY ENGINEERING REQUIREMENTS"
+        }
+      ],
+      "write": [
+        "include/ghostwire/crypto",
+        "src/crypto",
+        "tests/unit/crypto_tests.cpp"
+      ],
+      "checks": [
+        "Build existing crypto targets; run crypto-* CTests including fault/entropy/temporary-path coverage in Debug/Release.",
+        "python3 tools/check_boundaries.py"
+      ],
+      "expand": [
+        "Changed keys, entropy, primitive selection or backend: inspect identity callers, fault tests, platform paths and pinned Botan evidence; broaden native/security regression."
+      ]
+    },
+    "permissions": {
+      "read": [
+        {
+          "path": "include/ghostwire/permissions/local_policy.hpp"
+        },
+        {
+          "path": "src/permissions/local_policy.cpp"
+        },
+        {
+          "path": "docs/architecture/IDENTITY_DESIGN.md",
+          "find": "## Gates"
+        },
+        {
+          "path": "docs/development/MASTER_CONTRACT.md",
+          "find": "# 14 — SELF-HOSTED COMMUNITIES"
+        },
+        {
+          "path": "docs/development/MASTER_CONTRACT.md",
+          "find": "# 19 — SECURITY ENGINEERING REQUIREMENTS"
+        }
+      ],
+      "write": [
+        "include/ghostwire/permissions",
+        "src/permissions"
+      ],
+      "checks": [
+        "Inspect existing local-policy tests and explicit authorization gates before selecting checks; no AUTH-PRE implementation is assigned."
+      ],
+      "expand": [
+        "Candidate policy data cannot authorize actions: fresh possession, channel binding and commit-time checks need a separately reviewed scope."
+      ]
+    },
+    "build": {
+      "read": [
+        {
+          "path": "CMakeLists.txt"
+        },
+        {
+          "path": "CMakePresets.json"
+        },
+        {
+          "path": "tools/windows/dev-windows.ps1"
+        },
+        {
+          "path": "tools/windows/tooling.ps1"
+        },
+        {
+          "path": "BUILD.md",
+          "find": "## Windows 10 x64 / Visual Studio 2026 Community"
+        },
+        {
+          "path": "docs/development/MASTER_CONTRACT.md",
+          "find": "# 03 — LANGUAGE AND TOOLCHAIN"
+        }
+      ],
+      "write": [
+        "CMakeLists.txt",
+        "CMakePresets.json",
+        "cmake",
+        "tools/windows",
+        "BUILD.md"
+      ],
+      "checks": [
+        "Run existing windows-tooling/static documentation tests and configure/build only the affected presets.",
+        "Native Windows/macOS evidence must be identified by exact source; do not invent results from static checks."
+      ],
+      "expand": [
+        "Dependency pin/toolchain/CI changes: include matching manifests, platform jobs and native gates; no remote dispatch/publication."
+      ]
+    },
+    "native": {
+      "read": [
+        {
+          "path": "BUILD.md",
+          "find": "## Windows 10 x64 / Visual Studio 2026 Community"
+        },
+        {
+          "path": "BUILD.md",
+          "find": "## Linux and macOS"
+        },
+        {
+          "path": "tools/windows/dev-windows.ps1"
+        },
+        {
+          "path": "docs/checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md",
+          "find": "## Revision 6 — bounded fuzz properties, 2026-10-31"
+        },
+        {
+          "path": "docs/decisions/ADR-010-RESTRICTED-WIRE-CODEC-P02.md",
+          "find": "## Current maintain/replace recommendation"
+        }
+      ],
+      "write": [
+        "docs/checkpoints",
+        "docs/development/MODULE_REGISTRY.json"
+      ],
+      "checks": [
+        "Follow source-specific native commands only within owner-authorized acceptance scope; preserve earlier source results."
+      ],
+      "expand": [
+        "Actual native evidence closes only the tested source/platform scope, never independent parser review or owner disposition."
+      ]
+    },
+    "development": {
+      "read": [
+        {
+          "path": "tools/development/task_context.py"
+        },
+        {
+          "path": "tools/development/test_task_context.py"
+        },
+        {
+          "path": "docs/development/TASK_CONTEXTS.json"
+        },
+        {
+          "path": "tools/development/module_registry.py"
+        },
+        {
+          "path": "docs/development/STRUCTURE_RULES.md"
+        },
+        {
+          "path": "tools/packaging/package_source.py"
+        },
+        {
+          "path": "docs/development/MASTER_CONTRACT.md",
+          "find": "# 23 — GITHUB DEVELOPMENT POLICY"
+        }
+      ],
+      "write": [
+        "tools/development",
+        "tools/packaging/package_source.py",
+        "docs/development",
+        "START-HERE.md",
+        "AGENTS.md",
+        "current-development-map.md"
+      ],
+      "checks": [
+        "python3 tools/development/test_task_context.py",
+        "python3 tools/development/test_module_registry.py",
+        "python3 tools/development/module_registry.py",
+        "python3 tools/check_boundaries.py",
+        "Package and verify clean inventory; no C++/Windows rebuild is required for this tooling/documentation change."
+      ],
+      "expand": [
+        "Changed DAG/readiness/merge semantics: add focused existing registry/merge tests.",
+        "Changed source packaging: verify cumulative inventory, protected source bytes, attribution and checksum pairing."
+      ]
+    }
+  },
+  "module_areas": {
+    "GW-A00": "development",
+    "GW-A01": "core",
+    "GW-A02": "platform",
+    "GW-A03": "crypto",
+    "GW-A04": "identity",
+    "GW-A05": "protocol",
+    "GW-A06": "protocol",
+    "GW-A21": "permissions"
+  },
+  "tasks": {
+    "GW-APP-LOCAL-CONSOLE": {
+      "area": "cli"
+    },
+    "GW-APP-MEMBERSHIP-LIFECYCLE": {
+      "area": "cli"
+    },
+    "GW-APP-PROMPT-NAVIGATION": {
+      "area": "cli"
+    },
+    "GW-APP-PUBLIC-RECORD-EXCHANGE": {
+      "area": "cli",
+      "write": [
+        "apps/cli/identity_session.cpp",
+        "tests/integration/identity_session.cmake"
+      ],
+      "read": [
+        {
+          "path": "include/ghostwire/identity/identity_service.hpp",
+          "find": "pin_authority("
+        },
+        {
+          "path": "include/ghostwire/identity/identity_service.hpp",
+          "find": "verify_record("
+        },
+        {
+          "path": "include/ghostwire/identity/identity_service.hpp",
+          "find": "accept_record("
+        },
+        {
+          "path": "include/ghostwire/identity/identity_record.hpp"
+        },
+        {
+          "path": "docs/architecture/IDENTITY_DESIGN.md",
+          "find": "## Verification and authorization order"
+        },
+        {
+          "path": "docs/architecture/IDENTITY_DESIGN.md",
+          "find": "## Public DeviceSet signing frame"
+        }
+      ],
+      "expand": [
+        "Before implementation read the actual existing record limits/encoding and verify/pin/accept definitions and their negative tests; no new parser or implicit trust."
+      ]
+    },
+    "GW-A05-UPSTREAM-NATIVE": {
+      "area": "native"
+    },
+    "GW-DEV-CONTEXT-BOOTSTRAP": {
+      "area": "development"
+    },
+    "GW-DEV-STRUCTURE-HF05": {
+      "area": "development"
+    },
+    "GW-DEV-DOCS-HF05": {
+      "area": "build"
+    },
+    "GW-DEV-EFFORT-HF06": {
+      "area": "development"
+    }
+  }
+}

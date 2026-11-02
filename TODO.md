@@ -1,3 +1,70 @@
+## Current developer context bootstrap — 2026-11-02
+
+`GW-DEV-CONTEXT-BOOTSTRAP` adds the first-read guide and bounded task routing.
+Patch author tag: **GPT-6.1-Sol-Max**. Read START-HERE.md and AGENTS.md once, then
+`python3 tools/development/task_context.py --task TASK_ID`; do not reload every
+historical checkpoint at startup. This tooling-only delivery preserves P02 r2.
+**GW-APP-PUBLIC-RECORD-EXCHANGE** remains ready, unassigned and unimplemented.
+A05/AUTH-PRE/A11-PRE gates and official completion null remain; no extra Windows
+acceptance is requested. [Evidence](docs/checkpoints/GW-DEV-CONTEXT-BOOTSTRAP.md).
+
+## Current P02 revision 2 — prompt navigation, 2026-11-01
+
+- [x] Record owner P02 revision 1 Windows x64 Debug/Release CLI builds 31/31 each, identity workflow 1/1 each and automatic menu launch. Manual create/rename completion was not supplied; alias/back/quit confusion exposed the UI trap. No full suite or new A05 acceptance inferred.
+- [x] `GW-APP-PROMPT-NAVIGATION`: resolve standalone back/cancel/menu/../help/quit/exit before guided field validation; clarify numeric alias versus visible display name. Keep numeric zero and direct-command literal word names. Existing session source/header/integration test only; service contracts unchanged.
+- [x] Fresh Linux Debug/Release CLI builds 31/31 and scoped CLI CTests 9/9 each; existing workflow now covers help/back/quit across 19 prompt contexts, whitespace/synonyms, the owner reproduction, zero and literal names. No added CTest target or persisted file.
+- [x] Add owner-provided author tag `GPT-6.1-Sol-Max` to current delivery metadata, default archive name/report/response and matched SHA-256 sidecar. Runtime identity remains separate.
+- [ ] Revision 2 native confirmation remains unrun; bundle acceptance at the next agreed gate. PSReadLine's shell cursor exception is not claimed fixed by this patch; no shell policy/module installation is changed.
+
+Evidence is in the existing [P02 report](docs/checkpoints/GW-APP-P02-MEMBERSHIP-LIFECYCLE.md). Confidence 0.94 is separate from completion; accepted effort floor remains 11/110, about 10%.
+
+## Historical local membership lifecycle delivery — 2026-11-01
+
+- [x] `GW-APP-MEMBERSHIP-LIFECYCLE`: guided preparation and membership label/device/public-record actions over existing A04 services; source `apps/cli/identity_session.cpp/.hpp`, existing integration test. Dependency: completed `GW-APP-LOCAL-CONSOLE` and accepted volatile A04 APIs.
+- [x] Guided profile rename; profile/membership deletion with exact confirmation; console-managed trust listing/confirmed forgetting. Pending operations bind full handles. Deletion clears only owned UI handles; another profile's independent pin remains available for explicit cleanup.
+- [x] Linux Debug/Release scoped builds and 11/11 CTests each; identity unit 41 cases / 1799 assertions and fault suite 11 cases / 127 assertions; two new terminal workflows each. Existing integration verifies unchanged rename keys, fresh recreated identities, scoped devices, cancellation/EOF, retained pins and no persisted file.
+- [ ] Native Windows/macOS confirmation at the next agreed gate; no immediate acceptance rerun requested. Runtime remains 0.4.1, official completion null and accepted floor 11/110 (about 10%). No A05/AUTH-PRE/protected-storage gate is waived.
+- [ ] `GW-APP-PUBLIC-RECORD-EXCHANGE`: next proposed local task, unimplemented/unassigned. Use existing A04 verify/pin/accept APIs for bounded offline public record exchange between sessions, with explicit full authority and owner scope. No sockets, A05 wire-parser approval, automatic trust or private-key persistence.
+
+Acceptance and evidence: [GW-APP-P02-MEMBERSHIP-LIFECYCLE](docs/checkpoints/GW-APP-P02-MEMBERSHIP-LIFECYCLE.md). Implementation confidence 0.92, separate from progress and native acceptance.
+
+## Historical local console delivery — 2026-11-01
+
+- [x] `GW-APP-LOCAL-CONSOLE` — use existing A04 services to make the local experience discoverable. Sources: `apps/cli/main.cpp`, `terminal.cpp/.hpp`, `identity_session.cpp/.hpp`, and the core CLI bootstrap option/help. Dependency: accepted A04 volatile identity; no dependency on blocked network authorization.
+- [x] Automatic entry only with no arguments and both streams attached to a terminal; explicit session/one-shot commands and other executable roles keep deterministic behavior.
+- [x] Numbered menu, guided profile creation/selection, selected-list marker and explicit selected-label status. Cancel/EOF during creation never publishes a profile; rejected/oversized input remains bounded and is not echoed.
+- [x] Extend existing CLI/core integration suites; Linux Debug/Release each build four roles and core tests, pass 34 scoped CTests (core 67 cases / 643 assertions), plus 14 host terminal/redirection scenarios per configuration. No new test target or parser harness.
+- [ ] Native Windows/macOS confirmation of this app source, grouped with the next agreed gate; no immediate Windows acceptance repeat requested. Owner acceptance of the new app delivery remains separate from accepted A04 baseline.
+
+Acceptance: real menu-to-profile/status/select/quit flow, unchanged redirected bootstrap, fixed diagnostics, clean EOF and no persistent files. Evidence: [GW-APP-P01-LOCAL-CONSOLE](docs/checkpoints/GW-APP-P01-LOCAL-CONSOLE.md). Implementation confidence 0.92; official completion remains null and accepted floor remains 11/110 points (about 10%). A05/native/security, AUTH-PRE, A11-PRE and A06 gates below stay open.
+
+## Historical A05 fuzz invariants revision 6 — 2026-10-31
+
+- [x] Extend the existing optional fuzz target with canonical byte round trips, decoded-value stability and admission recovery after accepted/rejected operations; keep checks active under NDEBUG.
+- [x] Run two bounded Clang ASan/UBSan campaigns: 37,513,997 executions without a finding. Minimize to 1,937 inputs and cross-check with 18 frozen controls against the existing Python reference and actual TinyCBOR; two temporary negative controls fail as expected.
+- [!] Leak-enabled replay still fails at host process inspection. These leak-disabled Linux campaigns do not close native platform or independent security review gates.
+
+- [x] Enable actual pinned TinyCBOR in the existing Linux Debug/Release/sanitizer, Windows Debug/Release and macOS Intel/ARM Debug/Release jobs; preserve runner/action/dependency pins and read-only workflow permissions.
+- [x] Add explicit Windows `-TinyCborInterop` configure/all switch; preserve default local builds and existing x64 tool discovery. Fresh portable Linux Debug all-target build and 54/54 CTest pass; YAML structure and Bash syntax checks pass.
+- [ ] Execute these workflows on owner-published source and collect exact-source native evidence. No push, dispatch, PowerShell execution or hosted native run was performed in this pass.
+
+- [x] Review codec framing/cursors, canonical forms, closed schema, resource/lease behavior and trust boundary; reproduce the valueless-body encoder null dereference and reject it with `malformed_frame`.
+- [x] Add one regression to the existing protocol unit suite, preserving admission recovery and both permitted standard-library emplace failure outcomes.
+- [ ] Native confirmation of the revision 4 guard at the next agreed checkpoint. Revision 2 Windows success below is retained without claiming it tested this new change; no immediate rerun is requested.
+- [x] Correct owner-reported MSVC C4245/C2220 in the test-only validation mask; reproduce with GCC sign-conversion diagnostics and rerun existing interop/bounds tests.
+- [x] Owner revision 2 VS2026/MSVC x64 Debug/Release builds and both targeted interop/bounds checks pass 2/2 each; 4,023-case results match GCC. Revision 1's compile failure is resolved.
+- [x] Verify HF19's 298-file manifest and reconcile against GitHub main 89af5eeb.
+- [x] Fetch/import the actual pinned TinyCBOR v7.0 source (12/12 hashes); bundle it for offline reproduction.
+- [x] Run actual GCC Debug/Release comparison: 4,023 cases and stdin bounds pass in each; instrumented ASan/UBSan passes with local leak detection disabled after host teardown failure.
+- [x] Repair pinned C-source packaging, explicit probe C++20, upstream sanitizer instrumentation and vendor-header warning boundary.
+- [~] Retain the restricted reader for current offline use is the recorded recommendation, not production approval.
+- [!] Native macOS evidence, leak-enabled and cross-platform fuzz validation, and independent external parser review remain outstanding. The coordinator's review does not close the external gate. Upstream C5287 remains visible and nonfatal on the tested Windows source.
+- [ ] After accepted A05: composition-owned AUTH-PRE with fresh possession context and commit-time policy/revocation. No A06 or persistent private keys before their gates.
+
+See [checkpoint evidence](docs/checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md) and
+[current map](current-development-map.md). The following sections preserve historical
+snapshots; earlier upstream-unavailable wording is superseded by this section.
+
 ## Current A05-P04-HF06 — Resource review / estimated milestone gates (2026-10-26)
 
 - [x] Protocol resource/cancellation/deadline limits covered across the three supported wire kinds and routed max-size DeviceSet; allocation-free denied decode and lease recovery validated on Linux.

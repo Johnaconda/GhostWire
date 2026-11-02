@@ -1,34 +1,35 @@
-# TinyCBOR source gate (not yet installed)
+# TinyCBOR — pinned, bundled, test-only
 
-The upstream TinyCBOR v7.0 release is *not* bundled at this checkpoint.
-`tools/protocol/tinycbor_pins.json` identifies the fixed upstream commit and
-12 original source files, including its MIT LICENSE, by SHA-256.
+`verified/` contains the 12 original files selected by
+`tools/protocol/tinycbor_pins.json` from Intel TinyCBOR v7.0, immutable commit
+`6442e749ca811e24afad1551338a45c75e09808f`. Their original MIT license and file
+notices are preserved. No upstream source bytes are modified.
 
-The owner may separately supply a ZIP or extracted directory from that exact
-release, then run `python tools/protocol/import_tinycbor.py --source <PATH>`
-for verification only, or add `--install` to stage verified test-only sources into an atomically published `verified/` directory.
-No normal CMake build, CI check or executable performs a download. Importing
-source is not equivalent to an independent code or license compliance audit.
+The existing explicit fetch/import utilities obtained these sources on
+2026-10-29. Actual GCC Debug/Release execution of the maintained C parser is
+recorded in `docs/checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md`. Source provenance
+and successful interoperability are not an independent security audit.
 
-Public-network protocol use remains prohibited. Default builds continue to use
-the existing restricted codec and do not import or link TinyCBOR. When the
-verified upstream source is installed, an explicitly opt-in interop target can
-be enabled separately. None of these steps adds a new cryptographic protocol.
+Default CMake builds do not compile or link this dependency. Only the explicit
+`GW_A05_ENABLE_TINYCBOR_INTEROP=ON` test configuration enables it, after verifying
+every pin. CMake generates static-export and version headers in the build tree.
+No normal build, test or product executable downloads anything.
 
+From the source root, verify the bundled files without modifying them:
 
-## Optional explicit pinned fetch (A05-P04-HF02)
-
-For an **operator-invoked** public GitHub HTTPS download (never part of CMake
-or a regular build), run from the repository root:
-
-```
-python tools/protocol/fetch_tinycbor.py --acknowledge-network --output tinycbor-v7.0-pinned.zip
-python tools/protocol/import_tinycbor.py --source tinycbor-v7.0-pinned.zip --install
+```text
+python tools/protocol/import_tinycbor.py --source third_party/tinycbor/verified
 ```
 
-The fetch requires a previously nonexistent output path, exactly the pinned
-commit URL, bounded transfer, and all twelve SHA-256 pin matches before saving.
-Delete the downloaded local ZIP after importing if it is not needed. Existing
-files are never overwritten. To run test-only interop, follow the A05-P04-HF02
-checkpoint notes. The fetch utility requires network access only when expressly
-invoked; the shipped source has no automatic download dependencies.
+For an independent, explicitly invoked acquisition of the same upstream revision:
+
+```text
+python tools/protocol/fetch_tinycbor.py --acknowledge-network --output out/tinycbor-v7.0-pinned.zip
+python tools/protocol/import_tinycbor.py --source out/tinycbor-v7.0-pinned.zip
+```
+
+The output archive must not already exist. `--install` is needed only when the
+verified directory is absent; the importer never overlays an existing directory.
+The source packager revalidates the full pinned subset and includes its license.
+Public-network parsing remains blocked pending separate platform/security review
+and owner approval. No product identity, authorization or transport uses TinyCBOR.

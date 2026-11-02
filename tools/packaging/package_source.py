@@ -6,9 +6,11 @@ import json
 from pathlib import Path
 import zipfile
 
+# Owner-provided patch attribution label, separate from compiled runtime identity.
+PATCH_AUTHOR_TAG = 'GPT-6.1-Sol-Max'
 ROOT_FILES = {'CMakeLists.txt', 'CMakePresets.json', 'vcpkg.json', 'vcpkg-configuration.json',
               '.gitignore', '.gitattributes', '.editorconfig', '.clang-format', '.clang-tidy',
-              'README.md', 'BUILD.md', 'ARCHITECTURE.md', 'ROADMAP.md', 'TODO.md', 'AGENTS.md',
+              'README.md', 'START-HERE.md', 'BUILD.md', 'ARCHITECTURE.md', 'ROADMAP.md', 'current-development-map.md', 'TODO.md', 'AGENTS.md',
               'CONTRIBUTING.md', 'SECURITY.md', 'LICENSE', 'THIRD_PARTY_NOTICES.md'}
 DIRECTORIES = {'.github', 'apps', 'include', 'src', 'cmake', 'tests', 'tools', 'docs',
                'examples', 'third_party', 'schemas'}
@@ -20,9 +22,10 @@ SOURCE_DISTRIBUTIONS = {'third_party/botan/Botan-3.13.0.tar.xz',
                         'third_party/tinycbor/verified/LICENSE'}
 parser = argparse.ArgumentParser()
 parser.add_argument('--output', type=Path)
+parser.add_argument('--checkpoint', default='GW-DEV-CONTEXT-BOOTSTRAP')
 args = parser.parse_args()
 root = Path(__file__).resolve().parents[2]
-destination = args.output or root / 'dist/GHOSTWIRE-GW-A05-P04-HF09-MSVC-EXCEPTION-CONTRACT-source.zip'
+destination = args.output or root / f'dist/GHOSTWIRE-GW-DEV-CONTEXT-BOOTSTRAP-source-{PATCH_AUTHOR_TAG}.zip'
 destination = destination.resolve()
 # Imported upstream code may only be shipped when all pinned bytes revalidate.
 upstream = root / 'third_party' / 'tinycbor' / 'verified'
@@ -32,6 +35,8 @@ if upstream.exists():
     import import_tinycbor
     pins = json.loads((root / 'tools' / 'protocol' / 'tinycbor_pins.json').read_text())
     import_tinycbor.load_input(upstream, pins)
+    # Only the verified pinned subset may introduce upstream C source files.
+    SOURCE_DISTRIBUTIONS.update('third_party/tinycbor/verified/' + name for name in pins['files'])
 
 files = []
 for name in sorted(ROOT_FILES):
@@ -53,14 +58,20 @@ files.sort(key=lambda p: p.relative_to(root).as_posix())
 if destination == root or destination.is_relative_to(root / 'docs') or destination in files:
     parser.error('Output must not overwrite source')
 inventory = {path.relative_to(root).as_posix(): hashlib.sha256(path.read_bytes()).hexdigest() for path in files}
-manifest = json.dumps({'checkpoint': 'GW-A05-P04-HF09-MSVC-EXCEPTION-CONTRACT',
-                       'implementation_checkpoint': 'GW-A05-P04-HF09-MSVC-EXCEPTION-CONTRACT',
+manifest = json.dumps({'checkpoint': args.checkpoint,
+                       'source_revision': 1,
+                       'patch_author_tag': PATCH_AUTHOR_TAG,
+                       'patch_author_tag_origin': 'owner-provided label',
+                       'implementation_checkpoint': 'GW-APP-P02-MEMBERSHIP-LIFECYCLE',
+                       'parent_checkpoint': 'GW-APP-P02-MEMBERSHIP-LIFECYCLE',
+                       'parent_source_revision': 2,
+                       'parent_archive_sha256': '45fa5488149b548b1bad58ecd06362ba7587636b84508954c5b0a8a4c200d73e',
                        'algorithm': 'SHA-256',
                        'files': inventory}, indent=2, sort_keys=True).encode() + b'\n'
 destination.parent.mkdir(parents=True, exist_ok=True)
 with zipfile.ZipFile(destination, 'w', compression=zipfile.ZIP_DEFLATED, compresslevel=9) as archive:
     def add(name, data, executable=False):
-        info = zipfile.ZipInfo('GhostWire/' + name, (2026, 10, 27, 0, 0, 0))
+        info = zipfile.ZipInfo('GhostWire/' + name, (2026, 11, 2, 0, 0, 0))
         info.compress_type = zipfile.ZIP_DEFLATED
         info.create_system = 3
         info.external_attr = (0o100755 if executable else 0o100644) << 16

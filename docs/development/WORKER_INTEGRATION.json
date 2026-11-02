@@ -55,5 +55,257 @@
     "worker-codec",
     "worker-coordinator",
     "worker-importer"
+  ],
+  "historical_record": "format/baseline_manifest_sha256/merged_files/workers describe the earlier HF01 merge only; not this checkpoint or active agents",
+  "current_integration": {
+    "checkpoint": "GW-DEV-CONTEXT-BOOTSTRAP",
+    "source_revision": 1,
+    "input_source": {
+      "checkpoint": "GW-APP-P02-MEMBERSHIP-LIFECYCLE",
+      "source_revision": 2,
+      "archive_sha256": "45fa5488149b548b1bad58ecd06362ba7587636b84508954c5b0a8a4c200d73e"
+    },
+    "patch_author_tag": "GPT-6.1-Sol-Max",
+    "patch_author_tag_origin": "owner-provided label",
+    "coordinator": "single primary developer",
+    "independent_agents": [],
+    "status": "completed_local_tooling_validated",
+    "evidence": "docs/checkpoints/GW-DEV-CONTEXT-BOOTSTRAP.md",
+    "production_source_changed": false,
+    "validation": {
+      "task_context_tests": "14/14 PASS; 10 areas and 21 tasks; both formats bounded",
+      "registry_tests": "13/13 PASS; 26 modules / 21 tasks; one ready app task",
+      "effort_tests": "7/7 PASS",
+      "windows_documentation_tests": "3/3 PASS",
+      "dependency_boundaries": "PASS",
+      "protected_source": "132/132 byte-identical; all 315 parent files retained",
+      "native_cpp": "Not run: tooling/docs-only; app/build/test/dependency inputs unchanged"
+    },
+    "confidence": 0.91,
+    "publication": "No remote writes or publication",
+    "next_local_task": "GW-APP-PUBLIC-RECORD-EXCHANGE: ready, unimplemented, unassigned",
+    "next_service_gates": [
+      "GW-A05-UPSTREAM-NATIVE",
+      "GW-A05-PARSER-DECISION",
+      "GW-AUTH-PRE-COMPOSITION"
+    ],
+    "accepted_effort_points": "11/110; about 10%; official completion null; 20% not reached",
+    "context_metrics": {
+      "measurement": "UTF-8 bytes, not actual tokens; selected next app task without optional verification",
+      "baseline_bytes": 176161,
+      "entry_guide_bytes": 7943,
+      "task_packet_plain_bytes": 3740,
+      "task_packet_json_bytes": 4785,
+      "new_selected_task_initial_bytes": 11683,
+      "initial_text_reduction_percent": 93.4,
+      "excludes": "Task-specific code/contracts, optional list/verification output and platform/conversation context"
+    }
+  },
+  "historical_integrations": [
+    {
+      "checkpoint": "GW-A05-P04-UPSTREAM-INTEROP",
+      "baseline_archive_sha256": "7c94517caed47ef4bbd7df634443a67d56d07429484fec2bf1f67ac213997359",
+      "git_baseline": "89af5eebd1ac796d80b570651b21feef5d6122ae",
+      "coordinator": "single primary developer",
+      "independent_agents": [],
+      "status": "revision_6_fuzz_properties_linux_verified",
+      "evidence": "docs/checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md",
+      "production_source_changed": true,
+      "next_gates": [
+        "GW-A05-UPSTREAM-NATIVE",
+        "GW-A05-PARSER-DECISION",
+        "GW-AUTH-PRE-COMPOSITION"
+      ],
+      "source_revision": 6,
+      "revision_1_archive_sha256": "93395a39cb587e62d60e0ab4d2f6ae0dd511a27a632b93865ef8fb3090a342bf",
+      "revision_2_archive_sha256": "4ff6ce9137f86d5c0feaa1be9c1ca26bbd2525e43dd6665bb197e8bf3e3348d8",
+      "revision_3_change": "Evidence and package metadata only; application, build, dependency and test sources match revision 2",
+      "owner_windows_evidence": {
+        "date": "2026-10-29",
+        "tested_source_revision": 2,
+        "msvc": "19.51.36260.0",
+        "architecture": "x64",
+        "debug": "build PASS; targeted CTest 2/2 PASS",
+        "release": "build PASS; targeted CTest 2/2 PASS",
+        "corpus_cases": 4023,
+        "ghostwire_accepted": 918,
+        "tinycbor_accepted": 991,
+        "expected_schema_only_rejects": 73,
+        "remaining_native_platform": "macOS; revision 4 Windows guard confirmation is separately pending"
+      },
+      "revision_3_archive_sha256": "ce2f4697225bc6d619692d9f570a7c4a49d72a12d8763b79ed35bb86ad97e79e",
+      "revision_4_change": "One encoder valueless-state guard, public contract comment and one existing-suite regression; wire bytes, dependency pins and build settings unchanged",
+      "revision_4_ownership": "Single coordinator, isolated detached worktree; three source files integrated after scoped checks; no independent agents or external audit",
+      "revision_4_validation": {
+        "release_ctest": "54/54 PASS",
+        "debug_protocol_ctest": "5/5 PASS",
+        "protocol_unit": "14/14 cases; 2494 assertions PASS",
+        "asan_ubsan": "3/3 PASS plus explicit valueless-state recovery; detect_leaks=0",
+        "new_native_execution": "NOT RUN; confirmation deferred to next agreed checkpoint"
+      },
+      "revision_4_archive_sha256": "3a891086a363b5a4505bad3d6840126c6e3d4f973214da47f2fe5e2ff10913f0",
+      "revision_5_change": "Enable TinyCBOR in three existing workflows and add explicit Windows configure/all switch; production code, test cases, dependency pins and presets match revision 4",
+      "revision_5_ownership": "Single coordinator, isolated detached worktree; four CI/tooling files integrated after local validation; no independent agents, external audit or remote write",
+      "revision_5_validation": {
+        "workflow_static": "Three YAML files, same jobs/matrices/permissions/pins and prerequisite steps; all Bash run blocks pass syntax checks",
+        "portable_debug_build": "Fresh all-target GCC build 79/79 PASS",
+        "portable_debug_ctest": "54/54 PASS; actual TinyCBOR corpus 4023 cases; bounds PASS",
+        "hosted_native_execution": "NOT RUN; no PowerShell or macOS runtime available locally; owner publication and next agreed native checkpoint remain pending"
+      },
+      "revision_5_archive_sha256": "9203ef476093906cc21e5fb43eaa68b1e52078f60ad1fb7b2f0605d0d8dcc540",
+      "revision_6_change": "One existing optional fuzz entrypoint: canonical byte round trips, decoded-value stability and admission-release checks under NDEBUG; production source, CMake, CI and dependencies unchanged",
+      "revision_6_ownership": "Single coordinator, isolated detached worktree; two local fuzz test processes, no independent coding agents or external audit",
+      "revision_6_validation": {
+        "toolchain": "GCC 13.3 strict-warning compile; Ubuntu Clang 18.1.3 with libFuzzer, ASan/UBSan, O1 and NDEBUG",
+        "executions": 37513997,
+        "seeds": [
+          2690580486,
+          2690580487
+        ],
+        "campaign_time_budget_seconds_each": 120,
+        "reported_seconds_each": 121,
+        "campaign_exit_codes": [
+          0,
+          0
+        ],
+        "failure_artifacts": 0,
+        "negative_controls": "Encoder-byte corruption and omitted lease release each trigger exit 77",
+        "minimized_inputs": 1937,
+        "replayed_with_frozen_controls": 1955,
+        "codec_comparison_cases": 1954,
+        "separate_probe_oversized_rejections": 1,
+        "ghostwire_reference_accepts": 171,
+        "upstream_accepts": 216,
+        "schema_only_rejects": 45,
+        "clang_tinycbor_ctest": "2/2 PASS; original 4023-case results unchanged",
+        "leak_validation": "Default seed replay exits 1 at denied /proc task inspection; campaign/replay use detect_leaks=0",
+        "new_native_execution": "No Windows/macOS or hosted execution; native gates stay open"
+      }
+    },
+    {
+      "checkpoint": "GW-APP-P01-LOCAL-CONSOLE",
+      "source_revision": 1,
+      "input_source": {
+        "checkpoint": "GW-A05-P04-UPSTREAM-INTEROP",
+        "source_revision": 6,
+        "archive_sha256": "24dde54c4862edd79083dd13393e8cf3df0989dff82c4e11d6d4d72457c2eb95"
+      },
+      "coordinator": "single primary developer",
+      "independent_agents": [],
+      "status": "completed_linux_native_owner_pending",
+      "evidence": "docs/checkpoints/GW-APP-P01-LOCAL-CONSOLE.md",
+      "production_source_changed": true,
+      "files": [
+        "apps/cli/main.cpp",
+        "apps/cli/identity_session.cpp",
+        "apps/cli/identity_session.hpp",
+        "apps/cli/terminal.cpp",
+        "apps/cli/terminal.hpp",
+        "src/core/bootstrap.cpp",
+        "CMakeLists.txt",
+        "tests/unit/core_tests.cpp",
+        "tests/integration/cli_contract.cmake",
+        "tests/integration/identity_session.cmake"
+      ],
+      "validation": {
+        "debug": "40/40 scoped build; 34/34 scoped CTest; 67 core cases / 643 assertions; 14 terminal scenarios PASS",
+        "release": "40/40 scoped build; 34/34 scoped CTest; 67 core cases / 643 assertions; 14 terminal scenarios PASS",
+        "native_windows_macos": "NOT RUN; next agreed gate",
+        "owner_accepted": false
+      },
+      "confidence": 0.92,
+      "publication": "No remote operation",
+      "next_gates": [
+        "GW-A05-UPSTREAM-NATIVE",
+        "GW-A05-PARSER-DECISION",
+        "GW-AUTH-PRE-COMPOSITION"
+      ],
+      "accepted_effort_points": "11/110; about 10%; official completion null; 20% not reached"
+    },
+    {
+      "checkpoint": "GW-APP-P02-MEMBERSHIP-LIFECYCLE",
+      "source_revision": 1,
+      "input_source": {
+        "checkpoint": "GW-APP-P01-LOCAL-CONSOLE",
+        "source_revision": 1,
+        "archive_sha256": "faf190b398f30f7ab9e0315687b3fde7f25526982bcf10b1e7e0dd5bd9d2f081"
+      },
+      "coordinator": "single primary developer",
+      "independent_agents": [],
+      "status": "completed_linux_native_owner_pending",
+      "evidence": "docs/checkpoints/GW-APP-P02-MEMBERSHIP-LIFECYCLE.md",
+      "production_source_changed": true,
+      "files": [
+        "apps/cli/identity_session.cpp",
+        "apps/cli/identity_session.hpp",
+        "tests/integration/identity_session.cmake"
+      ],
+      "validation": {
+        "debug": "Scoped CLI/identity builds PASS; 11/11 CTest; identity 41 cases/1799 assertions, faults 11/127; 2 host terminal workflows PASS",
+        "release": "Scoped CLI/identity builds PASS; 11/11 CTest; identity 41 cases/1799 assertions, faults 11/127; 2 host terminal workflows PASS",
+        "native_windows_macos": "NOT RUN; next agreed gate",
+        "owner_accepted": false
+      },
+      "confidence": 0.92,
+      "publication": "No remote operation",
+      "next_local_task": "GW-APP-PUBLIC-RECORD-EXCHANGE: proposed, unimplemented, unassigned",
+      "next_service_gates": [
+        "GW-A05-UPSTREAM-NATIVE",
+        "GW-A05-PARSER-DECISION",
+        "GW-AUTH-PRE-COMPOSITION"
+      ],
+      "accepted_effort_points": "11/110; about 10%; official completion null; 20% not reached"
+    },
+    {
+      "checkpoint": "GW-APP-P02-MEMBERSHIP-LIFECYCLE",
+      "source_revision": 2,
+      "input_source": {
+        "checkpoint": "GW-APP-P02-MEMBERSHIP-LIFECYCLE",
+        "source_revision": 1,
+        "archive_sha256": "16ffe8c4d5e326eac44a0925c273e25d2ed0763d64bb022a82541d9a294de469"
+      },
+      "patch_author_tag": "GPT-6.1-Sol-Max",
+      "patch_author_tag_origin": "owner-provided label",
+      "coordinator": "single primary developer",
+      "independent_agents": [],
+      "status": "completed_linux_revision_2_native_pending",
+      "evidence": "docs/checkpoints/GW-APP-P02-MEMBERSHIP-LIFECYCLE.md",
+      "production_source_changed": true,
+      "files": [
+        "apps/cli/identity_session.cpp",
+        "apps/cli/identity_session.hpp",
+        "tests/integration/identity_session.cmake"
+      ],
+      "validation": {
+        "linux_debug": "Fresh CLI build 31/31 PASS; 9/9 scoped CLI CTests PASS",
+        "linux_release": "Fresh CLI build 31/31 PASS; 9/9 scoped CLI CTests PASS",
+        "coverage": "Existing workflow includes owner reproduction, help/back/quit across 19 prompt contexts, whitespace and synonyms, zero aliases, complete-command literal names, no persisted file",
+        "revision_2_native": "NOT RUN; owner revision 1 results are separate"
+      },
+      "owner_revision_1_native": {
+        "tested_source_checkpoint": "GW-APP-P02-MEMBERSHIP-LIFECYCLE",
+        "tested_source_revision": 1,
+        "reported_filename": "GHOSTWIRE-GW-APP-P02-MEMBERSHIP-LIFECYCLE-source-6.1Sol.zip",
+        "host_archive_hash": "not supplied",
+        "date": "2026-11-01",
+        "environment": "Visual Studio 2026 Developer PowerShell v18.10.3",
+        "compiler": "MSVC 19.51.36260.0; Hostx64/x64; MSVC directory 14.51.36231",
+        "python": "C:/Python/Python313/python.exe; 3.13.13",
+        "debug": "CLI configure/build 31/31; cli-identity-session 1/1 PASS, 0.54 seconds; repeated successfully",
+        "release": "CLI configure/build 31/31; cli-identity-session 1/1 PASS, 0.49 seconds",
+        "manual": "Automatic menu observed; alphabetic alias rejected; back/quit prompt trap reproduced; successful manual create/rename/quit not supplied",
+        "limits": "Owner-reported scoped source; no full suite, revision 2 native, macOS or A05 encoder/upstream coverage inferred",
+        "shell_issue": "PSReadLine HistoryRecall/ReallyRender negative cursor top after shell return; no shell fix claimed or automated shell setting changed"
+      },
+      "confidence": 0.94,
+      "publication": "No remote writes or publication",
+      "next_local_task": "GW-APP-PUBLIC-RECORD-EXCHANGE: proposed, unimplemented, unassigned",
+      "next_service_gates": [
+        "GW-A05-UPSTREAM-NATIVE",
+        "GW-A05-PARSER-DECISION",
+        "GW-AUTH-PRE-COMPOSITION"
+      ],
+      "accepted_effort_points": "11/110; about 10%; official completion null; 20% not reached"
+    }
   ]
 }

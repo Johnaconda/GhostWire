@@ -51,5 +51,8 @@ jobs:
         run: python3 tools/check_boundaries.py
       - name: Configure build and test
         run: |
+          set -euo pipefail
           CC="$(xcrun --find clang)" CXX="$(xcrun --find clang++)" \
-            bash tools/dev.sh all macos-${{ matrix.config }}
+            cmake --preset macos-${{ matrix.config }} -DGW_A05_ENABLE_TINYCBOR_INTEROP=ON
+          cmake --build --preset macos-${{ matrix.config }} --parallel 4
+          ctest --preset macos-${{ matrix.config }} --output-on-failure --verbose

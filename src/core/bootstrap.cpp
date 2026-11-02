@@ -49,7 +49,9 @@ Result<Options> parse_options(std::span<const std::string_view> args) {
             continue;
         }
         Command command;
-        if (arg == "--help")
+        if (arg == "--bootstrap")
+            command = Command::bootstrap;
+        else if (arg == "--help")
             command = Command::help;
         else if (arg == "--version")
             command = Command::version;
@@ -78,12 +80,19 @@ void help(Role role, std::ostream &out) {
         << "Usage: ghostwire-" << role_name(role) << " [command] [options]\n"
         << "  --help                  Show this help\n"
         << "  --version               Show project/checkpoint/platform identity\n"
+        << "  --bootstrap             Initialize and shut down once, even in a terminal\n"
         << "  --check-config          Validate defaults or an explicit config; no writes\n"
         << "  --print-paths           Explicitly disclose resolved local paths; no writes\n"
         << "  --config PATH           Read this config (no implicit config search)\n"
-        << "  --data-root ABS_PATH    Override storage roots; each role is isolated\n"
-        << "Without a command: initialize directories and crypto provider, then shut down gracefully.\n"
-        << "No identities are created by ordinary startup. No GUI, networking, vault or messaging.\n"
+        << "  --data-root ABS_PATH    Override storage roots; each role is isolated\n";
+    // GW-APP-LOCAL-CONSOLE, owner: coordinator. Automatic console routing is
+    // CLI composition behavior; run_cli itself remains a one-shot bootstrap.
+    if (role == Role::cli)
+        out << "With no arguments and terminal input/output: open the local identity console.\n"
+            << "Otherwise, without a command: initialize directories and crypto, then shut down.\n";
+    else
+        out << "Without a command: initialize directories and crypto provider, then shut down gracefully.\n";
+    out << "No identities are created by ordinary startup. No GUI, networking, vault or messaging.\n"
         << "Exit codes: 0 success; 2 usage; 3 configuration; 4 filesystem; 70 internal.\n";
 }
 } // namespace

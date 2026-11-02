@@ -284,6 +284,9 @@ Result<Bytes> encode_frame(const Envelope &message, Admission &admission, const 
     if (!lease.acquired()) return fail(ErrorCode::operation_busy);
     if (options.stop.stop_requested()) return fail(ErrorCode::cancelled);
     if (std::chrono::steady_clock::now() >= options.deadline) return fail(ErrorCode::deadline_exceeded);
+    // Owner: coordinator, GW-A05-ENCODE-STATE. A failed caller-side emplace
+    // can leave the body valueless; reject before using its alternatives.
+    if (message.body.valueless_by_exception()) return fail(ErrorCode::malformed_frame);
     const auto *o = std::get_if<VersionOffer>(&message.body);
     const auto *s = std::get_if<VersionSelect>(&message.body);
     const auto *d = std::get_if<PublicDeviceSet>(&message.body);

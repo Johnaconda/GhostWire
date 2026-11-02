@@ -1,3 +1,12 @@
+> **Current evidence (2026-10-31, revision 6):** Existing fuzz-target round-trip,
+> value-stability and admission checks pass two bounded Clang ASan/UBSan campaigns
+> totaling 37,513,997 executions, followed by independent corpus replay. Results,
+> actual TinyCBOR comparison and owner revision 2 MSVC evidence are in
+> [the consolidated checkpoint](../checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md).
+> Leak-enabled and cross-platform fuzzing, native confirmation of revision 4's
+> guard, macOS and independent external review remain separate. Earlier pending
+> statements below describe historical deliveries.
+
 > **P03 candidate security gate:** Added a bounded C++ test probe and
 > seeded independent Python-vs-C++ differential checker plus a strict
 > impossible-offer regression. The Python reference is not QCBOR/TinyCBOR;

@@ -1,6 +1,6 @@
 {
   "schema_version": 1,
-  "checkpoint": "GW-A05-P04-HF09-MSVC-EXCEPTION-CONTRACT",
+  "checkpoint": "GW-DEV-CONTEXT-BOOTSTRAP",
   "project_completion_percent": null,
   "completion_rule": "No percentage until all agreed modules, dependencies and functional weights are defined; do not use checklist count or implementation confidence as percentage",
   "acceptance_rule": "Windows owner acceptance near true 10% milestones, except security-critical exceptions",
@@ -73,7 +73,9 @@
       ],
       "state": "partial",
       "owner_accepted": false,
-      "evidence": []
+      "evidence": [
+        "docs/checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md"
+      ]
     },
     {
       "id": "GW-A06",
@@ -338,11 +340,15 @@
     {
       "id": "GW-A05-UPSTREAM-INTEROP",
       "module": "GW-A05",
-      "state": "blocked",
+      "state": "completed",
       "depends_on": [],
-      "owner": "protocol-review",
-      "blocker": "Pinned TinyCBOR source cannot be fetched in this environment; must compile and compare real upstream parser",
-      "description": "Import pinned upstream and run actual CBOR interoperability"
+      "owner": "coordinator",
+      "description": "Actual pinned TinyCBOR GCC and owner MSVC x64 Debug/Release interop and stdin bounds pass; native macOS and parser security gates remain separate",
+      "confidence": 0.94,
+      "evidence": [
+        "docs/checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md",
+        "tools/protocol/tinycbor_pins.json"
+      ]
     },
     {
       "id": "GW-A05-RESOURCE-REVIEW",
@@ -363,18 +369,20 @@
       "module": "GW-A05",
       "state": "blocked",
       "depends_on": [
-        "GW-A05-UPSTREAM-INTEROP"
+        "GW-A05-UPSTREAM-INTEROP",
+        "GW-A05-UPSTREAM-NATIVE"
       ],
       "owner": "security-review",
-      "blocker": "Real upstream interop and independent review are missing",
-      "description": "Record maintain/replace decision and independent audit before network exposure"
+      "blocker": "Independent external parser review/owner approval and remaining native evidence are open; the revision 4 internal review and revision 6 bounded fuzz campaigns do not close these gates",
+      "description": "Offline retain recommendation remains in ADR-010 after the internal review; final production maintain/replace decision still requires independent review and owner approval"
     },
     {
       "id": "GW-A06-TRANSPORT",
       "module": "GW-A06",
       "state": "deferred",
       "depends_on": [
-        "GW-A05-PARSER-DECISION"
+        "GW-A05-PARSER-DECISION",
+        "GW-AUTH-PRE-COMPOSITION"
       ],
       "owner": null,
       "description": "Transport remains gated behind A05 and explicit authorization"
@@ -422,18 +430,309 @@
         "docs/checkpoints/GW-A05-P04-HF09.md",
         "docs/checkpoints/GW-A05-P04-HF09-VALIDATION.json"
       ],
-      "description": "Resolve MSVC /EHc C4297 error on intentionally throwing test hook via C++ linkage and noexcept(false); Linux regression verified; MSVC awaits native acceptance"
+      "description": "C++-linked throwing test hook; HF09 owner Windows x64 Debug/Release accepted 2026-10-27; historical evidence only"
     },
     {
       "id": "GW-A05-WINDOWS-10PCT-HF09",
       "module": "GW-A05",
-      "state": "blocked",
+      "state": "completed",
       "depends_on": [
         "GW-A05-FAULT-HOOK-LINKAGE-HF09"
       ],
       "owner": "windows-acceptance",
-      "blocker": "Owner VS2026 x64 HF08 configured but failed MSVC C4297 at allocation test hook; HF09 correction awaits native Debug/Release build and full CTest",
-      "description": "Native Windows acceptance gate only; A05 parser security and transport remain gated separately"
+      "description": "Owner Windows 10% native x64 Debug/Release 66/66 build and 50/50 CTest each, accepted 2026-10-27; A05 parser security remains separate",
+      "confidence": 0.99,
+      "evidence": [
+        "docs/checkpoints/GW-A05-P04-HF09.md"
+      ]
+    },
+    {
+      "id": "GW-A05-UPSTREAM-NATIVE",
+      "module": "GW-A05",
+      "state": "blocked",
+      "depends_on": [
+        "GW-A05-UPSTREAM-INTEROP",
+        "GW-A05-CI-INTEROP"
+      ],
+      "owner": "native-host-validation",
+      "blocker": "macOS execution and native confirmation of the revision 4 guard remain unrun. Revision 5 prepares existing CI for upstream evidence, but no hosted jobs or new Windows checks have run.",
+      "description": "Preserve revision 2 Windows evidence; gather exact-source macOS/Windows evidence through owner-published CI or the next agreed checkpoint without an immediate owner rerun",
+      "evidence": [
+        "docs/checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md"
+      ]
+    },
+    {
+      "id": "GW-AUTH-PRE-COMPOSITION",
+      "module": "GW-A21",
+      "state": "deferred",
+      "depends_on": [
+        "GW-A05-PARSER-DECISION"
+      ],
+      "owner": null,
+      "description": "HF19 local policy is compiled candidate data only; reviewed fresh possession/session and commit-time identity/policy integration remain unimplemented"
+    },
+    {
+      "id": "GW-A05-INTEROP-MSVC",
+      "module": "GW-A05",
+      "state": "completed",
+      "depends_on": [
+        "GW-A05-UPSTREAM-INTEROP"
+      ],
+      "owner": "coordinator",
+      "confidence": 0.94,
+      "evidence": [
+        "tests/interop/tinycbor_probe.cpp",
+        "docs/checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md"
+      ],
+      "description": "Explicit unsigned validation flags preserve 0x80401301; GCC strict sign-conversion compile passes; owner MSVC x64 Debug/Release builds and interop/bounds 2/2 each pass on 2026-10-29"
+    },
+    {
+      "id": "GW-A05-ENCODE-STATE",
+      "module": "GW-A05",
+      "state": "completed",
+      "depends_on": [
+        "GW-A05-UPSTREAM-INTEROP"
+      ],
+      "owner": "coordinator",
+      "confidence": 0.96,
+      "evidence": [
+        "src/protocol/wire_codec.cpp",
+        "tests/unit/protocol_tests.cpp",
+        "docs/checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md"
+      ],
+      "description": "Internal review reproduced valueless-body encoder null dereference; reject malformed_frame before allocation and retain admission recovery. GCC Debug/Release and scoped sanitizer checks pass; native confirmation pending."
+    },
+    {
+      "id": "GW-A05-CI-INTEROP",
+      "module": "GW-A05",
+      "state": "completed",
+      "depends_on": [
+        "GW-A05-UPSTREAM-INTEROP"
+      ],
+      "owner": "coordinator",
+      "confidence": 0.93,
+      "evidence": [
+        ".github/workflows/linux.yml",
+        ".github/workflows/windows.yml",
+        ".github/workflows/macos.yml",
+        "tools/windows/dev-windows.ps1",
+        "docs/checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md"
+      ],
+      "description": "Enable real pinned upstream comparison in existing platform CI jobs with verbose results; fresh portable Linux Debug 54/54 PASS. Hosted/native execution remains pending; no remote writes."
+    },
+    {
+      "id": "GW-A05-FUZZ-INVARIANTS",
+      "module": "GW-A05",
+      "state": "completed",
+      "depends_on": [
+        "GW-A05-UPSTREAM-INTEROP",
+        "GW-A05-ENCODE-STATE"
+      ],
+      "owner": "coordinator",
+      "confidence": 0.95,
+      "evidence": [
+        "tests/fuzz/protocol_decode_fuzz.cpp",
+        "docs/checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md"
+      ],
+      "description": "Existing fuzz target checks canonical bytes, decoded-value stability and admission release under NDEBUG. Two bounded Clang ASan/UBSan campaigns complete 37513997 executions and corpus replay passes; leak-enabled/native/external-review gates remain open."
+    },
+    {
+      "id": "GW-APP-LOCAL-CONSOLE",
+      "module": "GW-A04",
+      "state": "completed",
+      "depends_on": [],
+      "owner": "coordinator",
+      "owner_accepted": false,
+      "confidence": 0.92,
+      "evidence": [
+        "docs/checkpoints/GW-APP-P01-LOCAL-CONSOLE.md",
+        "tests/integration/identity_session.cmake",
+        "tests/integration/cli_contract.cmake",
+        "tests/unit/core_tests.cpp"
+      ],
+      "description": "Terminal-only automatic local console, numbered navigation, guided create/select and explicit selected-label status using existing A04 services. Linux scoped validation complete; native/owner acceptance pending, all A05/AUTH-PRE/A11-PRE gates retained."
+    },
+    {
+      "id": "GW-APP-MEMBERSHIP-LIFECYCLE",
+      "module": "GW-A04",
+      "state": "completed",
+      "depends_on": [
+        "GW-APP-LOCAL-CONSOLE"
+      ],
+      "owner": "coordinator",
+      "owner_accepted": false,
+      "confidence": 0.92,
+      "evidence": [
+        "docs/checkpoints/GW-APP-P02-MEMBERSHIP-LIFECYCLE.md",
+        "apps/cli/identity_session.cpp",
+        "tests/integration/identity_session.cmake"
+      ],
+      "description": "Original P02 lifecycle implemented; Linux evidence and owner revision 1 Windows Debug/Release CLI build/workflow pass. Manual navigation trap is separately corrected by GW-APP-PROMPT-NAVIGATION; no full native/security acceptance inferred.",
+      "native_evidence": "docs/checkpoints/GW-APP-P02-MEMBERSHIP-LIFECYCLE.md"
+    },
+    {
+      "id": "GW-APP-PUBLIC-RECORD-EXCHANGE",
+      "module": "GW-A04",
+      "state": "ready",
+      "depends_on": [
+        "GW-APP-MEMBERSHIP-LIFECYCLE",
+        "GW-APP-PROMPT-NAVIGATION"
+      ],
+      "owner": null,
+      "description": "Proposed, unimplemented bounded offline public-record exchange between local sessions through existing A04 verify/pin/accept APIs. Require explicit full authority and owner scope; no automatic trust, private-key storage, A05 wire-parser approval or networking.",
+      "planned_source": [
+        "apps/cli/identity_session.cpp",
+        "tests/integration/identity_session.cmake"
+      ],
+      "acceptance": "Bounded external public record validation and explicit pin/accept/revocation behavior using existing service contracts; fixed diagnostics and no private-state file or network."
+    },
+    {
+      "id": "GW-APP-PROMPT-NAVIGATION",
+      "module": "GW-A04",
+      "state": "completed",
+      "depends_on": [
+        "GW-APP-MEMBERSHIP-LIFECYCLE"
+      ],
+      "owner": "coordinator",
+      "owner_accepted": false,
+      "confidence": 0.94,
+      "patch_author_tag": "GPT-6.1-Sol-Max",
+      "evidence": [
+        "docs/checkpoints/GW-APP-P02-MEMBERSHIP-LIFECYCLE.md",
+        "apps/cli/identity_session.cpp",
+        "tests/integration/identity_session.cmake"
+      ],
+      "description": "Standalone guided return/help/quit before field parsing, clearer numeric alias/name guidance, zero and direct-command literal data preserved. Linux Debug/Release 9/9 scoped CLI CTests each; native revision 2 pending. Packaging includes owner-provided attribution tag and matched checksum name."
+    },
+    {
+      "id": "GW-DEV-CONTEXT-BOOTSTRAP",
+      "module": "GW-A00",
+      "state": "completed",
+      "depends_on": [
+        "GW-DEV-STRUCTURE-HF05"
+      ],
+      "owner": "coordinator",
+      "confidence": 0.91,
+      "owner_accepted": false,
+      "patch_author_tag": "GPT-6.1-Sol-Max",
+      "evidence": [
+        "docs/checkpoints/GW-DEV-CONTEXT-BOOTSTRAP.md",
+        "tools/development/test_task_context.py"
+      ],
+      "description": "Short startup guide and bounded read-only task packets with section locators, dependency/gate status and source verification. Tooling-only; no runtime or project completion increase."
     }
-  ]
+  ],
+  "source_revision": 1,
+  "parent_source": {
+    "checkpoint": "GW-APP-P02-MEMBERSHIP-LIFECYCLE",
+    "source_revision": 2,
+    "archive_sha256": "45fa5488149b548b1bad58ecd06362ba7587636b84508954c5b0a8a4c200d73e"
+  },
+  "current_delivery": {
+    "scope": "Task-first agent startup routing and short entry guide; application/runtime unchanged",
+    "source_revision": 1,
+    "patch_author_tag": "GPT-6.1-Sol-Max",
+    "owner_accepted": false,
+    "evidence": "docs/checkpoints/GW-DEV-CONTEXT-BOOTSTRAP.md",
+    "validation": {
+      "task_context_tests": "14/14 PASS; 10 areas and 21 tasks; both formats bounded",
+      "registry_tests": "13/13 PASS; 26 modules / 21 tasks; one ready app task",
+      "effort_tests": "7/7 PASS",
+      "windows_documentation_tests": "3/3 PASS",
+      "dependency_boundaries": "PASS",
+      "protected_source": "132/132 byte-identical; all 315 parent files retained",
+      "native_cpp": "Not run: tooling/docs-only; app/build/test/dependency inputs unchanged"
+    },
+    "status": "completed_local_tooling_validated",
+    "context_metrics": {
+      "measurement": "UTF-8 bytes, not actual tokens; selected next app task without optional verification",
+      "baseline_bytes": 176161,
+      "entry_guide_bytes": 7943,
+      "task_packet_plain_bytes": 3740,
+      "task_packet_json_bytes": 4785,
+      "new_selected_task_initial_bytes": 11683,
+      "initial_text_reduction_percent": 93.4,
+      "excludes": "Task-specific code/contracts, optional list/verification output and platform/conversation context"
+    },
+    "confidence": 0.91
+  },
+  "delivery_history": [
+    {
+      "checkpoint": "GW-APP-P01-LOCAL-CONSOLE",
+      "source_revision": 1,
+      "parent_source": {
+        "checkpoint": "GW-A05-P04-UPSTREAM-INTEROP",
+        "source_revision": 6,
+        "archive_sha256": "24dde54c4862edd79083dd13393e8cf3df0989dff82c4e11d6d4d72457c2eb95"
+      },
+      "delivery": {
+        "scope": "Bounded local CLI usability over accepted A04; not A05 acceptance or A06",
+        "owner_accepted": false,
+        "evidence": "docs/checkpoints/GW-APP-P01-LOCAL-CONSOLE.md",
+        "confidence": 0.92,
+        "validation": {
+          "debug": "40/40 scoped build; 34/34 scoped CTest; 67 core cases / 643 assertions; 14 terminal scenarios PASS",
+          "release": "40/40 scoped build; 34/34 scoped CTest; 67 core cases / 643 assertions; 14 terminal scenarios PASS",
+          "native_windows_macos": "NOT RUN; next agreed gate",
+          "owner_accepted": false
+        }
+      }
+    },
+    {
+      "checkpoint": "GW-APP-P02-MEMBERSHIP-LIFECYCLE",
+      "source_revision": 1,
+      "parent_source": {
+        "checkpoint": "GW-APP-P01-LOCAL-CONSOLE",
+        "source_revision": 1,
+        "archive_sha256": "faf190b398f30f7ab9e0315687b3fde7f25526982bcf10b1e7e0dd5bd9d2f081"
+      },
+      "delivery": {
+        "scope": "Local A04 membership/profile/trust lifecycle UI; no A05 or AUTH-PRE advance",
+        "owner_accepted": false,
+        "evidence": "docs/checkpoints/GW-APP-P02-MEMBERSHIP-LIFECYCLE.md",
+        "confidence": 0.92,
+        "validation": {
+          "debug": "Scoped CLI/identity builds PASS; 11/11 CTest; identity 41 cases/1799 assertions, faults 11/127; 2 host terminal workflows PASS",
+          "release": "Scoped CLI/identity builds PASS; 11/11 CTest; identity 41 cases/1799 assertions, faults 11/127; 2 host terminal workflows PASS",
+          "native_windows_macos": "NOT RUN; next agreed gate",
+          "owner_accepted": false
+        }
+      }
+    },
+    {
+      "checkpoint": "GW-APP-P02-MEMBERSHIP-LIFECYCLE",
+      "source_revision": 2,
+      "delivery": {
+        "scope": "Owner-reported guided navigation trap; no service/security change",
+        "source_revision": 2,
+        "patch_author_tag": "GPT-6.1-Sol-Max",
+        "owner_accepted": false,
+        "evidence": "docs/checkpoints/GW-APP-P02-MEMBERSHIP-LIFECYCLE.md",
+        "confidence": 0.94,
+        "validation": {
+          "linux_debug": "Fresh CLI build 31/31 PASS; 9/9 scoped CLI CTests PASS",
+          "linux_release": "Fresh CLI build 31/31 PASS; 9/9 scoped CLI CTests PASS",
+          "coverage": "Existing workflow includes owner reproduction, help/back/quit across 19 prompt contexts, whitespace and synonyms, zero aliases, complete-command literal names, no persisted file",
+          "revision_2_native": "NOT RUN; owner revision 1 results are separate"
+        }
+      }
+    }
+  ],
+  "patch_author_tag": "GPT-6.1-Sol-Max",
+  "patch_author_tag_origin": "owner-provided label",
+  "owner_native_evidence": {
+    "tested_source_checkpoint": "GW-APP-P02-MEMBERSHIP-LIFECYCLE",
+    "tested_source_revision": 1,
+    "reported_filename": "GHOSTWIRE-GW-APP-P02-MEMBERSHIP-LIFECYCLE-source-6.1Sol.zip",
+    "host_archive_hash": "not supplied",
+    "date": "2026-11-01",
+    "environment": "Visual Studio 2026 Developer PowerShell v18.10.3",
+    "compiler": "MSVC 19.51.36260.0; Hostx64/x64; MSVC directory 14.51.36231",
+    "python": "C:/Python/Python313/python.exe; 3.13.13",
+    "debug": "CLI configure/build 31/31; cli-identity-session 1/1 PASS, 0.54 seconds; repeated successfully",
+    "release": "CLI configure/build 31/31; cli-identity-session 1/1 PASS, 0.49 seconds",
+    "manual": "Automatic menu observed; alphabetic alias rejected; back/quit prompt trap reproduced; successful manual create/rename/quit not supplied",
+    "limits": "Owner-reported scoped source; no full suite, revision 2 native, macOS or A05 encoder/upstream coverage inferred",
+    "shell_issue": "PSReadLine HistoryRecall/ReallyRender negative cursor top after shell return; no shell fix claimed or automated shell setting changed"
+  }
 }

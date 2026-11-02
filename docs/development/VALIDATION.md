@@ -1,4 +1,29 @@
-## Current — HF09 MSVC exception contract (2026-10-27)
+## Current — A05 fuzz invariants revision 6 (2026-10-31)
+
+The existing optional fuzz entrypoint now checks byte round trips, decoded-value
+stability and released admission, including rejected inputs. GCC strict-warning
+compilation and Clang 18.1.3 NDEBUG ASan/UBSan compilation pass. Two 120-second
+bounded campaigns finish 37,513,997 executions without a finding; two temporary
+fault controls fail as expected. Corpus minimization and reference/upstream replay
+pass, as do both existing Clang sanitizer TinyCBOR tests. Default LeakSanitizer
+replay fails because the host denies process inspection; bounded campaigns disable
+leak detection explicitly. These are local Linux results, not native Windows/macOS
+or independent audit evidence. See [the consolidated checkpoint](../checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md).
+
+## Historical — A05 native CI revision 5 (2026-10-31)
+
+All existing Linux, Windows and macOS jobs now opt into the real pinned TinyCBOR
+comparison. Workflow YAML/scope and available Bash syntax checks pass. A fresh
+portable Linux GCC Debug all-target build completes 79/79 steps and verbose CTest
+passes 54/54; the 4,023-case comparison and stdin bounds pass. This local run uses
+the bundled test dependency, not hosted vcpkg. PowerShell, hosted jobs and native
+Windows/macOS execution were not run for revision 5. Production code and test
+cases match revision 4; prior evidence and sanitizer/fuzz limits remain in
+[the consolidated checkpoint](../checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md).
+No immediate owner Windows rerun is requested. Historical sections below describe
+their own source versions and are superseded for current status.
+
+## Historical — HF09 MSVC exception contract (2026-10-27)
 
 Owner Windows 10 x64 HF08: correctly selected `Hostx64/x64/cl.exe`, passed
 `portable-debug` configuration, but build failed at the throwing test-only

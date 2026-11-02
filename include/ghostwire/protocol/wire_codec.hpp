@@ -88,6 +88,7 @@ struct Operation {
 
 // Each call must receive a bounded caller-owned admission slot. Results own
 // bytes; failures have no output or profile/identity side effect.
+// encode_frame rejects a valueless caller-created body as malformed_frame.
 [[nodiscard]] Result<std::vector<std::uint8_t>> encode_frame(const Envelope &, Admission &,
                                                               const Operation & = {});
 [[nodiscard]] Result<Envelope> decode_frame(std::span<const std::uint8_t>, Admission &,

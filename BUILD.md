@@ -1,21 +1,31 @@
-# Building GhostWire A04-P03
+<!-- Current tooling source: GW-DEV-CONTEXT-BOOTSTRAP r1; author tag GPT-6.1-Sol-Max.
+Read START-HERE.md for agent init. P02 r2 runtime/build inputs remain unchanged. -->
 
-Current runtime: **0.4.1 / GW-A04-P03-IDENTITY-HARDENING**. P03 preserves the
-volatile identity console and repairs local membership deletion/revocation
-semantics. The owner supplied P02 Windows Debug/Release 40/40 each and authorized
-continuation. Those results are not new P03 validation.
+# Building GhostWire
 
-Follow [P03 Windows acceptance](docs/checkpoints/GW-A04-P03-WINDOWS-ACCEPTANCE.md)
-and [actual P03 results](docs/checkpoints/GW-A04-P03.md). Keep original TEMP/TMP.
-The portable/vcpkg presets, warning policy and tool discovery remain unchanged.
+Current source: **GW-APP-P02-MEMBERSHIP-LIFECYCLE revision 2**; runtime remains
+**0.4.1 / GW-A04-P03-IDENTITY-HARDENING**. Source delivery names and the compiled
+runtime identity are separate. The CLI now opens its volatile identity menu on
+argument-free terminal launch. `--identity-session` works with redirected streams;
+`--bootstrap` selects one-shot startup. Membership preparation/device management
+and confirmed local cleanup now use the existing A04 services. See [current evidence](docs/checkpoints/GW-APP-P02-MEMBERSHIP-LIFECYCLE.md)
+for Linux checks and source-specific Windows evidence. Owner revision 1 Windows
+Debug/Release CLI builds and the identity workflow pass; revision 2 native execution
+and macOS remain unrun. The prompt navigation change is Linux Debug/Release checked.
+Patch author tag: **GPT-6.1-Sol-Max**, supplied by the owner.
+
+Keep original TEMP/TMP. The portable/vcpkg presets, warning policy and x64 tool
+discovery remain unchanged. Existing platform CI now enables the pinned, test-only
+TinyCBOR comparison explicitly; a fresh normal local build leaves it disabled.
 `python3 tools/packaging/package_source.py` produces the cumulative
-`dist/GHOSTWIRE-GW-A04-P03-IDENTITY-HARDENING-source.zip` plus SHA-256 sidecar,
+`dist/GHOSTWIRE-GW-APP-P02-MEMBERSHIP-LIFECYCLE-r2-source-GPT-6.1-Sol-Max.zip` plus matching SHA-256 sidecar,
 excluding build products, caches and private runtime state.
 
 ## Tool requirements
 
-C++20 compiler; CMake 3.25+; Ninja; Git for vcpkg. Python 3.9+ is needed only
-for formatting, boundary checks and packaging. Test dependency: doctest 2.4.12.
+C++20 compiler; CMake 3.25+; Ninja; Git for vcpkg. Python 3.9+ is needed for
+test validation, boundary checks and packaging. The optional upstream comparison
+also requires the matching native C compiler. Test dependency: doctest 2.4.12.
 The vcpkg baseline is `9e593bb18ea69cc5095e012465dcd675a822ed0d`
 (upstream tag 2026.07.29). Runtime dependencies are standard C++, OS APIs and
 the bundled static Botan 3.13.0 subset. Normal builds remain fully offline in
@@ -39,14 +49,13 @@ beside the selected CMake before PATH fallback, with a matching version check.
 Unicode and preserves the original process TEMP/TMP. No permanent environment
 or execution-policy change is made.
 
-A04-P02 acceptance starts with the portable/vendored mode already accepted by
-the owner through A03-HF01 with original TEMP/TMP. Project root:
-`C:\Cumpiling-shit\GhostWire`. Keep the actual account's default temporary paths.
-Open a new ordinary PowerShell from Start (not a child
-of the old workaround shell), leave TEMP/TMP unchanged, then from the source root:
+The portable/vendored mode is the owner's established local route. Project root:
+`C:\Cumpiling-shit\GhostWire`. Open the project folder's integrated terminal in
+Visual Studio and verify `(Get-Command cl.exe).Source` selects `Hostx64\x64`.
+You are already in the source root. Keep the account's default TEMP/TMP unchanged.
+The ordinary PowerShell route remains supported through automatic x64 discovery.
 
 ```powershell
-Set-Location 'C:\Cumpiling-shit\GhostWire'
 .\tools\windows\dev-windows.ps1 -Action diagnostics -OfflineTests
 .\tools\windows\dev-windows.ps1 -Action all -Configuration Debug -OfflineTests -Fresh
 .\tools\windows\dev-windows.ps1 -Action all -Configuration Release -OfflineTests -Fresh
@@ -63,15 +72,24 @@ valid with configure/all and asks CMake to recreate its cache/CMakeFiles for the
 selected build directory. It does not delete application data. Use it when
 recovering from a wrong compiler, source root or architecture.
 
+For an agreed upstream-validation checkpoint, add `-TinyCborInterop` to
+`-Action configure` or `-Action all`. This passes
+`-DGW_A05_ENABLE_TINYCBOR_INTEROP=ON`; `all` also prints verbose CTest output.
+It works with either `-OfflineTests` or the vcpkg route. The option stays in that
+CMake cache for later build/test actions; a fresh configuration without the switch
+returns to the default OFF. The three existing CI workflows select it explicitly
+and still run their complete test suites. The included TinyCBOR files are verified
+locally against immutable pins; the build does not fetch upstream source.
+
 For example, in an already configured shell:
 
 ```powershell
 .\tools\windows\dev-windows.ps1 -Action run -Configuration Release -OfflineTests -Target cli -AppArgs @('--version')
 ```
 
-If script execution is blocked, use the child-process command above. No script
-changes the global or current-user execution policy. If organization policy
-blocks scripts, use the manual CMake route from an authorized developer shell.
+No script changes the global or current-user execution policy. If script
+execution is blocked, use the manual CMake route from an authorized developer
+shell in accordance with the configured policy.
 
 ### vcpkg selection
 
@@ -191,6 +209,48 @@ bash tools/dev.sh all linux-release # macos-release on macOS
 Host architecture is inferred by vcpkg on Linux/macOS. Windows presets target
 x64. Other architectures are unverified. `portable-*` means no vcpkg toolchain,
 not a portable-data mode. Override data locations using `--data-root`.
+
+### Optional Linux protocol fuzzing
+
+The existing `tests/fuzz/protocol_decode_fuzz.cpp` entrypoint checks canonical
+round trips, decoded-value stability and admission release. It is separate from
+normal CMake/MSVC builds. Use Linux Clang with libFuzzer and ASan/UBSan runtimes
+(validated with Clang 18.1.3). From the source root:
+
+```bash
+mkdir -p out/fuzz/seeds out/fuzz/corpus out/fuzz/artifacts
+python3 - <<'PY'
+from pathlib import Path
+import hashlib, sys
+sys.path.insert(0, 'tools/protocol')
+from differential_check import cases
+inputs = cases() + [b'', b'\0' * 3, b'\0' * 4,
+                   bytes.fromhex('00010000') + b'\0' * 65536,
+                   bytes.fromhex('00010001') + b'\0' * 65537]
+for raw in inputs:
+    (Path('out/fuzz/seeds') / hashlib.sha256(raw).hexdigest()).write_bytes(raw)
+PY
+clang++ -std=c++20 -O1 -g -DNDEBUG -pthread -Iinclude \
+  -Wall -Wextra -Wpedantic -Wconversion -Wshadow -Werror \
+  -fsanitize=fuzzer,address,undefined -fno-sanitize-recover=all \
+  -fno-omit-frame-pointer tests/fuzz/protocol_decode_fuzz.cpp \
+  src/protocol/wire_codec.cpp -o out/fuzz/protocol-fuzz
+./out/fuzz/protocol-fuzz out/fuzz/corpus out/fuzz/seeds \
+  -seed=2690580486 -max_total_time=120 -max_len=65541 -timeout=5 \
+  -rss_limit_mb=512 -use_value_profile=1 -print_final_stats=1 \
+  -reload=0 -artifact_prefix=out/fuzz/artifacts/
+```
+
+The seed set includes the existing corpus plus framing boundaries; 65,541 bytes
+is one byte above the largest frame. Checks remain active under NDEBUG. Keep
+generated corpus, binaries and failure artifacts under `out/`; none are packaged.
+The command retains default leak checking. This execution host denied LeakSanitizer
+process inspection, so the recorded bounded campaigns explicitly used
+`ASAN_OPTIONS=detect_leaks=0`, `UBSAN_OPTIONS=halt_on_error=1` and
+`-detect_leaks=0`. That result does not establish leak freedom. Record the exact
+seed, compiler, options, exit status and limits for each run; see the consolidated
+checkpoint for the second seed and actual results. A bounded clean run is not an
+independent security audit.
 
 ## Configuration and storage
 

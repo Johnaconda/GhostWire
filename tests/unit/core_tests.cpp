@@ -318,6 +318,9 @@ TEST_CASE("CLI returns exact usage config and filesystem codes without echoing r
     CHECK(err.find("secret") == std::string::npos);
     CHECK(cli({"--config"}) == 2);
     CHECK(cli({"--version", "--help"}) == 2);
+    CHECK(cli({"--bootstrap", "--help"}) == 2);
+    CHECK(cli({"--check-config", "--bootstrap"}) == 2);
+    CHECK(cli({"--bootstrap", "--bootstrap"}) == 2);
     CHECK(cli({"--help", "--config", "secret"}) == 2);
     CHECK(cli({"--check-config", "--data-root", "relative"}) == 3);
     const auto absent = platform::path_to_utf8(temp.path / "secret-absent.conf");
@@ -344,7 +347,7 @@ TEST_CASE("config precedence is explicit and bootstrap never claims network read
     const auto override_root = temp.path / "override";
     const auto override_text = platform::path_to_utf8(override_root);
     std::string output, errors;
-    CHECK(cli({"--config", file_text, "--data-root", override_text}, &output, &errors) == 0);
+    CHECK(cli({"--bootstrap", "--config", file_text, "--data-root", override_text}, &output, &errors) == 0);
     CHECK_FALSE(fs::exists(config_root));
     CHECK(fs::is_directory(override_root / "cli/data"));
     CHECK(errors.empty());

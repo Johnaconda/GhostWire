@@ -1,3 +1,105 @@
+## Agent startup context — 2026-11-02
+
+`GW-DEV-CONTEXT-BOOTSTRAP` implements task-first startup routing: short guides,
+10 area routes, exact task/dependency/contract locators, bounded output and optional
+clean-manifest hashing. Tests cover all registered selections and failure paths.
+Patch author tag: **GPT-6.1-Sol-Max**. This is development tooling, with no new
+application functionality, owner acceptance or project completion credit.
+[Evidence](checkpoints/GW-DEV-CONTEXT-BOOTSTRAP.md).
+
+## Prompt navigation correction — P02 revision 2, 2026-11-01
+
+`GW-APP-PROMPT-NAVIGATION` is implemented and Linux-validated: all guided prompts
+support explicit return/quit/help navigation, numeric alias guidance is clearer,
+and canonical data/confirmation semantics are preserved. Fresh Debug/Release CLI
+builds 31/31 and scoped CTests 9/9 each pass, including 19 prompt contexts and the
+owner reproduction. Default packaging includes owner-provided author tag
+**GPT-6.1-Sol-Max** and matched checksum naming. Owner Windows revision 1 scoped
+build/workflow results are recorded separately; revision 2 native execution is
+pending. No new full-suite, security approval or 20% acceptance is inferred.
+[Evidence](checkpoints/GW-APP-P02-MEMBERSHIP-LIFECYCLE.md).
+
+## Local membership lifecycle — 2026-11-01
+
+`GW-APP-MEMBERSHIP-LIFECYCLE` is implemented and Linux-validated in Debug/Release:
+guided preparation, membership label/device/public-record panel, profile rename,
+confirmed local deletion and explicit trust cleanup. Existing scoped CTests pass
+11/11 each, including identity 41 cases / 1799 assertions and faults 11 / 127.
+Two additional terminal workflows per configuration pass, with no persisted files.
+The integration checks unchanged rename keys, fresh recreated authorities, independent
+profile/member/device/trust scopes, bounded input and incomplete/confirmation EOF.
+Native Windows/macOS and owner acceptance of this delivery remain pending; no A05,
+AUTH-PRE or 20% acceptance is implied. [Evidence](checkpoints/GW-APP-P02-MEMBERSHIP-LIFECYCLE.md).
+
+## Local console usability — 2026-11-01
+
+`GW-APP-LOCAL-CONSOLE` is implemented and Linux-validated in Debug and Release:
+automatic terminal launch, numbered navigation, guided create/select,
+cancellation, selected-label status and explicit one-shot --bootstrap. Existing
+34 scoped CTests and 14 host terminal/redirection scenarios pass per configuration;
+core reports 67 cases / 643 assertions. No files are persisted by the exercised
+workflows. This is completion of a local usability task, not owner acceptance,
+native Windows/macOS validation, A05 approval or the 20% milestone. See
+[delivery evidence](checkpoints/GW-APP-P01-LOCAL-CONSOLE.md).
+
+## A05 bounded fuzz properties — revision 6, 2026-10-31
+
+`GW-A05-FUZZ-INVARIANTS` is locally complete: the existing entrypoint checks
+canonical bytes, decoded values and admission recovery. Clang ASan/UBSan runs
+complete 18,969,914 and 18,544,083 executions, with successful independent replay
+of the minimized corpus and frozen controls. Strict GCC/Clang compilation and two
+intentional fault controls validate the target itself. This is bounded Linux
+evidence with leak detection disabled, not A05 approval or an external audit.
+See [checkpoint evidence](checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md).
+
+## A05 CI upstream coverage — revision 5, 2026-10-31
+
+`GW-A05-CI-INTEROP` is prepared and locally checked. All existing platform jobs
+explicitly enable the pinned upstream comparison; Windows selects the new
+configure/all switch, and CI logs preserve successful comparison counts.
+Fresh portable Linux Debug builds 79/79 steps and passes 54/54 tests. Workflow
+structure and Bash syntax checks pass. Hosted execution, native PowerShell and
+macOS evidence remain unrun. This completes CI wiring, not the native acceptance
+or independent review gates. See [checkpoint evidence](checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md).
+
+## A05 encoder state guard / internal review — revision 4, 2026-10-30
+
+`GW-A05-ENCODE-STATE` is implemented and Linux-validated: a valueless caller-created
+body now returns `malformed_frame` without a null dereference; admission remains
+reusable. One existing-suite regression covers the failure and recovery. Protocol
+unit tests pass 14/14 (2,494 assertions), Release CTest 54/54, targeted Debug 5/5
+and scoped ASan/UBSan 3/3; the 4,023-case corpus results are unchanged.
+This completes the narrow guard, not A05, independent external review or new
+native Windows/macOS acceptance. See
+[checkpoint evidence](checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md).
+
+## Upstream interoperability revision 3 — 2026-10-29
+
+Record owner revision 2 VS2026/MSVC 19.51.36260.0 x64 Debug/Release success:
+both targeted tests pass 2/2 in each configuration, with the same 4,023-case
+counts as GCC. C4245/C2220 is resolved; upstream C5287 remains nonfatal.
+Evidence and package metadata only; code, dependencies, build settings and
+tests are unchanged. No repeat Windows run is requested. Native macOS evidence
+and independent parser review/owner decision remain open.
+See [checkpoint evidence](checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md).
+Earlier pending statements below describe their original deliveries.
+
+## Upstream interoperability revision 2 — 2026-10-29
+
+Correct the owner-reported MSVC C4245/C2220 in the test-only TinyCBOR probe:
+convert validation enums to uint32_t before OR-ing, preserving all mask bits.
+Original failure reproduced with GCC sign-conversion errors; corrected Debug,
+Release and scoped ASan/UBSan interop pass. Native Windows rerun is pending.
+See [checkpoint evidence](checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md).
+
+## A05 actual upstream comparison — 2026-10-29
+
+Bundled the exact 12 pinned TinyCBOR v7.0 sources and ran the existing native
+GCC Debug/Release 4,023-case comparison and stdin-bounds checks. Fixed source
+packaging and optional build language/sanitizer/vendor-header integration.
+Production behavior remains unchanged; Windows/macOS and independent security
+approval remain open. See [evidence](checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md).
+
 ## A05-P03 validated subset (candidate, not owner accepted)
 
 Codec advisory helper now verifies the exact registered local offer and selection.

@@ -6,6 +6,7 @@
 #include <chrono>
 #include <cstdint>
 #include <doctest/doctest.h>
+#include <new>
 #include <random>
 #include <string_view>
 #include <vector>
@@ -90,6 +91,32 @@ TEST_CASE("all 16 original design negative fixtures reject with pinned error cat
         CAPTURE(entry.data);
         fails(from_hex(entry.data), entry.category);
     }
+}
+
+// Owner: coordinator, GW-A05-ENCODE-STATE. Exercise caller construction failure
+// without replacing global operator new or changing the production variant.
+TEST_CASE("encoder handles failed body construction and releases admission") {
+    struct FailedPublicBytes {
+        operator Bytes() const { throw std::bad_alloc{}; }
+    };
+    p::Envelope message{p::VersionSelect{}, std::nullopt};
+    CHECK_THROWS_AS(message.body.emplace<p::PublicDeviceSet>(FailedPublicBytes{}), std::bad_alloc);
+    p::Admission slot;
+    if (message.body.valueless_by_exception()) {
+        const auto rejected = p::encode_frame(message, slot);
+        REQUIRE_FALSE(rejected);
+        CHECK(rejected.error().code == p::ErrorCode::malformed_frame);
+        CHECK(message.body.valueless_by_exception());
+    } else {
+        // C++20 also permits emplace to preserve the prior alternative.
+        const auto preserved = p::encode_frame(message, slot);
+        REQUIRE(preserved);
+        CHECK(preserved.value() == from_hex(select_hex));
+    }
+    message.body.emplace<p::VersionSelect>();
+    const auto recovered = p::encode_frame(message, slot);
+    REQUIRE(recovered);
+    CHECK(recovered.value() == from_hex(select_hex));
 }
 
 TEST_CASE("routing is an untrusted optional exact 16-byte value with explicit hop ceiling") {

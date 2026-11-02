@@ -1,0 +1,42 @@
+{
+  "schema_version": 1,
+  "parent_checkpoint": "GW-APP-P02-MEMBERSHIP-LIFECYCLE",
+  "parent_source_revision": 2,
+  "parent_archive_sha256": "45fa5488149b548b1bad58ecd06362ba7587636b84508954c5b0a8a4c200d73e",
+  "measurement": "UTF-8 input bytes of the previously prescribed/read-first document bundle; not measured model tokens or total task context",
+  "files": {
+    "AGENTS.md": {
+      "bytes": 22191,
+      "sha256": "09a5fd49d7896a447c785a64fb68a5583236c49c6c99fcce17f9b2fc2274aeb3"
+    },
+    "docs/development/MASTER_CONTRACT.md": {
+      "bytes": 36650,
+      "sha256": "6ea4e2d0a0eb93ded2a34345d7778ee1f5139dd25dd1e68d01c7a6f8cf87ee78"
+    },
+    "ARCHITECTURE.md": {
+      "bytes": 14136,
+      "sha256": "c52ef4ffb353f744ffa2e4fbb3557264cc80c48da3b9e200396c7a4dea8103d4"
+    },
+    "ROADMAP.md": {
+      "bytes": 15482,
+      "sha256": "b28d090e44c63e06046bc9fac5d0d99c697ea86fd5da4a9b4f25365b62f2c9e4"
+    },
+    "TODO.md": {
+      "bytes": 50363,
+      "sha256": "c47ef13581f7b45a6dfa5bc92ed18def1520f0c614882031d2fcac022e0cd93e"
+    },
+    "docs/checkpoints/GW-A00.md": {
+      "bytes": 9753,
+      "sha256": "e0cb2c90fca42afa893ea6d1b735626c117f703e86fb20efed18d298ee6f7af9"
+    },
+    "current-development-map.md": {
+      "bytes": 11442,
+      "sha256": "8e973928bd27642c1bf9fafdd4f4f3b8cc68c0a1c120d9839ec90eb7cb70f8e4"
+    },
+    "docs/checkpoints/GW-APP-P02-MEMBERSHIP-LIFECYCLE.md": {
+      "bytes": 16144,
+      "sha256": "3aeb9cef002daebce1faa5152c5de706e3f0b114bd867c875b24407b583fb56d"
+    }
+  },
+  "total_bytes": 176161
+}

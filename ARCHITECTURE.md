@@ -1,5 +1,13 @@
 # Architecture authority
 
+> Current local app correction (2026-11-01, P02 revision 2): standalone navigation is resolved before guided field parsing. Back/cancel/menu/.. clears pending UI handles/labels and returns to the main menu; quit/exit requests normal console teardown; help preserves the field. Confirmation tokens and canonical label validation remain unchanged. Complete commands retain literal navigation-word names. No service, terminal mode, shell profile, dependency or trust boundary is changed. [Evidence](docs/checkpoints/GW-APP-P02-MEMBERSHIP-LIFECYCLE.md).
+
+> Current local app delivery (2026-11-01): GW-APP-P02-MEMBERSHIP-LIFECYCLE adds an owner-thread navigation state machine for existing A04 membership/profile/trust operations. Pending actions capture profile/member/trust handles; no alias authorizes selection or mutation. Complete fields precede credential preparation; exact confirmation precedes deletion/forgetting. Other profiles' trust survives local subject deletion. Services, public contracts, compile-time DAG, wire bytes, terminal adapter and storage remain unchanged. See [delivery evidence](docs/checkpoints/GW-APP-P02-MEMBERSHIP-LIFECYCLE.md). The following app/checkpoint paragraphs describe their own deliveries.
+
+> Current local app delivery (2026-11-01): GW-APP-P01-LOCAL-CONSOLE adds CLI terminal detection and navigation over existing A04 services. Automatic entry requires no arguments and terminal input/output; explicit --identity-session supports redirected commands and --bootstrap selects one-shot startup. OS types are confined to the CLI terminal adapter .cpp. Service ownership, dependency edges, trust rules, wire formats and storage contracts are unchanged. See [delivery evidence](docs/checkpoints/GW-APP-P01-LOCAL-CONSOLE.md). Earlier status paragraphs describe their own checkpoints.
+
+> Current status (2026-10-30): the isolated A05 codec now rejects a valueless caller-created body before encoder dereference. Wire bytes, trust boundaries and runtime dependency edges are unchanged. Real upstream interop and owner revision 2 MSVC evidence remain recorded; the revision 4 guard has separate Linux validation. Native macOS and independent parser security approval remain open. See [current-development-map.md](current-development-map.md). Earlier checkpoint sections below are historical.
+
 ## GW-A05-P01 — proposed protocol design (no runtime change)
 
 After owner acceptance of A04-P03, P01 specifies a proposed RFC 8949

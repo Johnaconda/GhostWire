@@ -13,6 +13,10 @@ endif()
 set(VCPKG_MANIFEST_NO_DEFAULT_FEATURES ON)
 
 project(GhostWire VERSION 0.4.1 LANGUAGES CXX)
+# Reject unintended 32-bit MSVC configure targets.
+if(MSVC AND NOT CMAKE_SIZEOF_VOID_P EQUAL 8)
+    message(FATAL_ERROR "GhostWire requires x64 MSVC (8-byte pointers). Choose an x64 target/toolchain and configure a fresh build directory.")
+endif()
 if(CMAKE_SOURCE_DIR STREQUAL CMAKE_BINARY_DIR)
     message(FATAL_ERROR "Use an out-of-source build: cmake --preset portable-debug")
 endif()
@@ -88,6 +92,11 @@ add_library(ghostwire_protocol STATIC src/protocol/wire_codec.cpp)
 target_link_libraries(ghostwire_protocol PUBLIC ghostwire_contracts PRIVATE ghostwire_options)
 add_library(GhostWire::protocol ALIAS ghostwire_protocol)
 
+# Local, in-memory policy candidates only: no runtime permission or network authority.
+add_library(ghostwire_permissions STATIC src/permissions/local_policy.cpp)
+target_link_libraries(ghostwire_permissions PUBLIC ghostwire_contracts PRIVATE ghostwire_options)
+add_library(GhostWire::permissions ALIAS ghostwire_permissions)
+
 add_library(ghostwire_composition STATIC src/composition/identity_service_adapter.cpp)
 target_link_libraries(ghostwire_composition PUBLIC GhostWire::core GhostWire::identity
     PRIVATE ghostwire_options)
@@ -98,7 +107,7 @@ foreach(role IN ITEMS desktop server relay cli)
     target_link_libraries(ghostwire-${role} PRIVATE GhostWire::core ghostwire_options)
     install(TARGETS ghostwire-${role} RUNTIME DESTINATION bin)
 endforeach()
-target_sources(ghostwire-cli PRIVATE apps/cli/identity_session.cpp)
+target_sources(ghostwire-cli PRIVATE apps/cli/identity_session.cpp apps/cli/terminal.cpp)
 target_link_libraries(ghostwire-cli PRIVATE GhostWire::composition)
 install(FILES LICENSE README.md BUILD.md THIRD_PARTY_NOTICES.md DESTINATION share/ghostwire)
 install(FILES third_party/botan/LICENSE.txt DESTINATION share/ghostwire/licenses RENAME Botan-LICENSE.txt)
@@ -251,10 +260,14 @@ if(GW_A05_ENABLE_TINYCBOR_INTEROP)
         third_party/tinycbor/verified/src/cborparser_dup_string.c
         third_party/tinycbor/verified/src/cborerrorstrings.c)
     set_target_properties(ghostwire_test_tinycbor PROPERTIES C_STANDARD 99 C_STANDARD_REQUIRED ON)
+    # Instrument the upstream C implementation as well as its C++ wrapper.
+    target_link_libraries(ghostwire_test_tinycbor PRIVATE ghostwire_sanitizers)
     target_compile_definitions(ghostwire_test_tinycbor PUBLIC CBOR_NO_FLOATING_POINT CBOR_PARSER_MAX_RECURSIONS=8)
-    target_include_directories(ghostwire_test_tinycbor PUBLIC
+    # Keep unmodified vendor headers outside project /WX and -Werror policy.
+    target_include_directories(ghostwire_test_tinycbor SYSTEM PUBLIC
         "${CMAKE_SOURCE_DIR}/third_party/tinycbor/verified/src" "${GW_TINYCBOR_GEN}")
     add_executable(ghostwire-tinycbor-probe tests/interop/tinycbor_probe.cpp)
+    target_compile_features(ghostwire-tinycbor-probe PRIVATE cxx_std_20)
     target_link_libraries(ghostwire-tinycbor-probe PRIVATE ghostwire_test_tinycbor ghostwire_options)
     add_test(NAME protocol-tinycbor-interop
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tools/protocol/differential_check.py"
@@ -267,7 +280,12 @@ if(GW_A05_ENABLE_TINYCBOR_INTEROP)
     set_tests_properties(protocol-tinycbor-stdin-bounds PROPERTIES TIMEOUT 35 LABELS "security;protocol;interop")
 endif()
 
-find_package(Python3 3.9 QUIET COMPONENTS Interpreter)
+# Required CTest security checks must not silently disappear when Python is absent.
+if(BUILD_TESTING)
+    find_package(Python3 3.9 REQUIRED COMPONENTS Interpreter)
+else()
+    find_package(Python3 3.9 QUIET COMPONENTS Interpreter)
+endif()
 if(Python3_Interpreter_FOUND AND BUILD_TESTING)
     add_test(NAME protocol-upstream-import-guard
         COMMAND "${Python3_EXECUTABLE}" "${CMAKE_SOURCE_DIR}/tools/protocol/test_tinycbor_import.py")

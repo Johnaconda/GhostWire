@@ -4,7 +4,42 @@
 **Status:** Implementation candidate, not owner accepted / not security audited  
 **Supersedes:** Only the *proposed implementation dependency* part of ADR-009; RFC 8949 deterministic subset and the A04 signing contract remain intact.
 
-## Decision and review
+## Current maintain/replace recommendation — 2026-10-31
+
+**Recommendation: retain the finite-schema reader for its current offline-only
+scope. Production/network adoption remains undecided pending independent review
+and owner approval.** This is an implementation recommendation, not that approval.
+
+The real pinned TinyCBOR v7.0 C parser now compiles and the existing 4,023-case
+comparison passes on GCC and owner MSVC x64 Debug/Release. Every one of the 918 GhostWire-accepted
+frames also passes the generic upstream validator. TinyCBOR accepts 73 additional
+cases that the GhostWire reference rejects for closed-schema version, kind,
+capability or shape/type restrictions. No production parser correction or wire
+change was indicated by this corpus. Evidence and sanitizer/platform limits:
+[upstream checkpoint](../checkpoints/GW-A05-P04-UPSTREAM-INTEROP.md).
+
+Replacing the current reader would still require the same closed-schema checks,
+resource admission, cancellation, deadline and error contracts. The finite reader
+has no recursive traversal or unknown-field skipping. The upstream validator
+provides a useful independent comparison, but this corpus does not prove either
+implementation secure for hostile networking. Reconsider replacement if independent
+review identifies unmanageable parser risk, or if a future approved schema needs
+general CBOR traversal. Do not weaken schema rejection to match generic CBOR.
+
+Owner MSVC evidence covers both targeted interop/bounds tests, 2/2 per build.
+This evidence is for revision 2. Revision 4's internal review found one caller-state
+encoder failure: a valueless body was dereferenced. The explicit rejection changes
+neither accepted CBOR nor the restricted reader. This does not justify replacing
+the decoder, and the coordinator review does not substitute for independent audit.
+Revision 6 adds bounded Clang ASan/UBSan fuzz evidence: 37,513,997 executions
+without a finding, followed by reference/upstream replay of retained inputs.
+Only the existing fuzz entrypoint changed; the retain recommendation is unchanged.
+Outstanding: native macOS execution, leak-enabled and cross-platform fuzz validation,
+independent parser/security review, and explicit owner disposition of this exception.
+Native confirmation of the new guard belongs to the next agreed checkpoint.
+AUTH-PRE integration still follows accepted A05; A06 remains blocked.
+
+## Historical P02 decision and review
 
 ADR-009 preferred an independently reviewed, maintained CBOR implementation and
 required an amendment before making a profile-specific decoder. The alternatives

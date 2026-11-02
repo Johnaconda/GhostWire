@@ -30,7 +30,11 @@ jobs:
       - name: Check module boundaries
         run: python3 tools/check_boundaries.py
       - name: Configure build and test
-        run: bash tools/dev.sh all linux-${{ matrix.config }}
+        run: |
+          set -euo pipefail
+          cmake --preset linux-${{ matrix.config }} -DGW_A05_ENABLE_TINYCBOR_INTEROP=ON
+          cmake --build --preset linux-${{ matrix.config }} --parallel 4
+          ctest --preset linux-${{ matrix.config }} --output-on-failure --verbose
   sanitizers:
     runs-on: ubuntu-24.04
     timeout-minutes: 15
@@ -38,4 +42,9 @@ jobs:
       - uses: actions/checkout@11d5960a326750d5838078e36cf38b85af677262 # v4
         with:
           persist-credentials: false
-      - run: bash tools/dev.sh all portable-sanitize
+      - name: Configure build and test with pinned upstream parser
+        run: |
+          set -euo pipefail
+          cmake --preset portable-sanitize -DGW_A05_ENABLE_TINYCBOR_INTEROP=ON
+          cmake --build --preset portable-sanitize --parallel 4
+          ctest --preset portable-sanitize --output-on-failure --verbose
